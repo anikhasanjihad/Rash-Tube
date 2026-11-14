@@ -30,6 +30,8 @@ internal data class SettingsHomeState(
     val updateCheckingLabel: String?,
     /** Attached to the [selected] page's row, so a host can return focus to it. */
     val selectedRowFocus: FocusRequester? = null,
+    /** Signed in to YouTube: that account is the profile, so the local Profiles page is hidden. */
+    val youtubeSignedIn: Boolean = false,
 )
 
 internal class SettingsHomeActions(
@@ -41,6 +43,7 @@ internal class SettingsHomeActions(
     val onScrobbleChange: (Boolean) -> Unit,
     val onShowOnSearchChange: (Boolean) -> Unit,
     val onCheckForUpdates: () -> Unit,
+    val onOpenUrl: (String) -> Unit = {},
 )
 
 /** The settings list when no search is running. */
@@ -126,7 +129,7 @@ internal fun SettingsListScope.homeContent(
             onClick = { com.ahr.rashtube.account.YouTubeAccountActivity.launch() },
             icon = HomeRowIcons.YouTubeAccount,
         )
-        page(SettingsDestination.PROFILES)
+        if (!state.youtubeSignedIn) page(SettingsDestination.PROFILES)
         page(SettingsDestination.BACKUP)
         page(SettingsDestination.SYNC)
         page(SettingsDestination.HISTORY)
@@ -139,7 +142,18 @@ internal fun SettingsListScope.homeContent(
         page(SettingsDestination.SECURITY)
     }
     group(key = "home.about", header = R.string.settings_header_about) {
-        page(SettingsDestination.ABOUT)
+        nav(
+            com.ahr.rashtube.ui.screens.settings.index.AboutIndex.support,
+            iconRes = R.drawable.ic_telegram,
+            showChevron = false,
+            onClick = { actions.onOpenUrl("https://t.me/rnexflix") },
+        )
+        nav(
+            com.ahr.rashtube.ui.screens.settings.index.AboutIndex.license,
+            icon = androidx.compose.material.icons.Icons.Outlined.Description,
+            showChevron = false,
+            onClick = { actions.onOpenUrl("https://www.gnu.org/licenses/gpl-3.0.html") },
+        )
         page(SettingsDestination.DIAGNOSTICS)
         if (BuildConfig.UPDATER_ENABLED) {
             nav(

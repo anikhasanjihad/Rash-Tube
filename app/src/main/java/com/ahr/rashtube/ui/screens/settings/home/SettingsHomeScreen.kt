@@ -15,6 +15,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import kotlinx.coroutines.flow.map
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -61,6 +62,12 @@ internal fun SettingsHomeScreen(
     val persona by viewModel.persona.collectAsStateWithLifecycle()
     val updateCheck by viewModel.updateCheck.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val uriHandler = androidx.compose.ui.platform.LocalUriHandler.current
+    val youtubeSignedIn by com.ahr.rashtube.account.YouTubeAccountStore
+        .getInstance(androidx.compose.ui.platform.LocalContext.current)
+        .state
+        .map { it.signedIn }
+        .collectAsStateWithLifecycle(initialValue = false)
 
     var query by rememberSaveable { mutableStateOf("") }
     var highlight by remember { mutableStateOf<String?>(null) }
@@ -123,11 +130,13 @@ internal fun SettingsHomeScreen(
                         deepFlow = deepFlow,
                         updateCheckingLabel = checkingLabel.takeIf { updateCheck == UpdateCheckState.Checking },
                         selectedRowFocus = selectedRowFocus,
+                        youtubeSignedIn = youtubeSignedIn,
                     ),
                 actions =
                     SettingsHomeActions(
                         onOpen = onOpen,
                         onOpenDonations = onOpenDonations,
+                        onOpenUrl = { url -> runCatching { uriHandler.openUri(url) } },
                         onDeepFlowChange = viewModel::setDeepFlowEnabled,
                         onDurationClick = { showDurationDialog = true },
                         onSaveHistoryChange = viewModel::setDeepFlowSaveToHistory,
