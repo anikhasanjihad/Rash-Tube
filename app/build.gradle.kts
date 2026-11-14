@@ -166,12 +166,20 @@ android {
                 } catch (e: Exception) {
                     null
                 }
-            if (releaseKeystore?.exists() == true) {
-                signingConfig = signingConfigs.getByName("release")
-                println("Using RELEASE signing config with keystore: ${releaseKeystore.absolutePath}")
+            val releaseSigning = signingConfigs.getByName("release")
+            val hasRealKeystore =
+                releaseKeystore != null &&
+                    releaseKeystore.exists() &&
+                    releaseKeystore.length() > 0 &&
+                    !releaseSigning.storePassword.isNullOrEmpty() &&
+                    !releaseSigning.keyAlias.isNullOrEmpty()
+            if (hasRealKeystore) {
+                signingConfig = releaseSigning
+                println("Using RELEASE signing config with keystore: ${releaseKeystore?.absolutePath}")
             } else {
-                signingConfig = null // Let Gradle build an unsigned APK for IzzyOnDroid/F-Droid
-                println("WARNING: Release keystore not found. Building UNSIGNED release APK.")
+                // No usable release keystore: sign with the debug key so the APK still installs.
+                signingConfig = signingConfigs.getByName("debug")
+                println("WARNING: Release keystore not configured. Signing with DEBUG key.")
             }
         }
         // Nightly: release-level performance under its own app id. It must come after release,
