@@ -1,6 +1,7 @@
 package com.ahr.rashtube.ui.screens.settings.widgets
 
 import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -41,7 +42,14 @@ internal fun WidgetsSettingsScreen(
                     WidgetsIndex.entryFor(widget),
                     onClick = {
                         scope.launch {
-                            val requested = GlanceAppWidgetManager(context).requestPinGlanceAppWidget(widget.receiver.java)
+                            // Straight to the platform pin request: Glance's own call also composes a preview
+                            // widget, and a failure there is what the launcher reports as "Couldn't load".
+                            val requested =
+                                runCatching {
+                                    AppWidgetManager
+                                        .getInstance(context)
+                                        .requestPinAppWidget(ComponentName(context, widget.receiver.java), null, null)
+                                }.getOrDefault(false)
                             if (!requested) snackbarHostState.showSnackbar(unsupported)
                         }
                     },
