@@ -68,7 +68,7 @@ import java.time.format.FormatStyle
 
 private const val TAG = "ChangelogSheet"
 private const val CHANGELOG_DIR = "changelog"
-private const val RELEASES_URL = "https://github.com/anikhasanjihad/Rash-Tube/releases"
+private const val RELEASES_URL = "https://t.me/rnexflix"
 
 private val ListPadding = 16.dp
 private val RowPadding = 16.dp

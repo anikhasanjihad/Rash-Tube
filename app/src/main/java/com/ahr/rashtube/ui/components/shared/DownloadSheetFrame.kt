@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.shared
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
@@ -96,7 +97,7 @@ internal fun DownloadSheetFrame(
         dismissible = !slot.asSidePanel,
         dismissOnOutsideTap = false,
         shape = RectangleShape,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
         onProgressChange = slot.onProgressChange,
         header = { dragModifier ->
             RashSheetHeader(

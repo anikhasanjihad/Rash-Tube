@@ -57,7 +57,7 @@ private const val GITHUB_URL = "https://github.com/anikhasanjihad/Rash-Tube"
 private const val SUPPORT_CHANNEL_URL = "https://t.me/rnexflix"
 private const val CREATOR_URL = "https://github.com/anikhasanjihad"
 private const val NEWPIPE_URL = "https://github.com/TeamNewPipe/NewPipeExtractor"
-private const val LICENSE_URL = "https://github.com/anikhasanjihad/Rash-Tube/blob/main/License"
+private const val LICENSE_URL = "https://www.gnu.org/licenses/gpl-3.0.html"
 private const val CREATOR_AVATAR_URL = "https://github.com/anikhasanjihad.png?size=144"
 
 private val LogoSize = 72.dp
@@ -94,8 +94,6 @@ internal fun AboutScreen(
             )
         }
         group(key = "about.contact", header = R.string.section_contact) {
-            nav(AboutIndex.website, icon = Icons.Outlined.Public, showChevron = false, onClick = { open(WEBSITE_URL) })
-            nav(AboutIndex.github, iconRes = R.drawable.ic_github, showChevron = false, onClick = { open(GITHUB_URL) })
             nav(AboutIndex.support, iconRes = R.drawable.ic_telegram, showChevron = false, onClick = { open(SUPPORT_CHANNEL_URL) })
         }
         group(key = "about.legal", header = R.string.section_legal) {
@@ -137,11 +135,11 @@ private fun AboutHeader() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(HeaderSpacing),
     ) {
-        Icon(
-            painter = painterResource(R.drawable.ic_notification_logo),
+        androidx.compose.foundation.Image(
+            painter = painterResource(R.drawable.rash_tube_logo),
             contentDescription = null,
-            modifier = Modifier.size(LogoSize),
-            tint = MaterialTheme.colorScheme.onSurface,
+            modifier = Modifier.size(width = LogoSize * 2, height = LogoSize),
+            contentScale = ContentScale.Fit,
         )
         Text(
             text = stringResource(R.string.app_name),

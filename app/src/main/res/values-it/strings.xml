@@ -374,9 +374,6 @@
     <string name="app_icon_picker_subtitle">Scegli uno stile per l\'icona del launcher. La modifica ha effetto immediato e il launcher si aggiornerà brevemente.</string>
     <string name="app_icon_picker_warning">Cambiare icona potrebbe rimuovere momentaneamente Rash Tube dalla schermata home. Aggiungila nuovamente dal drawer delle app, se necessario.</string>
     <string name="app_icon_apply_toast">Icona aggiornata - il tuo launcher si aggiornerà</string>
-    <string name="icon_name_flow_red">Rosso Rash Tube</string>
-    <string name="icon_name_amoled">AMOLED scuro</string>
-    <string name="icon_name_monochrome">Monocromatica</string>
     <string name="icon_name_ghost">Fantasma</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="player_appearance_title">Aspetto del player</string>
@@ -1442,7 +1439,6 @@
     <string name="appearance_system_defaults_subtitle">Scegli quale tema viene utilizzato quando il dispositivo passa dalla modalità chiara a quella scura.</string>
     <string name="appearance_system_light_theme">Tema modalità chiara</string>
     <string name="appearance_system_dark_theme">Tema modalità scura</string>
-    <string name="icon_name_flow_light">Rash Tube chiaro</string>
     <string name="icon_name_material_sky">Material cielo</string>
     <string name="icon_name_material_mint">Material menta</string>
     <string name="theme_name_material_you">Material You</string>

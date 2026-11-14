@@ -240,8 +240,6 @@
     <string name="appearance_applied_toast">محدد: %1$s</string>
     <string name="app_icon_picker_subtitle">اختر نمط أيقونة المشغل. سيتم تطبيق التغيير فورًا وسيتم تحديث المشغل لفترة وجيزة.</string>
     <string name="app_icon_picker_warning">قد يؤدي تغيير الأيقونة إلى إزالة Rash Tube من الشاشة الرئيسية مؤقتًا. أعد إضافته من درج التطبيقات إذا لزم الأمر.</string>
-    <string name="icon_name_amoled">مظلم AMOLED</string>
-    <string name="icon_name_monochrome">أُحادي اللون</string>
     <string name="icon_name_ghost">شبحي</string>
     <string name="player_appearance_title">مظهر المشغل</string>
     <string name="player_appearance_header">خصص عناصر تحكم المشغل</string>
@@ -1066,7 +1064,6 @@
     <string name="settings_item_time_management">إدارة الوقت</string>
     <string name="settings_item_time_management_subtitle">إحصائيات الاستخدام، تذكيرات وقت النوم</string>
     <string name="app_icon_apply_toast">تم تحديث الأيقونة - سيتم تحديث مشغل التطبيقات الخاص بك</string>
-    <string name="icon_name_flow_red">أحمر Rash Tube</string>
     <string name="icon_name_dynamic">ألوان ديناميكية</string>
     <string name="player_nav_btn_subtitle">إظهار أزرار الفيديو التالي و السابق في المشغل المصغر</string>
     <string name="lyrics_provider_title">مُقدّم كلمات الأغاني</string>
@@ -1429,7 +1426,6 @@
     <string name="appearance_system_defaults_subtitle">إختر السمة التي سيتم استخدامها عند تبديل جهازك بين الوضع الفاتح والوضع الداكن.</string>
     <string name="appearance_system_light_theme">الوضع الفاتح</string>
     <string name="appearance_system_dark_theme">الوضع الداكن</string>
-    <string name="icon_name_flow_light">فاتح Rash Tube</string>
     <string name="icon_name_material_sky">سماوي Material</string>
     <string name="icon_name_material_mint">نعناع Material</string>
     <string name="theme_name_material_you">الألوان الديناميكية</string>

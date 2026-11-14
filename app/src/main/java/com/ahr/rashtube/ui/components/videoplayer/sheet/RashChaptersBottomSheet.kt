@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.videoplayer.sheet
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -93,7 +94,7 @@ fun RashChaptersBottomSheet(
         dismissible = enableVerticalDismiss,
         dismissOnOutsideTap = false,
         shape = RectangleShape,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
         onProgressChange = onSheetProgressChange,
         header = { dragModifier ->
             RashSheetHeader(

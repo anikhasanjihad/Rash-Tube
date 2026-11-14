@@ -851,11 +851,7 @@
     <string name="app_icon_picker_subtitle">துவக்கி ஐகான் பாணியைத் தேர்வு செய்யவும். மாற்றம் உடனடியாக அமலுக்கு வரும் மற்றும் துவக்கி சுருக்கமாக புதுப்பிக்கப்படும்.</string>
     <string name="app_icon_picker_warning">ஐகானை மாற்றுவது Rash Tube ஐ உங்கள் முகப்புத் திரையில் இருந்து சிறிது நேரத்திற்கு அகற்றலாம். தேவைப்பட்டால் அதை ஆப் டிராயரில் இருந்து மீண்டும் சேர்க்கவும்.</string>
     <string name="app_icon_apply_toast">ஐகான் புதுப்பிக்கப்பட்டது - உங்கள் துவக்கி புதுப்பிக்கப்படும்</string>
-    <string name="icon_name_flow_red">Rash Tube சிவப்பு</string>
-    <string name="icon_name_flow_light">Rash Tube ஒளி</string>
     <string name="icon_name_flow_play">Rash Tube ப்ளே</string>
-    <string name="icon_name_amoled">AMOLED டார்க்</string>
-    <string name="icon_name_monochrome">ஒரே வண்ணமுடையது</string>
     <string name="icon_name_ghost">பேய்</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">பொருள் வானம்</string>

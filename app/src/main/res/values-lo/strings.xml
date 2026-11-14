@@ -830,11 +830,7 @@
     <string name="app_icon_picker_subtitle">ເລືອກຮູບແບບໄອຄອນຕົວເປີດ. ການປ່ຽນແປງຈະມີຜົນໃນທັນທີ ແລະຕົວເປີດໃຊ້ຈະໂຫຼດຂໍ້ມູນຄືນໃໝ່ໄລຍະສັ້ນໆ.</string>
     <string name="app_icon_picker_warning">ການປ່ຽນໄອຄອນອາດຈະເອົາ Rash Tube ອອກຈາກໜ້າຈໍຫຼັກຂອງທ່ານຊົ່ວຄາວ. ເພີ່ມມັນຄືນຈາກລິ້ນຊັກແອັບຖ້າຈຳເປັນ.</string>
     <string name="app_icon_apply_toast">ອັບເດດໄອຄອນ - ຕົວເປີດໃຊ້ຂອງທ່ານຈະໂຫຼດຂໍ້ມູນຄືນໃໝ່</string>
-    <string name="icon_name_flow_red">Rash Tube ສີແດງ</string>
-    <string name="icon_name_flow_light">Rash Tube ແສງ</string>
     <string name="icon_name_flow_play">Rash Tube ຫຼິ້ນ</string>
-    <string name="icon_name_amoled">AMOLED ມືດ</string>
-    <string name="icon_name_monochrome">ໂມໂນໂຄມ</string>
     <string name="icon_name_ghost">ຜີ</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">ທ້ອງຟ້າວັດສະດຸ</string>

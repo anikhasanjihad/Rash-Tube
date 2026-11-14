@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.shared
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -72,7 +73,7 @@ fun RashCommentsBottomSheet(
         collapsedHeight = collapsedHeight,
         dismissOnOutsideTap = dismissOnOutsideTap,
         shape = RectangleShape,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
         onProgressChange = onSheetProgressChange,
         header = { dragModifier ->
             // Not RashSheetHeader: the sort chips sit under the title row, inside the same padding

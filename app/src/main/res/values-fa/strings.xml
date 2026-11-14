@@ -851,11 +851,7 @@
     <string name="app_icon_picker_subtitle">یک سبک نماد راهانداز را انتخاب کنید. این تغییر فوراً اعمال می شود و راه انداز برای مدت کوتاهی به روز می شود.</string>
     <string name="app_icon_picker_warning">تغییر نماد ممکن است Rash Tube را برای لحظه ای از صفحه اصلی شما حذف کند. در صورت نیاز آن را از کشوی برنامه برگردانید.</string>
     <string name="app_icon_apply_toast">نماد بهروزرسانی شد - راهانداز شما تازهسازی میشود</string>
-    <string name="icon_name_flow_red">Rash Tube قرمز</string>
-    <string name="icon_name_flow_light">نور Rash Tube</string>
     <string name="icon_name_flow_play">Rash Tube پخش کنید</string>
-    <string name="icon_name_amoled">AMOLED Dark</string>
-    <string name="icon_name_monochrome">تک رنگ</string>
     <string name="icon_name_ghost">شبح</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">آسمان متریال</string>

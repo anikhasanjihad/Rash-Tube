@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import kotlin.math.cos
 import kotlin.math.max
@@ -132,4 +133,16 @@ internal fun LiquidGlassHost(
         LiquidBackdrop(base = base)
         content()
     }
+}
+
+/**
+ * iOS-style frosted base for the video player page and its sheets. The app's own page colour is
+ * transparent (so the aurora shows through), which let the feed behind the player bleed through the
+ * player UI. This is dark and almost opaque so text stays readable, while the ambient glow that is
+ * drawn above it still shows.
+ */
+@Composable
+fun frostColor(): Color {
+    val darkTheme = MaterialTheme.colorScheme.onSurface.luminance() > 0.5f
+    return if (darkTheme) Color(0xF2101016) else Color(0xF2F6F6FA)
 }

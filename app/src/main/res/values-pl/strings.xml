@@ -462,10 +462,6 @@
     <string name="app_icon_picker_subtitle">Wybierz styl ikony aplikacji. Po zmianie aplikacja uruchomi się ponownie.</string>
     <string name="app_icon_picker_warning">Uwaga: Zmiana ikony wykorzystuje mechanizm systemu Android, który może tymczasowo usunąć skrót z ekranu głównego. Jeśli tak się stanie, wystarczy dodać go ponownie z listy aplikacji.</string>
     <string name="app_icon_apply_toast">Ikona zaktualizowana - aplikacja się włączy ponownie</string>
-    <string name="icon_name_flow_red">Rash Tube Czerwony</string>
-    <string name="icon_name_flow_light">Rash Tube Jasny</string>
-    <string name="icon_name_amoled">Czarny AMOLED</string>
-    <string name="icon_name_monochrome">Monochromatyczny</string>
     <string name="icon_name_ghost">Duch</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">Material Sky</string>

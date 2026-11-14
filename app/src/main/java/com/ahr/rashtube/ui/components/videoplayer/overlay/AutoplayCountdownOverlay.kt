@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.videoplayer.overlay
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.fadeIn
@@ -119,7 +120,7 @@ private fun CountdownCard(
 
     Surface(
         shape = MaterialTheme.shapes.extraLarge,
-        color = MaterialTheme.colorScheme.background,
+        color = frostColor(),
         modifier =
             modifier
                 .padding(horizontal = 20.dp)

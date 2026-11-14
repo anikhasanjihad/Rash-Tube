@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.videoplayer.sheet
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -139,7 +140,7 @@ fun LiveChatList(
                             Modifier
                                 .align(Alignment.BottomEnd)
                                 .padding(end = 16.dp, bottom = 16.dp),
-                        containerColor = MaterialTheme.colorScheme.surface,
+                        containerColor = frostColor(),
                         contentColor = MaterialTheme.colorScheme.primary,
                     ) {
                         Icon(

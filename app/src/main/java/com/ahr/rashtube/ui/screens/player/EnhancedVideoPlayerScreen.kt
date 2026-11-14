@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.screens.player
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -113,7 +114,7 @@ internal fun EnhancedVideoPlayerScreen(
                 .graphicsLayer { this.alpha = alpha() }
                 .keyboardReturnToPlayer()
                 // The immersive light paints the page colour itself, under its light.
-                .then(if (immersive) Modifier else Modifier.background(MaterialTheme.colorScheme.background)),
+                .then(if (immersive) Modifier else Modifier.background(frostColor())),
     ) {
         val layoutMode =
             playerLayoutModeFor(

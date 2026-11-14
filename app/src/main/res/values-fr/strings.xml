@@ -1051,8 +1051,6 @@
     <string name="settings_language_dialog_title">Sélectionner la langue de l\'application</string>
     <string name="settings_language_system_default">Paramètres par défaut du système</string>
     <string name="app_icon_apply_toast">L\'icône a été mise à jour – votre lanceur va s\'actualiser</string>
-    <string name="icon_name_flow_red">Rash Tube Rouge</string>
-    <string name="icon_name_monochrome">Monochrome</string>
     <string name="icon_name_ghost">Fantôme</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="player_appearance_brightness_gesture_title">Geste de réglage de la luminosité</string>
@@ -1261,7 +1259,6 @@
     <string name="this_week">Cette semaine</string>
     <string name="appearance_role_outline">Plan</string>
     <string name="appearance_role_scrim">Toile de protection</string>
-    <string name="icon_name_amoled">AMOLED sombre</string>
     <string name="proxy_settings_port">Port</string>
     <string name="total_hours_template">Total : %s heures</string>
     <string name="bedtime_reminder_title">Rappel de l\'heure du coucher</string>
@@ -1488,7 +1485,6 @@
     <string name="appearance_system_defaults_subtitle">Choisissez le thème à utiliser lorsque votre appareil passe du mode clair au mode sombre.</string>
     <string name="appearance_system_light_theme">Thème en mode clair</string>
     <string name="appearance_system_dark_theme">Thème en mode sombre</string>
-    <string name="icon_name_flow_light">Rash Tube clair</string>
     <string name="icon_name_material_sky">Material Sky</string>
     <string name="icon_name_material_mint">Material Mint</string>
     <string name="theme_name_material_you">Material You</string>

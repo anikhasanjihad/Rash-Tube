@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.videoplayer.settings
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -120,7 +121,7 @@ fun SettingsMenuDialog(
         dismissible = enableVerticalDismiss,
         dismissOnOutsideTap = false,
         shape = RectangleShape,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
         onBack = backPage?.let { page -> { currentPage = page } },
         onProgressChange = onSheetProgressChange,
         header = { dragModifier ->

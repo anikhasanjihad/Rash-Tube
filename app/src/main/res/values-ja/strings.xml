@@ -935,11 +935,7 @@
     <string name="app_icon_picker_subtitle">ランチャーアイコンのスタイルを選択します。変更はすぐに有効になり、ランチャーが短時間更新されます。</string>
     <string name="app_icon_picker_warning">アイコンを変更すると、Rash Tube がホーム画面から一時的に削除される場合があります。必要に応じて、アプリドロワーから再度追加します。</string>
     <string name="app_icon_apply_toast">アイコンが更新されました - ランチャーが更新されます</string>
-    <string name="icon_name_flow_red">Rash Tube 赤</string>
-    <string name="icon_name_flow_light">Rash Tube ライト</string>
     <string name="icon_name_flow_play">Rash Tube Play</string>
-    <string name="icon_name_amoled">AMOLEDダーク</string>
-    <string name="icon_name_monochrome">モノクロ</string>
     <string name="icon_name_ghost">おばけ</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">マテリアルスカイ</string>

@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.shared
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
@@ -256,7 +257,7 @@ private fun RashSleepTimerBottomSheet(
         dismissible = enableVerticalDismiss,
         dismissOnOutsideTap = false,
         shape = RectangleShape,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
         onProgressChange = onSheetProgressChange,
         header = { dragModifier ->
             RashSheetHeader(

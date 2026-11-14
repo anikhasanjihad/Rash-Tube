@@ -392,7 +392,6 @@
     <string name="appearance_system_defaults_subtitle">Escolha qual tema será usado quando o seu dispositivo alternar entre o modo claro e o modo escuro.</string>
     <string name="appearance_system_light_theme">Tema do modo claro</string>
     <string name="appearance_system_dark_theme">Tema do modo escuro</string>
-    <string name="icon_name_monochrome">Monocromático</string>
     <string name="icon_name_ghost">Fanstasma</string>
     <string name="player_appearance_title">Aparência do Reprodutor</string>
     <string name="player_background_style_blur_gradient">Desfoque + Degradê</string>
@@ -462,8 +461,6 @@
     <string name="appearance_role_secondary">Secundário</string>
     <string name="appearance_role_background">Plano de fundo</string>
     <string name="appearance_role_outline">Contorno</string>
-    <string name="icon_name_flow_red">Rash Tube Vermelho</string>
-    <string name="icon_name_amoled">Preto AMOLED</string>
     <string name="settings_item_player_appearance_subtitle">Personalizar o estilo da barra de progresso</string>
     <string name="player_fullscreen_seekbar_width_full">Largura total</string>
     <string name="player_fullscreen_seekbar_width_default">Padrão</string>
@@ -729,7 +726,6 @@
     <string name="app_icon_picker_subtitle">Escolha o estilo de ícone para o aplicativo. A alteração entra em vigor imediatamente e o launcher será atualizado em seguida.</string>
     <string name="app_icon_picker_warning">Alterar o ícone pode remover o Rash Tube da sua tela inicial por um momento. Adicione-o de volta da gaveta de aplicativos, se necessário.</string>
     <string name="app_icon_apply_toast">Ícone atualizado - o launcher será atualizado</string>
-    <string name="icon_name_flow_light">Rash Tube Claro</string>
     <string name="icon_name_flow_play">Play Rash Tube</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">Material Sky</string>

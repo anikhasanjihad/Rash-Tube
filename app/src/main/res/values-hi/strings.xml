@@ -349,9 +349,6 @@
     <string name="app_icon_picker_subtitle">लॉन्चर आइकन शैली चुनें। परिवर्तन तुरंत प्रभावी होगा और लॉन्चर संक्षेप में ताज़ा होगा।</string>
     <string name="app_icon_picker_warning">⚠ ध्यान दें: आइकन बदलने पर Android सिस्टम तंत्र का उपयोग होता है जो होम स्क्रीन से ऐप शॉर्टकट को अस्थायी रूप से हटा सकता है। यदि आवश्यक हो तो इसे वापस जोड़ने के लिए लॉन्चर को लंबे समय तक दबाएँ।</string>
     <string name="app_icon_apply_toast">आइकन अपडेट किया गया — आपका लॉन्चर ताज़ा होगा</string>
-    <string name="icon_name_flow_red">Rash Tube लाल</string>
-    <string name="icon_name_amoled">AMOLED गहरा</string>
-    <string name="icon_name_monochrome">एकवर्णी</string>
     <string name="icon_name_ghost">प्रेत</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="player_appearance_title">प्लेयर दिखावट</string>
@@ -1612,7 +1609,6 @@
     <string name="appearance_system_defaults_subtitle">चुनें कि जब आपका डिवाइस प्रकाश और अंधेरे मोड के बीच स्विच करता है तो कौन सी थीम का उपयोग किया जाएगा।</string>
     <string name="appearance_system_light_theme">लाइट मोड थीम</string>
     <string name="appearance_system_dark_theme">डार्क मोड थीम</string>
-    <string name="icon_name_flow_light">Rash Tube लाइट</string>
     <string name="icon_name_flow_play">Rash Tube प्ले</string>
     <string name="icon_name_material_sky">भौतिक आकाश</string>
     <string name="icon_name_material_mint">सामग्री टकसाल</string>

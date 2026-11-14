@@ -386,7 +386,6 @@
     <string name="notif_check_interval">Nuevo intervalo de verificación de video</string>
     <string name="notif_interval_30m">30 minutos</string>
     <string name="settings_item_quality">Calidad de vídeo y música</string>
-    <string name="icon_name_amoled">AMOLED Oscuro</string>
     <string name="settings_item_player_appearance">Apariencia del reproductor</string>
     <string name="mini_player_normal">Normal</string>
     <string name="lyrics_provider_better_lyrics">Better Lyrics</string>
@@ -517,8 +516,6 @@
     <string name="settings_item_region">Región de tendencia</string>
     <string name="settings_item_search_history">Búsqueda e historial</string>
     <string name="settings_item_search_history_subtitle">Borrar historial, gestionar sugerencias</string>
-    <string name="icon_name_flow_red">Rash Tube Rojo</string>
-    <string name="icon_name_monochrome">Monocromo</string>
     <string name="icon_name_ghost">Fantasma</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="player_appearance_title">Apariencia del reproductor</string>
@@ -1485,7 +1482,6 @@
     <string name="appearance_system_dark_theme">Tema del modo oscuro</string>
     <string name="theme_desc_material_you">Colores extraídos del fondo de pantalla en Android 12 y posteriores.</string>
     <string name="appearance_system_defaults_title">Temas predeterminados del sistema</string>
-    <string name="icon_name_flow_light">Rash Tube Claro</string>
     <string name="icon_name_material_sky">Material Sky</string>
     <string name="icon_name_material_mint">Material Mint</string>
     <string name="content_settings_subs_show_videos_title">Vídeos de suscripciones</string>

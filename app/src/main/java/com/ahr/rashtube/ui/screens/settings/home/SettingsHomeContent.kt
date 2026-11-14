@@ -151,7 +151,6 @@ internal fun SettingsListScope.homeContent(
                 icon = HomeRowIcons.Updates,
             )
         }
-        nav(HomeIndex.support, onClick = actions.onOpenDonations, icon = HomeRowIcons.Support)
     }
 }
 

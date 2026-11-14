@@ -878,11 +878,7 @@
     <string name="app_icon_picker_subtitle">Valige käivitiikooni stiil. Muudatus jõustub kohe ja käivitajat värskendatakse korraks.</string>
     <string name="app_icon_picker_warning">Ikooni muutmine võib Rash Tube hetkeks teie avaekraanilt eemaldada. Vajadusel lisage see rakenduste sahtlist tagasi.</string>
     <string name="app_icon_apply_toast">Ikoon on värskendatud – teie käivitaja värskendatakse</string>
-    <string name="icon_name_flow_red">Rash Tube Punane</string>
-    <string name="icon_name_flow_light">Rash Tube tuli</string>
     <string name="icon_name_flow_play">Rash Tube Mängi</string>
-    <string name="icon_name_amoled">AMOLED tume</string>
-    <string name="icon_name_monochrome">Ühevärviline</string>
     <string name="icon_name_ghost">Kummitus</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">Materjal taevas</string>

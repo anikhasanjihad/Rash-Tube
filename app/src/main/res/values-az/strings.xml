@@ -555,11 +555,7 @@
     <string name="app_icon_picker_subtitle">Başlatıcı ikonu tərzi seçin. Dəyişiklik dərhal qüvvəyə minəcək və başlatıcı qısaca yenilənəcək.</string>
     <string name="app_icon_picker_warning">İkonun dəyişdirilməsi Rash Tube-u qısa müddətə əsas ekranınızdan silə bilər. Lazım gələrsə, tətbiq menyusundan onu yenidən əlavə edin.</string>
     <string name="app_icon_apply_toast">İkon yeniləndi - başlatıcınız yenilənəcək</string>
-    <string name="icon_name_flow_red">Rash Tube Qırmızı</string>
-    <string name="icon_name_flow_light">Rash Tube İşıqlı</string>
     <string name="icon_name_flow_play">Rash Tube Oynat</string>
-    <string name="icon_name_amoled">AMOLED Qarası</string>
-    <string name="icon_name_monochrome">Monoxrom</string>
     <string name="icon_name_ghost">Kabus</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">Material Göy</string>

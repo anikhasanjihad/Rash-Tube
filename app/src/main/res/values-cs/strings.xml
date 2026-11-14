@@ -893,11 +893,7 @@
     <string name="app_icon_picker_subtitle">Vyberte styl ikony spouštěče. Změna se projeví okamžitě a spouštěč se krátce obnoví.</string>
     <string name="app_icon_picker_warning">Změna ikony může na chvíli odstranit Rash Tube z domovské obrazovky. V případě potřeby jej přidejte zpět ze zásuvky aplikace.</string>
     <string name="app_icon_apply_toast">Ikona aktualizována – váš spouštěč se obnoví</string>
-    <string name="icon_name_flow_red">Rash Tube červená</string>
-    <string name="icon_name_flow_light">Rash Tube Světlo</string>
     <string name="icon_name_flow_play">Rash Tube Přehrát</string>
-    <string name="icon_name_amoled">AMOLED Tmavý</string>
-    <string name="icon_name_monochrome">Monochromatický</string>
     <string name="icon_name_ghost">Duch</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">Materiál nebe</string>

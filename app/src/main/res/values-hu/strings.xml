@@ -851,11 +851,7 @@
     <string name="app_icon_picker_subtitle">Válasszon indítóikon stílust. A változás azonnal életbe lép, és az indító rövid időre frissül.</string>
     <string name="app_icon_picker_warning">Az ikon megváltoztatásával az Rash Tube egy pillanatra eltávolítható a kezdőképernyőről. Ha szükséges, adja vissza az alkalmazásfiókból.</string>
     <string name="app_icon_apply_toast">Ikon frissítve – az indító frissíteni fog</string>
-    <string name="icon_name_flow_red">Rash Tube Piros</string>
-    <string name="icon_name_flow_light">Rash Tube Fény</string>
     <string name="icon_name_flow_play">Rash Tube Lejátszás</string>
-    <string name="icon_name_amoled">AMOLED sötét</string>
-    <string name="icon_name_monochrome">Monokróm</string>
     <string name="icon_name_ghost">Szellem</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">Anyag égbolt</string>

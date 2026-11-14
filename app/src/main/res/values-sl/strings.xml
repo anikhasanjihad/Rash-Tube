@@ -893,11 +893,7 @@
     <string name="app_icon_picker_subtitle">Izberite slog ikone zaganjalnika. Sprememba začne veljati takoj in zaganjalnik se bo na kratko osvežil.</string>
     <string name="app_icon_picker_warning">Spreminjanje ikone lahko za trenutek odstrani Rash Tube z začetnega zaslona. Po potrebi ga dodajte nazaj iz predala aplikacij.</string>
     <string name="app_icon_apply_toast">Ikona posodobljena – vaš zaganjalnik se bo osvežil</string>
-    <string name="icon_name_flow_red">Rash Tube Rdeča</string>
-    <string name="icon_name_flow_light">Rash Tube Svetloba</string>
     <string name="icon_name_flow_play">Rash Tube Igraj</string>
-    <string name="icon_name_amoled">AMOLED temno</string>
-    <string name="icon_name_monochrome">Enobarvno</string>
     <string name="icon_name_ghost">Duh</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">Materialno nebo</string>

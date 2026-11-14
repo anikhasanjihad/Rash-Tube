@@ -945,11 +945,11 @@
     <string name="app_icon_picker_subtitle">Choose a launcher icon style. The change takes effect immediately and the launcher will briefly refresh.</string>
     <string name="app_icon_picker_warning">Changing the icon may remove Rash Tube from your home screen for a moment. Add it back from the app drawer if needed.</string>
     <string name="app_icon_apply_toast">Icon updated - your launcher will refresh</string>
-    <string name="icon_name_flow_red">Rash Tube Red</string>
-    <string name="icon_name_flow_light">Rash Tube Light</string>
+    <string name="icon_name_flow_red">Rash Tube</string>
+    <string name="icon_name_flow_light">Rash Red</string>
     <string name="icon_name_flow_play">Rash Tube Play</string>
-    <string name="icon_name_amoled">AMOLED Dark</string>
-    <string name="icon_name_monochrome">Monochrome</string>
+    <string name="icon_name_amoled">Rash Dark</string>
+    <string name="icon_name_monochrome">Rash Mono</string>
     <string name="icon_name_ghost">Ghost</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">Material Sky</string>
@@ -2100,7 +2100,7 @@
     <string name="about_support_channel">Support channel</string>
     <string name="about_support_channel_subtitle">t.me/rnexflix</string>
     <string name="about_website">Website</string>
-    <string name="about_website_address">github.com/anikhasanjihad/Rash-Tube</string>
+    <string name="about_website_address">t.me/rnexflix</string>
     <string name="about_reddit">Reddit</string>
     <string name="about_reddit_subtitle">r/Flow_Official</string>
     <string name="github_subtitle">Source code &amp; Issues</string>

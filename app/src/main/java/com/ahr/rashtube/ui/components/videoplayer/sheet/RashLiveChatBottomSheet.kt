@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.videoplayer.sheet
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
@@ -36,7 +37,7 @@ fun RashLiveChatBottomSheet(
         collapsedHeight = collapsedHeight,
         dismissOnOutsideTap = false,
         shape = RectangleShape,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
         onProgressChange = onSheetProgressChange,
         header = { dragModifier ->
             RashSheetHeader(

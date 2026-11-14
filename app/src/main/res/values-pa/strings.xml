@@ -854,11 +854,7 @@
     <string name="app_icon_picker_subtitle">ਇੱਕ ਲਾਂਚਰ ਆਈਕਨ ਸ਼ੈਲੀ ਚੁਣੋ। ਤਬਦੀਲੀ ਤੁਰੰਤ ਲਾਗੂ ਹੁੰਦੀ ਹੈ ਅਤੇ ਲਾਂਚਰ ਥੋੜ੍ਹੇ ਸਮੇਂ ਲਈ ਰਿਫ੍ਰੈਸ਼ ਹੋ ਜਾਵੇਗਾ।</string>
     <string name="app_icon_picker_warning">ਆਈਕਨ ਨੂੰ ਬਦਲਣ ਨਾਲ ਤੁਹਾਡੀ ਹੋਮ ਸਕ੍ਰੀਨ ਤੋਂ Rash Tube ਨੂੰ ਇੱਕ ਪਲ ਲਈ ਹਟਾ ਦਿੱਤਾ ਜਾ ਸਕਦਾ ਹੈ। ਜੇਕਰ ਲੋੜ ਹੋਵੇ ਤਾਂ ਇਸਨੂੰ ਐਪ ਦਰਾਜ਼ ਤੋਂ ਵਾਪਸ ਸ਼ਾਮਲ ਕਰੋ।</string>
     <string name="app_icon_apply_toast">ਆਈਕਨ ਅੱਪਡੇਟ ਕੀਤਾ ਗਿਆ - ਤੁਹਾਡਾ ਲਾਂਚਰ ਤਾਜ਼ਾ ਹੋ ਜਾਵੇਗਾ</string>
-    <string name="icon_name_flow_red">Rash Tube ਲਾਲ</string>
-    <string name="icon_name_flow_light">Rash Tube ਲਾਈਟ</string>
     <string name="icon_name_flow_play">Rash Tube ਪਲੇ</string>
-    <string name="icon_name_amoled">AMOLED ਗੂੜ੍ਹਾ</string>
-    <string name="icon_name_monochrome">ਮੋਨੋਕ੍ਰੋਮ</string>
     <string name="icon_name_ghost">ਭੂਤ</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">ਪਦਾਰਥ ਅਸਮਾਨ</string>

@@ -874,11 +874,7 @@
     <string name="app_icon_picker_subtitle">Xdem ungal n usemmiḍ n usebter. Ameddal-nni ad d-yeffeγ s tɣawla, ad d-yesseɣmal umeslay-nni.</string>
     <string name="app_icon_picker_warning">Ma tbeddel taẓuri, ad t-tesseḥḥbes Rash Tube seg uswir n uxxam-ik. Ɣer-as-tt-id seg usaru n uselmed ma yella ilaq.</string>
     <string name="app_icon_apply_toast">Tiwlafin igerrzen-d, ad d-yessnerked tasenduqt-ik.</string>
-    <string name="icon_name_flow_red">Rash Tube azeggaɣ</string>
-    <string name="icon_name_flow_light">Rash Tube Tafat</string>
     <string name="icon_name_flow_play">Rash Tube uraren</string>
-    <string name="icon_name_amoled">AMOLED Aberkan</string>
-    <string name="icon_name_monochrome">Sslam</string>
     <string name="icon_name_ghost">Afus</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="icon_name_material_sky">Igenni n tɣawsa</string>

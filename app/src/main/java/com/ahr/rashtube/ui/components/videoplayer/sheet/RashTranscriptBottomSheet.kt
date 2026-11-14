@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.videoplayer.sheet
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -133,7 +134,7 @@ fun RashTranscriptBottomSheet(
         // what is being read over it.
         dismissOnOutsideTap = false,
         shape = RectangleShape,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
         onProgressChange = onSheetProgressChange,
         header = { dragModifier ->
             Column(modifier = dragModifier) {

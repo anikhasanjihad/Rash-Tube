@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.screens.player.stage
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -229,7 +230,7 @@ internal fun BoxScope.FullscreenSidePanel(
                 .width(panelState.drawerWidth)
                 .fillMaxHeight()
                 .then(panelState.dragModifier)
-                .background(MaterialTheme.colorScheme.surface)
+                .background(frostColor())
                 .zIndex(8f),
     ) {
         if (panelState.showSettings) {

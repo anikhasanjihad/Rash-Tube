@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.shared
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -64,7 +65,7 @@ fun MergeIntoCollectionSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberFlowSheetState(),
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
     ) {
         Column(
             modifier =

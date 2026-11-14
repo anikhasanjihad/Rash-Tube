@@ -404,9 +404,6 @@
     <string name="app_icon_picker_subtitle">Odaberite stil ikone pokretača. Promjena stupa na snagu odmah i pokretač će se nakratko osvježiti.</string>
     <string name="app_icon_picker_warning">⚠ Oprez: promjena ikona koristi mehanizam Android sistema koji može nakratko ukloniti prečac aplikacije s početnog ekrana. Dugo pritisnite launcher da ga vratite ako je potrebno.</string>
     <string name="app_icon_apply_toast">Ikona je ažurirana — vaš launcher će se osvježiti</string>
-    <string name="icon_name_flow_red">Rash Tube Crvena</string>
-    <string name="icon_name_amoled">AMOLED Tamna</string>
-    <string name="icon_name_monochrome">Monochrome</string>
     <string name="icon_name_ghost">Duh</string>
     <string name="icon_name_dynamic">Material You</string>
     <string name="player_appearance_title">Izgled Plejera</string>
@@ -910,7 +907,6 @@
     <string name="appearance_system_defaults_subtitle">Odaberite koja će se tema koristiti kada vaš uređaj prelazi između svijetlog i tamnog načina rada.</string>
     <string name="appearance_system_light_theme">Tema za svjetlosni način rada</string>
     <string name="appearance_system_dark_theme">Tamna tema</string>
-    <string name="icon_name_flow_light">Rash Tube Light</string>
     <string name="icon_name_flow_play">Rash Tube Igraj</string>
     <string name="icon_name_material_sky">Materijalno nebo</string>
     <string name="icon_name_material_mint">Materijal Mint</string>

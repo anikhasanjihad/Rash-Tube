@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.shared
 
+import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -72,7 +73,7 @@ fun SaveToCollectionSheet(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         sheetState = rememberFlowSheetState(),
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
         dragHandle = { BottomSheetDefaults.DragHandle() },
     ) {
         CollectionSheetContent(

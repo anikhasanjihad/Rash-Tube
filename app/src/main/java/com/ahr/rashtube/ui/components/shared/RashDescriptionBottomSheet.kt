@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.shared
 
+import com.ahr.rashtube.ui.theme.frostColor
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -115,7 +116,7 @@ fun RashDescriptionBottomSheet(
         dismissible = enableVerticalDismiss,
         dismissOnOutsideTap = dismissOnOutsideTap,
         shape = RectangleShape,
-        containerColor = MaterialTheme.colorScheme.surface,
+        containerColor = frostColor(),
         onProgressChange = onSheetProgressChange,
         header = { dragModifier ->
             RashSheetHeader(
