@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
@@ -83,6 +85,49 @@ fun ProfileTopBarAction(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    // Signed in to YouTube: that account IS the profile (its name and Google photo), so the separate
+    // local profile switcher is not shown.
+    val accountStore = remember { com.ahr.rashtube.account.YouTubeAccountStore.getInstance(context) }
+    val account by accountStore.state.collectAsStateWithLifecycle()
+    LaunchedEffect(account.signedIn, account.avatarUrl) {
+        if (account.signedIn && account.avatarUrl == null) {
+            kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
+                com.ahr.rashtube.innertube.YouTube
+                    .accountInfo()
+                    .onSuccess { accountStore.saveProfile(it) }
+            }
+        }
+    }
+    if (account.signedIn) {
+        val accountName = account.name ?: account.email ?: stringResource(R.string.app_name)
+        IconButton(
+            onClick = { com.ahr.rashtube.account.YouTubeAccountActivity.launch() },
+            modifier = Modifier.semantics { contentDescription = accountName },
+        ) {
+            androidx.compose.material3.Surface(
+                modifier = Modifier.size(TopBarAvatarSize),
+                shape = androidx.compose.foundation.shape.CircleShape,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            ) {
+                androidx.compose.foundation.layout.Box(contentAlignment = androidx.compose.ui.Alignment.Center) {
+                    if (account.avatarUrl != null) {
+                        coil3.compose.AsyncImage(
+                            model = account.avatarUrl,
+                            contentDescription = null,
+                            contentScale = androidx.compose.ui.layout.ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    } else {
+                        Text(accountName.trim().take(1).uppercase(), style = MaterialTheme.typography.titleMedium)
+                    }
+                }
+            }
+        }
+        return
+    }
+
     val running = state?.profiles?.firstOrNull { it.id == viewModel.runningId } ?: return
     var open by rememberSaveable { mutableStateOf(false) }
     val description = stringResource(R.string.profiles_action_description, running.displayName(context))

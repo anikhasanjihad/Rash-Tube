@@ -20,10 +20,14 @@ class SplashController(
     @Volatile
     var contentReady: Boolean = false
 
+    /** Set once the animated wordmark has drawn, so the platform splash can hand over to it. */
+    @Volatile
+    var overlayShown: Boolean = false
+
     private val startedAt = SystemClock.uptimeMillis()
 
     fun install(splash: SplashScreen) {
-        splash.setKeepOnScreenCondition { !contentReady && SystemClock.uptimeMillis() - startedAt < MAX_HOLD_MS }
+        splash.setKeepOnScreenCondition { !overlayShown && SystemClock.uptimeMillis() - startedAt < MAX_HOLD_MS }
     }
 
     /** Opens the next launch on [tone] with the art of [iconSuffix]; Android 13 and later only. */

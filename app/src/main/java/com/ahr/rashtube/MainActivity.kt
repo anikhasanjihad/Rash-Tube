@@ -15,6 +15,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
@@ -212,17 +213,23 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CompositionLocalProvider(LocalHardwareKeyboard provides hardwareKeyboard) {
-                RashRoot(
-                    storedTheme = storedTheme,
-                    links = links,
-                    splashController = splashController,
-                    originalTitles = originalTitles,
-                    deArrow = deArrow,
-                    aiList = aiList,
-                    appIconController = appIconController,
-                    appLock = appLock,
-                    onUiRoot = { cachedAppUiRoot = it },
-                )
+                androidx.compose.foundation.layout.Box(androidx.compose.ui.Modifier.fillMaxSize()) {
+                    RashRoot(
+                        storedTheme = storedTheme,
+                        links = links,
+                        splashController = splashController,
+                        originalTitles = originalTitles,
+                        deArrow = deArrow,
+                        aiList = aiList,
+                        appIconController = appIconController,
+                        appLock = appLock,
+                        onUiRoot = { cachedAppUiRoot = it },
+                    )
+                    com.ahr.rashtube.ui.startup.RashTextSplash(
+                        contentReady = { splashController.contentReady },
+                        onShown = { splashController.overlayShown = true },
+                    )
+                }
             }
         }
     }

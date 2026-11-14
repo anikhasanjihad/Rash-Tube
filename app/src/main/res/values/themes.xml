@@ -18,7 +18,7 @@
          and launcher icon the user chose. -->
     <style name="Theme.Rash.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/splash_background</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
         <item name="postSplashScreenTheme">@style/Theme.Rash</item>
     </style>
 
@@ -26,17 +26,17 @@
         <item name="windowSplashScreenBackground">@color/splash_background_light</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Play">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Amoled">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Monochrome">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Dynamic" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenBackground">@color/splash_background_light</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/icon_bg_dynamic</item>
         <item name="postSplashScreenTheme">@style/Theme.Rash</item>
     </style>
@@ -45,20 +45,20 @@
         <item name="windowSplashScreenBackground">@color/splash_background_dark</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Play">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Amoled">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Monochrome">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Ghost">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Dynamic" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenBackground">@color/splash_background_dark</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/icon_bg_dynamic</item>
         <item name="postSplashScreenTheme">@style/Theme.Rash</item>
     </style>
@@ -67,32 +67,32 @@
         <item name="windowSplashScreenBackground">@color/splash_background_black</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Play">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Amoled">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Monochrome">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Ghost">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Dynamic" parent="Theme.SplashScreen.IconBackground">
         <item name="windowSplashScreenBackground">@color/splash_background_black</item>
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/icon_bg_dynamic</item>
         <item name="postSplashScreenTheme">@style/Theme.Rash</item>
     </style>
 
     <!-- Material icons: launcher foreground over the icon tint, one base per icon. -->
     <style name="Theme.Rash.Starting.Material.Sky" parent="Theme.SplashScreen.IconBackground">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/icon_bg_material_sky</item>
         <item name="postSplashScreenTheme">@style/Theme.Rash</item>
     </style>
     <style name="Theme.Rash.Starting.Material.Mint" parent="Theme.SplashScreen.IconBackground">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/icon_bg_material_mint</item>
         <item name="postSplashScreenTheme">@style/Theme.Rash</item>
     </style>
@@ -118,78 +118,78 @@
     <!-- Expressive icons: their own art at logo size over the tone's window, like the Flow badge. -->
     <style name="Theme.Rash.Starting.Light.Expressive" />
     <style name="Theme.Rash.Starting.Light.Expressive.Scallop">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Expressive.Segmented">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Expressive.Play">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Expressive.Sky">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Expressive.Mint">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Expressive.Cookie">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Expressive.Oval">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Light.Expressive.Pill">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Expressive" />
     <style name="Theme.Rash.Starting.Dark.Expressive.Scallop">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Expressive.Segmented">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Expressive.Play">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Expressive.Sky">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Expressive.Mint">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Expressive.Cookie">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Expressive.Oval">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Dark.Expressive.Pill">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Expressive" />
     <style name="Theme.Rash.Starting.Black.Expressive.Scallop">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Expressive.Segmented">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Expressive.Play">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Expressive.Sky">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Expressive.Mint">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Expressive.Cookie">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Expressive.Oval">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
     <style name="Theme.Rash.Starting.Black.Expressive.Pill">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_rash_fg</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_empty</item>
     </style>
 </resources>
 

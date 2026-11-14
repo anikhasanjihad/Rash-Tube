@@ -136,7 +136,7 @@ private fun AboutHeader() {
         verticalArrangement = Arrangement.spacedBy(HeaderSpacing),
     ) {
         androidx.compose.foundation.Image(
-            painter = painterResource(R.drawable.rash_tube_logo),
+            painter = painterResource(R.drawable.rash_tube_logo_vector),
             contentDescription = null,
             modifier = Modifier.size(width = LogoSize * 2, height = LogoSize),
             contentScale = ContentScale.Fit,

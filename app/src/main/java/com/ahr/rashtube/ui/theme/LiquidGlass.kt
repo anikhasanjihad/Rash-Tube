@@ -144,5 +144,5 @@ internal fun LiquidGlassHost(
 @Composable
 fun frostColor(): Color {
     val darkTheme = MaterialTheme.colorScheme.onSurface.luminance() > 0.5f
-    return if (darkTheme) Color(0xF2101016) else Color(0xF2F6F6FA)
+    return if (darkTheme) Color(0xB8101016) else Color(0xB8F6F6FA)
 }
