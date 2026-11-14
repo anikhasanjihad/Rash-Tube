@@ -91,3 +91,13 @@
 -dontwarn javax.annotation.**
 -dontwarn org.slf4j.**
 -dontwarn java.beans.**
+## Home-screen widgets (Glance): receivers, widgets and Hilt entry point are created by the
+## framework / by reflection, so R8 must not strip or rename them in release builds.
+-keep class com.ahr.rashtube.widget.** { *; }
+-keep class * extends androidx.glance.appwidget.GlanceAppWidget { *; }
+-keep class * extends androidx.glance.appwidget.GlanceAppWidgetReceiver { *; }
+-keep class androidx.glance.** { *; }
+-keep class androidx.glance.appwidget.** { *; }
+-keep @dagger.hilt.EntryPoint interface * { *; }
+-keep class androidx.work.impl.** { *; }
+-dontwarn androidx.glance.**

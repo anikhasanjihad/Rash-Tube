@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget layouts/drawables are looked up at runtime by the launcher and Glance, so the resource
+     shrinker must keep them. -->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@layout/widget_*,@layout/glance_*,@xml/widget_*,@drawable/ic_widget_*,@drawable/ic_music_note,@drawable/ic_repeat" />
