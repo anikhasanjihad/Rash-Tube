@@ -1,0 +1,53 @@
+package com.ahr.rashtube.ui.screens.library
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.ahr.rashtube.R
+import com.ahr.rashtube.ui.components.library.LibraryNavigationRow
+import com.ahr.rashtube.ui.components.library.LibrarySection
+import com.ahr.rashtube.ui.components.shared.RashMaxContentWidth
+
+@Composable
+internal fun LibrarySectionList(
+    sections: List<LibrarySection>,
+    counts: LibraryCounts?,
+    onOpenSection: (LibrarySection) -> Unit,
+) {
+    Column(modifier = Modifier.widthIn(max = RashMaxContentWidth).padding(horizontal = 16.dp)) {
+        LibrarySectionHeader(stringResource(R.string.library_section_header))
+        sections.forEach { section ->
+            LibrarySectionRow(section, counts) { onOpenSection(section) }
+        }
+    }
+}
+
+@Composable
+internal fun LibrarySectionHeader(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.primary,
+        modifier = Modifier.padding(horizontal = 8.dp, vertical = 8.dp),
+    )
+}
+
+@Composable
+internal fun LibrarySectionRow(
+    section: LibrarySection,
+    counts: LibraryCounts?,
+    onClick: () -> Unit,
+) {
+    LibraryNavigationRow(
+        icon = section.icon,
+        title = section.title,
+        subtitle = section.subtitle(counts),
+        onClick = onClick,
+    )
+}

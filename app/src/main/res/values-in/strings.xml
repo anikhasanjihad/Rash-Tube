@@ -1871,7 +1871,7 @@
     <string name="playback_speed_multiplier_precise">%1$.2f×</string>
     <string name="channel_metadata_unavailable">Informasi kanal tidak tersedia</string>
     <string name="about_creator_name">AHR</string>
-    <string name="about_website_address">flow-tube.org</string>
+    <string name="about_website_address">github.com/anikhasanjihad/Rash-Tube</string>
     <string name="about_reddit">Reddit</string>
     <string name="about_reddit_subtitle">r/Flow_Official</string>
     <string name="about_license_name">GNU GPL v3</string>

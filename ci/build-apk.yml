@@ -1,0 +1,54 @@
+# Rash Tube — build a signed APK on GitHub and attach it to a Release.
+#
+# HOW TO USE
+#  1. Create a keystore once (keep it forever; every update must use the same one):
+#       keytool -genkey -v -keystore release.keystore -alias rashtube -keyalg RSA -keysize 2048 -validity 36500
+#  2. Repo -> Settings -> Secrets and variables -> Actions, add:
+#       KEYSTORE_BASE64   (output of: base64 -w0 release.keystore)
+#       STORE_PASSWORD, KEY_ALIAS, KEY_PASSWORD
+#  3. Copy THIS file to .github/workflows/build.yml (GitHub web: Add file -> Create new file).
+#  4. Run it from the Actions tab, or push a tag like v1.0.0 to also publish a Release.
+#     The in-app updater reads the latest Release of anikhasanjihad/Rash-Tube.
+name: Build Rash Tube APK
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Restore keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > release.keystore
+      - name: Build release APK
+        env:
+          STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleGithubRelease --stacktrace
+      - name: Collect APK
+        run: |
+          mkdir -p out
+          find app/build/outputs/apk -name "*.apk" -exec cp {} out/ \;
+          ls -la out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: RashTube-apk
+          path: out/*.apk
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: out/*.apk

@@ -2663,7 +2663,7 @@
     </plurals>
     <string name="support_flow_open_collective">Open Collective에서 Rash Tube 지원</string>
     <string name="about_creator_name">AHR</string>
-    <string name="about_website_address">flow-tube.org</string>
+    <string name="about_website_address">github.com/anikhasanjihad/Rash-Tube</string>
     <string name="about_reddit">레딧</string>
     <string name="about_reddit_subtitle">r/Flow_Official</string>
     <string name="about_notices">오픈소스 공지</string>

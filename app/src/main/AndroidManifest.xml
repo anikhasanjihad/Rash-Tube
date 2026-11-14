@@ -64,9 +64,9 @@
     </queries>
 
     <application
-        android:name=".FlowApplication"
+        android:name=".RashApplication"
         android:allowBackup="true"
-        android:backupAgent=".data.backup.FlowBackupAgent"
+        android:backupAgent=".data.backup.RashBackupAgent"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:fullBackupOnly="true"
@@ -75,7 +75,7 @@
         android:label="@string/app_launcher_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Flow"
+        android:theme="@style/Theme.Rash"
         android:usesCleartextTraffic="true"
         android:resizeableActivity="true"
         android:requestLegacyExternalStorage="true"
@@ -103,6 +103,11 @@
         <meta-data
             android:name="com.google.android.gms.car.application"
             android:resource="@xml/automotive_app_desc" />
+        <activity
+            android:name=".account.YouTubeAccountActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Rash" />
+
 
         <activity
             android:name=".TvActivity"
@@ -110,7 +115,7 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="landscape"
-            android:theme="@style/Theme.Flow.Starting">
+            android:theme="@style/Theme.Rash.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
@@ -126,7 +131,7 @@
             android:launchMode="singleTask"
             android:resizeableActivity="true"
             android:supportsPictureInPicture="true"
-            android:theme="@style/Theme.Flow.Starting"
+            android:theme="@style/Theme.Rash.Starting"
             android:windowSoftInputMode="adjustResize"
             android:windowLayoutInDisplayCutoutMode="shortEdges">
 
@@ -266,11 +271,11 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="io.github.aedev.flow.action.CANCEL_DOWNLOAD" />
-                <action android:name="io.github.aedev.flow.action.RETRY_DOWNLOAD" />
-                <action android:name="io.github.aedev.flow.action.PAUSE_DOWNLOAD" />
-                <action android:name="io.github.aedev.flow.action.RESUME_DOWNLOAD" />
-                <action android:name="io.github.aedev.flow.action.DISMISS_NOTIFICATION" />
+                <action android:name="com.ahr.rashtube.action.CANCEL_DOWNLOAD" />
+                <action android:name="com.ahr.rashtube.action.RETRY_DOWNLOAD" />
+                <action android:name="com.ahr.rashtube.action.PAUSE_DOWNLOAD" />
+                <action android:name="com.ahr.rashtube.action.RESUME_DOWNLOAD" />
+                <action android:name="com.ahr.rashtube.action.DISMISS_NOTIFICATION" />
             </intent-filter>
         </receiver>
 
@@ -300,13 +305,13 @@
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:taskAffinity="${applicationId}.lockscreen"
-            android:theme="@style/Theme.Flow" />
+            android:theme="@style/Theme.Rash" />
         <activity
             android:name=".widget.config.WidgetConfigActivity"
             android:exported="true"
             android:excludeFromRecents="true"
             android:taskAffinity=""
-            android:theme="@style/Theme.Flow">
+            android:theme="@style/Theme.Rash">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

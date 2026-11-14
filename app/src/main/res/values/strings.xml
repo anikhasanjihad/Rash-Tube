@@ -2098,7 +2098,7 @@
     <string name="about_creator">Creator</string>
     <string name="about_creator_name">AHR</string>
     <string name="about_website">Website</string>
-    <string name="about_website_address">flow-tube.org</string>
+    <string name="about_website_address">github.com/anikhasanjihad/Rash-Tube</string>
     <string name="about_reddit">Reddit</string>
     <string name="about_reddit_subtitle">r/Flow_Official</string>
     <string name="github_subtitle">Source code &amp; Issues</string>
@@ -5088,4 +5088,16 @@
     <string name="ai_report_rate_limited">Too many reports sent, try again later</string>
     <string name="ai_report_rejected">AiSList rejected the report</string>
     <string name="ai_report_failed">Report failed, check your connection</string>
+
+    <!-- Rash Tube: YouTube account -->
+    <string name="yt_account_title" translatable="false">YouTube account</string>
+    <string name="yt_account_summary" translatable="false">Sign in to use your YouTube data</string>
+    <string name="yt_account_signed_out_title" translatable="false">Sign in with YouTube</string>
+    <string name="yt_account_signed_out_body" translatable="false">Sign in with your Google account to bring your YouTube subscriptions into Rash Tube. Your session stays on this device.</string>
+    <string name="yt_account_sign_in" translatable="false">Sign in</string>
+    <string name="yt_account_sign_out" translatable="false">Sign out</string>
+    <string name="yt_account_loading" translatable="false">Loading account…</string>
+    <string name="yt_account_import" translatable="false">Import my subscriptions</string>
+    <string name="yt_account_import_done" translatable="false">Imported %d subscriptions.</string>
+    <string name="yt_account_import_failed" translatable="false">Could not import subscriptions. Sign in again and retry.</string>
 </resources>

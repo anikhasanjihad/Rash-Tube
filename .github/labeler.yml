@@ -1,30 +1,30 @@
 player:
   - changed-files:
       - any-glob-to-any-file:
-          - 'app/src/main/java/io/github/aedev/flow/player/**'
-          - 'app/src/main/java/io/github/aedev/flow/service/**'
+          - 'app/src/main/java/com/ahr/rashtube/player/**'
+          - 'app/src/main/java/com/ahr/rashtube/service/**'
 
 ui:
   - changed-files:
       - any-glob-to-any-file:
-          - 'app/src/main/java/io/github/aedev/flow/ui/**'
+          - 'app/src/main/java/com/ahr/rashtube/ui/**'
           - 'app/src/main/res/values/themes.xml'
 
 algorithm:
   - changed-files:
       - any-glob-to-any-file:
-          - 'app/src/main/java/io/github/aedev/flow/data/recommendation/**'
+          - 'app/src/main/java/com/ahr/rashtube/data/recommendation/**'
 
 sync:
   - changed-files:
       - any-glob-to-any-file:
-          - 'app/src/main/java/io/github/aedev/flow/sync/**'
+          - 'app/src/main/java/com/ahr/rashtube/sync/**'
 
 extraction:
   - changed-files:
       - any-glob-to-any-file:
-          - 'app/src/main/java/io/github/aedev/flow/innertube/**'
-          - 'app/src/main/java/io/github/aedev/flow/network/**'
+          - 'app/src/main/java/com/ahr/rashtube/innertube/**'
+          - 'app/src/main/java/com/ahr/rashtube/network/**'
 
 localization:
   - changed-files:

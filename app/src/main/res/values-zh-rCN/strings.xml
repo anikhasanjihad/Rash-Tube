@@ -2524,7 +2524,7 @@
     </plurals>
     <string name="support_flow_open_collective">在 Open Collective 上支持 Rash Tube</string>
     <string name="about_creator_name">AHR</string>
-    <string name="about_website_address">flow-tube.org</string>
+    <string name="about_website_address">github.com/anikhasanjihad/Rash-Tube</string>
     <string name="about_reddit_subtitle">r/Flow_Official</string>
     <string name="about_notices">开源声明</string>
     <string name="about_notices_summary">来自其他项目的单词列表和代码</string>
