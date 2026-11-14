@@ -2097,6 +2097,8 @@
     <!-- About Screen -->
     <string name="about_creator">Creator</string>
     <string name="about_creator_name">AHR</string>
+    <string name="about_support_channel">Support channel</string>
+    <string name="about_support_channel_subtitle">t.me/rnexflix</string>
     <string name="about_website">Website</string>
     <string name="about_website_address">github.com/anikhasanjihad/Rash-Tube</string>
     <string name="about_reddit">Reddit</string>
