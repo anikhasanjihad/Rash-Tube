@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.videoplayer.ambient
 
+import androidx.compose.ui.graphics.luminance
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.foundation.layout.Box
@@ -46,7 +47,7 @@ fun AmbientPageGlow(
         remember(colors.background, colors.onBackground) {
             AmbientPageStyle.Glow(
                 strip = AmbientGlowTone.forStatusBar(PlayerGround),
-                page = AmbientGlowTone.forSurface(colors.background, colors.onBackground),
+                page = AmbientGlowTone.forSurface(ambientGround(colors.onBackground), colors.onBackground),
             )
         }
     DisposableEffect(frames, style) {
@@ -119,3 +120,11 @@ internal fun rememberAmbientAppear(frames: AmbientFrameHolder): Animatable<Float
     LaunchedEffect(appear, ready) { if (ready) appear.animateTo(1f, spec) else appear.snapTo(0f) }
     return appear
 }
+
+/** The theme's page colour is transparent glass, so the glow is tinted against an opaque ground of the same tone. */
+private fun ambientGround(onBackground: androidx.compose.ui.graphics.Color): androidx.compose.ui.graphics.Color =
+    if (onBackground.luminance() > 0.5f) {
+        androidx.compose.ui.graphics.Color(0xFF101016)
+    } else {
+        androidx.compose.ui.graphics.Color(0xFFF6F6FA)
+    }

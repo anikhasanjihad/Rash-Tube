@@ -13,7 +13,7 @@ internal const val MIN_TEXT_CONTRAST = 4.5f
 private const val CONTRAST_AIM = 4.6f
 
 /** Dark surfaces: the share of the frame's light added on top of the surface. */
-internal const val GLOW_GAIN_DARK = 0.32f
+internal const val GLOW_GAIN_DARK = 0.55f
 
 /** Light surfaces: the share of the surface given up to the frame's light, which makes it a pastel. */
 internal const val GLOW_MIX_LIGHT = 0.30f

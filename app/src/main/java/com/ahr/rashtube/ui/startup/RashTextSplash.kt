@@ -9,7 +9,9 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,9 +48,10 @@ import kotlinx.coroutines.launch
 
 private val SplashBackground = Color(0xFF0B0B10)
 private val SplashRed = Color(0xFFE50914)
-private const val MIN_SHOW_MS = 1_900L
+private val SmoothOut = CubicBezierEasing(0.16f, 1f, 0.3f, 1f)
+private const val MIN_SHOW_MS = 2_500L
 private const val MAX_SHOW_MS = 3_800L
-private const val LETTER_STAGGER_MS = 75L
+private const val LETTER_STAGGER_MS = 70L
 
 /**
  * Animated "RASH TUBE" wordmark that plays over the app on start. It is pure text and drawing, so it
@@ -63,6 +67,8 @@ fun RashTextSplash(
     val letters = remember { "RASH TUBE".toList() }
     val progress = remember { letters.map { Animatable(0f) } }
     val bar = remember { Animatable(0f) }
+    val credit = remember { Animatable(0f) }
+    val settle = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
         val started = SystemClock.uptimeMillis()
@@ -70,23 +76,28 @@ fun RashTextSplash(
         progress.forEachIndexed { index, anim ->
             launch {
                 delay(index * LETTER_STAGGER_MS)
-                anim.animateTo(1f, tween(520, easing = FastOutSlowInEasing))
+                anim.animateTo(1f, tween(900, easing = SmoothOut))
             }
         }
+        launch { settle.animateTo(1f, tween(2200, easing = SmoothOut)) }
         launch {
-            delay(letters.size * LETTER_STAGGER_MS + 120)
-            bar.animateTo(1f, tween(650, easing = FastOutSlowInEasing))
+            delay(letters.size * LETTER_STAGGER_MS + 150)
+            bar.animateTo(1f, tween(900, easing = SmoothOut))
+        }
+        launch {
+            delay(letters.size * LETTER_STAGGER_MS + 500)
+            credit.animateTo(1f, tween(900, easing = SmoothOut))
         }
         delay(MIN_SHOW_MS)
         while (!contentReady() && SystemClock.uptimeMillis() - started < MAX_SHOW_MS) delay(50)
         visible = false
     }
 
-    AnimatedVisibility(visible = visible, exit = fadeOut(tween(420))) {
+    AnimatedVisibility(visible = visible, exit = fadeOut(tween(650)) + scaleOut(targetScale = 1.05f, animationSpec = tween(650))) {
         val pulse by rememberInfiniteTransition(label = "splashGlow").animateFloat(
             initialValue = 0.55f,
             targetValue = 1f,
-            animationSpec = infiniteRepeatable(tween(1400), RepeatMode.Reverse),
+            animationSpec = infiniteRepeatable(tween(2200), RepeatMode.Reverse),
             label = "glow",
         )
         Box(
@@ -105,7 +116,15 @@ fun RashTextSplash(
                     }.pointerInput(Unit) { detectTapGestures { } },
             contentAlignment = Alignment.Center,
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier =
+                    Modifier.graphicsLayer {
+                        val k = 1.06f - 0.06f * settle.value
+                        scaleX = k
+                        scaleY = k
+                    },
+            ) {
                 Row(horizontalArrangement = Arrangement.Center) {
                     letters.forEachIndexed { index, char ->
                         val p = progress[index].value
@@ -122,8 +141,8 @@ fun RashTextSplash(
                             modifier =
                                 Modifier.graphicsLayer {
                                     alpha = p
-                                    translationY = (1f - p) * 36.dp.toPx()
-                                    val scale = 0.8f + 0.2f * p
+                                    translationY = (1f - p) * 30.dp.toPx()
+                                    val scale = 0.88f + 0.12f * p
                                     scaleX = scale
                                     scaleY = scale
                                 },
@@ -139,6 +158,17 @@ fun RashTextSplash(
                             .background(SplashRed),
                 )
             }
+            Text(
+                text = "DEVELOPED BY AHR",
+                style =
+                    TextStyle(
+                        color = Color.White.copy(alpha = 0.62f * credit.value),
+                        fontSize = 11.sp,
+                        fontWeight = FontWeight.Medium,
+                        letterSpacing = 3.sp,
+                    ),
+                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 56.dp),
+            )
         }
     }
 }

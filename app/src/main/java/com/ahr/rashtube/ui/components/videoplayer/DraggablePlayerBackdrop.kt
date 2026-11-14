@@ -83,7 +83,7 @@ internal fun CollapsingPlayerScrim(
     val scrimVisible by remember(state) { derivedStateOf { state.expandFraction.value < 0.999f } }
     val inlineMode by remember(state) { derivedStateOf { state.miniSizeScale.value > 1.5f } }
     if (!scrimVisible || inlineMode) return
-    val background = MaterialTheme.colorScheme.background
+    val background = com.ahr.rashtube.ui.theme.frostColor()
     val scrim = MaterialTheme.colorScheme.scrim
     Box(
         modifier =

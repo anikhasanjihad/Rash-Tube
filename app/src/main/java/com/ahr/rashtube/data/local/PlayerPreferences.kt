@@ -2097,7 +2097,7 @@ class PlayerPreferences(
     val videoAmbientGlowInBatterySaver: Flow<Boolean> =
         context.playerPreferencesDataStore.data
             .map { preferences ->
-                preferences[Keys.VIDEO_AMBIENT_GLOW_BATTERY_SAVER] ?: false
+                preferences[Keys.VIDEO_AMBIENT_GLOW_BATTERY_SAVER] ?: true
             }
 
     suspend fun setVideoAmbientGlowInBatterySaver(enabled: Boolean) {

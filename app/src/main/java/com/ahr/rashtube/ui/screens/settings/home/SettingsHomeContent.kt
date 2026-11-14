@@ -143,6 +143,12 @@ internal fun SettingsListScope.homeContent(
     }
     group(key = "home.about", header = R.string.settings_header_about) {
         nav(
+            com.ahr.rashtube.ui.screens.settings.index.AboutIndex.developer,
+            icon = androidx.compose.material.icons.Icons.Outlined.Person,
+            showChevron = false,
+            onClick = { actions.onOpenUrl("https://anikhasanjihad.vercel.app/") },
+        )
+        nav(
             com.ahr.rashtube.ui.screens.settings.index.AboutIndex.support,
             iconRes = R.drawable.ic_telegram,
             showChevron = false,

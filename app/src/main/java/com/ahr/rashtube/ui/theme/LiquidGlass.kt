@@ -17,6 +17,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
@@ -64,18 +66,21 @@ internal fun LiquidBackdrop(
     val one = scheme.primary
     val two = scheme.tertiary
     val three = scheme.secondary
-    val phase =
-        rememberInfiniteTransition(label = "liquidBackdrop").animateFloat(
-            initialValue = 0f,
-            targetValue = 1f,
-            animationSpec = infiniteRepeatable(tween(durationMillis = 45_000, easing = LinearEasing), RepeatMode.Restart),
-            label = "liquidPhase",
-        )
+    // The drift is slow, so it updates ~10 times a second; redrawing three full-screen gradients on
+    // every frame under a scrolling list is what made scrolling heavy.
+    var phase by androidx.compose.runtime.remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
+    androidx.compose.runtime.LaunchedEffect(Unit) {
+        val start = android.os.SystemClock.uptimeMillis()
+        while (true) {
+            kotlinx.coroutines.delay(100)
+            phase = ((android.os.SystemClock.uptimeMillis() - start) % 45_000L) / 45_000f
+        }
+    }
     Box(
         modifier =
             modifier.fillMaxSize().drawBehind {
                 drawRect(base)
-                val t = phase.value * TwoPi
+                val t = phase * TwoPi
                 val radius = max(size.width, size.height) * 0.75f
                 fun blob(color: Color, cx: Float, cy: Float, alpha: Float) {
                     val center = Offset(size.width * cx, size.height * cy)
