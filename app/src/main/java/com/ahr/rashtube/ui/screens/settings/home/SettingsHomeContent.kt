@@ -148,12 +148,6 @@ internal fun SettingsListScope.homeContent(
             showChevron = false,
             onClick = { actions.onOpenUrl("https://t.me/rnexflix") },
         )
-        nav(
-            com.ahr.rashtube.ui.screens.settings.index.AboutIndex.license,
-            icon = androidx.compose.material.icons.Icons.Outlined.Description,
-            showChevron = false,
-            onClick = { actions.onOpenUrl("https://www.gnu.org/licenses/gpl-3.0.html") },
-        )
         page(SettingsDestination.DIAGNOSTICS)
         if (BuildConfig.UPDATER_ENABLED) {
             nav(
