@@ -28,6 +28,7 @@ internal object NotificationsIndex {
     private val types = R.string.settings_section_notification_types
 
     val enabled = entry("enabled", R.string.notif_master_toggle, schedule, R.string.notif_master_toggle_subtitle)
+    val alwaysOn = entry("always_on", R.string.notif_always_on_title, schedule, R.string.notif_always_on_subtitle)
     val interval = entry("interval", R.string.notif_check_interval, schedule)
     val newVideos = entry("new_videos", R.string.notif_type_new_videos, types, R.string.notif_type_new_videos_subtitle)
     val shorts = entry("shorts", R.string.notif_type_shorts, types, R.string.notif_type_shorts_subtitle)
@@ -45,5 +46,5 @@ internal object NotificationsIndex {
     val system =
         entry("system", R.string.notif_system_settings, R.string.settings_section_more, R.string.notif_system_settings_subtitle)
 
-    val all = listOf(enabled, interval, newVideos, shorts, downloads, reminders, updates, general, system)
+    val all = listOf(enabled, alwaysOn, interval, newVideos, shorts, downloads, reminders, updates, general, system)
 }

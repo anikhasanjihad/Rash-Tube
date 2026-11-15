@@ -56,6 +56,7 @@ internal fun NotificationSettingsScreen(
     val context = LocalContext.current
     val enabled by viewModel.enabled.collectAsStateWithLifecycle()
     val newVideosOn by viewModel.newVideos.collectAsStateWithLifecycle()
+    val alwaysOn by viewModel.alwaysOn.collectAsStateWithLifecycle()
     val interval by viewModel.intervalMinutes.collectAsStateWithLifecycle()
     val backgroundAllowed by viewModel.backgroundAllowed.collectAsStateWithLifecycle()
     var showIntervalDialog by rememberSaveable { mutableStateOf(false) }
@@ -103,6 +104,16 @@ internal fun NotificationSettingsScreen(
                     )
                 }
             }
+            switch(
+                NotificationsIndex.alwaysOn,
+                alwaysOn,
+                { on ->
+                    viewModel.setAlwaysOn(on)
+                    if (on && !backgroundAllowed) BackgroundWorkPolicy.requestUnrestrictedBackgroundWork(context)
+                },
+                enabled = enabled && newVideosOn,
+                icon = Icons.Outlined.Notifications,
+            )
             nav(
                 NotificationsIndex.interval,
                 value = intervalSummary,

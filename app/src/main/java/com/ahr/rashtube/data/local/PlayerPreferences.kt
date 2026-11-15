@@ -262,6 +262,7 @@ class PlayerPreferences(
         val NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
         val NOTIF_NEW_VIDEOS_ENABLED = booleanPreferencesKey("notif_new_videos_enabled")
         val ALL_BELLS_ON_MIGRATED = booleanPreferencesKey("all_bells_on_migrated_v1")
+        val ALWAYS_ON_NOTIFICATIONS = booleanPreferencesKey("always_on_notifications")
         val NOTIF_SHORTS_ENABLED = booleanPreferencesKey("notif_shorts_enabled")
         val NOTIF_REMINDERS_ENABLED = booleanPreferencesKey("notif_reminders_enabled")
         val NOTIF_GENERAL_ENABLED = booleanPreferencesKey("notif_general_enabled")
@@ -2274,6 +2275,15 @@ class PlayerPreferences(
         context.playerPreferencesDataStore.edit { preferences ->
             preferences[Keys.NOTIFICATIONS_ENABLED] = enabled
         }
+    }
+
+    /** Keeps a quiet foreground service running so new-video checks are not held back in the background. */
+    val alwaysOnNotifications: Flow<Boolean> =
+        context.playerPreferencesDataStore.data
+            .map { preferences -> preferences[Keys.ALWAYS_ON_NOTIFICATIONS] ?: true }
+
+    suspend fun setAlwaysOnNotifications(enabled: Boolean) {
+        context.playerPreferencesDataStore.edit { preferences -> preferences[Keys.ALWAYS_ON_NOTIFICATIONS] = enabled }
     }
 
     val allBellsOnMigrated: Flow<Boolean> =

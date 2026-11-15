@@ -21,6 +21,7 @@ class NotificationSettingsViewModel
     ) : SettingsViewModel() {
         val enabled = preferences.notificationsEnabled.asState(true)
         val newVideos = preferences.notifNewVideosEnabled.asState(true)
+        val alwaysOn = preferences.alwaysOnNotifications.asState(true)
         val shorts = preferences.notifShortsEnabled.asState(true)
         val downloads = preferences.notifDownloadsEnabled.asState(true)
         val reminders = preferences.notifRemindersEnabled.asState(true)
@@ -42,6 +43,8 @@ class NotificationSettingsViewModel
 
         fun setInterval(minutes: Int) = write { preferences.setSubscriptionCheckIntervalMinutes(minutes) }
 
+        fun setAlwaysOn(value: Boolean) = write { preferences.setAlwaysOnNotifications(value) }
+
         fun setNewVideos(value: Boolean) = write { preferences.setNotifNewVideosEnabled(value) }
 
         fun setShorts(value: Boolean) = write { preferences.setNotifShortsEnabled(value) }
@@ -55,6 +58,6 @@ class NotificationSettingsViewModel
         fun setGeneral(value: Boolean) = write { preferences.setNotifGeneralEnabled(value) }
 
         companion object {
-            const val DEFAULT_INTERVAL_MINUTES = 360
+            const val DEFAULT_INTERVAL_MINUTES = 30
         }
     }

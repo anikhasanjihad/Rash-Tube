@@ -821,6 +821,10 @@
     <string name="notif_check_interval_section_header">Feed Check Schedule</string>
     <string name="notif_master_toggle">Enable notifications</string>
     <string name="notif_master_toggle_subtitle">Let Rash Tube check for new videos in the background</string>
+    <string name="notif_always_on_title">Always-on notifications</string>
+    <string name="notif_always_on_subtitle">Keeps a quiet status notification and checks for new videos every 5 minutes, even when the app is closed.</string>
+    <string name="notif_always_on_channel">Always-on check</string>
+    <string name="notif_always_on_text">Checking for new videos</string>
     <string name="notif_background_restricted_title">Background checks are restricted</string>
     <string name="notif_background_restricted_subtitle">Android blocks checks while Rash Tube is closed. Tap to allow background activity.</string>
     <string name="notif_check_interval">New Video Check Interval</string>

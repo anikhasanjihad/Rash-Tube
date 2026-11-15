@@ -49,6 +49,15 @@ internal object BackgroundCheckScheduler {
                     }
                 }
         }
+        launch {
+            combine(
+                preferences.notificationsEnabled,
+                preferences.notifNewVideosEnabled,
+                preferences.alwaysOnNotifications,
+            ) { enabled, newVideos, alwaysOn -> enabled && newVideos && alwaysOn }
+                .distinctUntilChanged()
+                .collect { wanted -> AlwaysOnNotificationService.setRunning(context, wanted) }
+        }
         if (BuildConfig.UPDATER_ENABLED) {
             launch {
                 combine(preferences.notificationsEnabled, preferences.notifUpdatesEnabled, ::updateCheckWanted)

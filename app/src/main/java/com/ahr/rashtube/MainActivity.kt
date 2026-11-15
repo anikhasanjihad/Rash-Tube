@@ -261,6 +261,7 @@ class MainActivity : ComponentActivity() {
         super.onStart()
         DiscordPresenceRuntime.setAppForeground(true)
         LinkedSyncWorker.syncOnOpen(this)
+        com.ahr.rashtube.notification.AlwaysOnNotificationService.ensureRunning(this)
     }
 
     override fun onDestroy() {
