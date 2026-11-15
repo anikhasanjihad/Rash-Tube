@@ -57,6 +57,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -211,6 +212,20 @@ class MainActivity : ComponentActivity() {
         // Read now, alongside the rest of startup, so the theme is usually known by the first composition.
         val storedTheme = MutableStateFlow<ThemeSettings?>(null)
         lifecycleScope.launch { dataManager.themeSettings(appFontPreferences).collect { storedTheme.value = it } }
+
+        // Ambient Mode is landscape; turning it off hands the orientation back to the system.
+        lifecycleScope.launch {
+            com.ahr.rashtube.ui.components.musicplayer.full.AmbientModeController.active
+                .drop(1)
+                .collect { on ->
+                    requestedOrientation =
+                        if (on) {
+                            android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+                        } else {
+                            android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                        }
+                }
+        }
 
         setContent {
             CompositionLocalProvider(LocalHardwareKeyboard provides hardwareKeyboard) {

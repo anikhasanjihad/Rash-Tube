@@ -1,9 +1,5 @@
 package com.ahr.rashtube.ui.components.musicplayer.full
 
-import android.app.Activity
-import android.content.Context
-import android.content.ContextWrapper
-import android.content.pm.ActivityInfo
 import android.view.WindowManager
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
@@ -31,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -48,14 +43,6 @@ import com.ahr.rashtube.ui.screens.music.MusicPlayerViewModel
 import kotlin.math.abs
 
 private const val SWIPE_SKIP_THRESHOLD_PX = 150f
-
-/** The context may be wrapped (locale, theme), so walk down to the activity that owns the window. */
-private tailrec fun Context.findActivity(): Activity? =
-    when (this) {
-        is Activity -> this
-        is ContextWrapper -> baseContext.findActivity()
-        else -> null
-    }
 
 /**
  * Ambient Mode: the song's cover beside its synced lyrics, full screen and landscape, with the screen
@@ -77,11 +64,11 @@ internal fun AmbientModeOverlay(
         properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false),
     ) {
         val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
-        val activity = LocalContext.current.findActivity()
 
-        DisposableEffect(activity, dialogWindow) {
-            val previousOrientation = activity?.requestedOrientation ?: ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        // The activity does the rotating (see AmbientModeController); the dialog only hides the bars
+        // and keeps the screen awake.
+        DisposableEffect(dialogWindow) {
+            AmbientModeController.set(true)
             dialogWindow?.let { window ->
                 window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
                 WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -91,7 +78,7 @@ internal fun AmbientModeOverlay(
                 }
             }
             onDispose {
-                activity?.requestedOrientation = previousOrientation
+                AmbientModeController.set(false)
                 dialogWindow?.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
             }
         }
