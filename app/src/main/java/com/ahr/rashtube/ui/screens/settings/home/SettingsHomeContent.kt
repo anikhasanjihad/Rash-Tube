@@ -157,7 +157,9 @@ internal fun SettingsListScope.homeContent(
             onClick = { actions.onOpenUrl("https://t.me/rnexflix") },
         )
         page(SettingsDestination.DIAGNOSTICS)
-        if (BuildConfig.UPDATER_ENABLED) {
+    }
+    if (BuildConfig.UPDATER_ENABLED) {
+        group(key = "home.updates", header = R.string.settings_header_updates) {
             nav(
                 HomeIndex.checkForUpdates,
                 onClick = actions.onCheckForUpdates,

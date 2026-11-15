@@ -799,6 +799,7 @@
     <string name="settings_header_content_playback">Content &amp; Playback</string>
     <string name="settings_header_data_management">Data Management</string>
     <string name="settings_header_about">About</string>
+    <string name="settings_header_updates">Updates</string>
     <string name="settings_header_notifications">Notifications</string>
     <string name="settings_item_notifications">Notification Preferences</string>
     <string name="settings_item_notifications_subtitle">Control which notifications Rash Tube can send</string>

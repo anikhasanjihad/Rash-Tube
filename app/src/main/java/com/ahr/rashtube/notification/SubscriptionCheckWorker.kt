@@ -72,6 +72,9 @@ class SubscriptionCheckWorker(
         /** How many channels are polled concurrently. */
         private const val CHANNEL_CHUNK_SIZE = 10
 
+        /** Upper bound on notifications from one run, so a first check over many channels cannot flood. */
+        private const val MAX_PER_RUN = 15
+
         /**
          * Schedules the periodic check; [BackgroundCheckScheduler] decides whether it should run at all. A check
          * another profile left behind is replaced, so it runs with this profile's interval.
@@ -210,7 +213,7 @@ class SubscriptionCheckWorker(
                 }
 
                 // A collaboration two followed channels both list must still notify once.
-                val uniqueVideos = newVideos.distinctBy { it.videoId }
+                val uniqueVideos = newVideos.distinctBy { it.videoId }.take(MAX_PER_RUN)
                 if (uniqueVideos.isNotEmpty()) {
                     NotificationHelper.showSubscriptionUpdates(applicationContext, uniqueVideos)
                 }
@@ -257,7 +260,14 @@ class SubscriptionCheckWorker(
             reelVideoIds = reelVideoIds,
         )
 
-        val newEntries = ChannelRssParser.newEntriesSince(feed.entries, subscription.lastVideoId)
+        val newEntries =
+            if (subscription.lastVideoId == null) {
+                // Never checked before: announce only an upload from the last 24 hours, not the back catalogue.
+                val cutoff = System.currentTimeMillis() - TimeUnit.HOURS.toMillis(24)
+                feed.entries.take(1).filter { it.publishedAtMillis > cutoff }
+            } else {
+                ChannelRssParser.newEntriesSince(feed.entries, subscription.lastVideoId)
+            }
         repository.updateChannelLatestVideo(subscription.channelId, latestVideo.videoId)
 
         if (newEntries.isNotEmpty()) {

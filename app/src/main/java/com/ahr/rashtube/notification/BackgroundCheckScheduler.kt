@@ -44,7 +44,8 @@ internal object BackgroundCheckScheduler {
                     if (minutes == null) {
                         SubscriptionCheckWorker.cancelScheduledChecks(context)
                     } else {
-                        SubscriptionCheckWorker.schedulePeriodicCheck(context, minutes.toLong(), reschedule = index > 0)
+                        // REPLACE on every start, so a 6-hour schedule left by an older version is not kept.
+                        SubscriptionCheckWorker.schedulePeriodicCheck(context, minutes.toLong(), reschedule = true)
                     }
                 }
         }
