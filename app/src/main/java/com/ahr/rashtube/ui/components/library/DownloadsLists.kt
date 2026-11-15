@@ -214,6 +214,7 @@ internal fun MusicDownloadsList(
                         selectionMode = selection.active,
                         selected = track.track.videoId in selection.ids,
                         onClick = { if (selection.active) selection.onToggle(track.track.videoId) else onMusicClick(tracks, index) },
+                        onDeleteClick = { onSwipeDelete(track.track.videoId) },
                     )
                 }
             }

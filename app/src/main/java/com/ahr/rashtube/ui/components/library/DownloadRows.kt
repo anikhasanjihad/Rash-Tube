@@ -124,6 +124,18 @@ internal fun VideoDownloadItem(
             onClick = onClick,
             onLongClick = onLongClick,
             leading = if (selectionMode) ({ Checkbox(checked = selected, onCheckedChange = { onClick() }) }) else null,
+            trailing =
+                if (selectionMode) {
+                    null
+                } else {
+                    {
+                        MediaRowAction(
+                            icon = Icons.Outlined.Delete,
+                            contentDescription = stringResource(R.string.download_remove_from_downloads),
+                            onClick = onDeleteClick,
+                        )
+                    }
+                },
         ) {
             MediaThumbnail(
                 videoId = video.video.id,
@@ -139,7 +151,7 @@ internal fun VideoDownloadItem(
             video = video.video,
             onDismiss = { showMenu = false },
             onRemoveFromCollection = onDeleteClick,
-            removeFromCollectionLabel = stringResource(R.string.delete),
+            removeFromCollectionLabel = stringResource(R.string.download_remove_from_downloads),
             removeFromCollectionIcon = Icons.Outlined.Delete,
         )
     }
@@ -153,6 +165,7 @@ internal fun MusicDownloadRow(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onDeleteClick: (() -> Unit)? = null,
 ) {
     val musicMenus = LocalMusicMenus.current
     MediaRow(
@@ -166,6 +179,18 @@ internal fun MusicDownloadRow(
         onClick = onClick,
         onLongClick = if (selectionMode) null else ({ musicMenus.openSong(downloadedTrack.track) }),
         leading = if (selectionMode) ({ Checkbox(checked = selected, onCheckedChange = { onClick() }) }) else null,
+        trailing =
+            if (selectionMode || onDeleteClick == null) {
+                null
+            } else {
+                {
+                    MediaRowAction(
+                        icon = Icons.Outlined.Delete,
+                        contentDescription = stringResource(R.string.download_remove_from_downloads),
+                        onClick = onDeleteClick,
+                    )
+                }
+            },
         subtitleLeading =
             if (downloadedTrack.track.isExplicit == true) {
                 { ExplicitBadge(modifier = Modifier.padding(end = 4.dp)) }

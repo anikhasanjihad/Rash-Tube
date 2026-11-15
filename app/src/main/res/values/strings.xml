@@ -746,6 +746,7 @@
     <!-- Notifications Screen -->
     <string name="clear_all_notifications">Clear all notifications</string>
     <string name="delete">Delete</string>
+    <string name="download_remove_from_downloads">Remove from downloads</string>
     <string name="dismiss">Dismiss</string>
     <string name="peace_and_quiet">Peace and quiet</string>
     <string name="notifications_empty_body">You\'re all caught up! New updates from your subscriptions will appear here.</string>
