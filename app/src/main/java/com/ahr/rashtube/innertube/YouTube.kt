@@ -115,6 +115,8 @@ import com.ahr.rashtube.innertube.pages.search.SearchResultsPage
 import com.ahr.rashtube.innertube.pages.search.SearchSuggestion
 import com.ahr.rashtube.innertube.pages.search.parseSearchSuggestions
 import com.ahr.rashtube.innertube.pages.search.toSearchResultsPage
+import com.ahr.rashtube.innertube.pages.renderer.FeedItem
+import com.ahr.rashtube.innertube.pages.renderer.toAccountBrowsePage
 import com.ahr.rashtube.innertube.pages.timedLyricLines
 import com.ahr.rashtube.innertube.pages.toCommentRepliesPage
 import com.ahr.rashtube.innertube.pages.toMixPlaylistPage
@@ -2143,6 +2145,60 @@ object YouTube {
             }
         }
     }
+
+    /**
+     * The signed-in account's subscribed channels as the main site lists them (youtube.com/feed/channels),
+     * which is a different list from the music library's artists. The first page must load; a later
+     * page that fails keeps what was already read.
+     */
+    suspend fun accountSubscribedChannels(maxPages: Int = 40): Result<List<com.ahr.rashtube.data.model.Channel>> =
+        runCatching {
+            ensureVisitorData()
+            val client = currentWebClient().copy(loginSupported = true)
+            val found = LinkedHashMap<String, com.ahr.rashtube.data.model.Channel>()
+            var page =
+                innerTube
+                    .accountWebBrowse(client, browseId = "FEchannels")
+                    .body<JsonObject>()
+                    .toAccountBrowsePage()
+            var pages = 0
+            while (true) {
+                page.items.forEach { item ->
+                    (item as? FeedItem.RelatedChannelItem)?.channel?.let { found.putIfAbsent(it.id, it) }
+                }
+                val token = page.continuation ?: break
+                if (++pages >= maxPages) break
+                page =
+                    runCatching {
+                        innerTube
+                            .accountWebBrowse(client, continuation = token)
+                            .body<JsonObject>()
+                            .toAccountBrowsePage()
+                    }.getOrNull() ?: break
+            }
+            found.values.toList()
+        }
+
+    /**
+     * One page of the signed-in account's own YouTube home feed: what the site itself recommends
+     * to this account. Shorts are left out. Pass the returned token for the next page.
+     */
+    suspend fun accountHomeVideos(
+        continuation: String? = null,
+    ): Result<Pair<List<com.ahr.rashtube.data.model.Video>, String?>> =
+        runCatching {
+            ensureVisitorData()
+            val client = currentWebClient().copy(loginSupported = true)
+            val page =
+                innerTube
+                    .accountWebBrowse(
+                        client,
+                        browseId = "FEwhat_to_watch".takeIf { continuation == null },
+                        continuation = continuation,
+                    ).body<JsonObject>()
+                    .toAccountBrowsePage()
+            page.items.mapNotNull { (it as? FeedItem.VideoItem)?.video } to page.continuation
+        }
 
     suspend fun libraryContinuation(continuation: String) =
         runCatching {

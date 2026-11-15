@@ -241,49 +241,49 @@ internal fun EnhancedVideoPlayerScreen(
                         },
                     )
                 }
-                // Kept through fullscreen: the layout hides the page there, and keeping the list
-                // means leaving fullscreen, or waiting for the turn into it, never shows it empty.
-                if (!isInPipMode) {
-                    LazyColumn(
-                        Modifier.fillMaxSize(),
-                        state = listState,
-                        contentPadding = PaddingValues(bottom = maxOf(ListEndPadding, dockReserve + QueueDockGap)),
-                    ) {
-                        item {
-                            VideoInfoContent(
-                                video = video,
-                                uiState = uiState,
-                                viewModel = viewModel,
-                                screenState = screenState,
-                                commentsUiState = commentsUiState,
-                                commentsEnabled = commentsEnabled,
-                                showCommentsPreview = showCommentsPreview,
-                                deArrowEnabled = prefs.deArrowEnabled,
-                                context = context,
-                                scope = scope,
-                                snackbarHostState = snackbarHostState,
-                                onChannelClick = onChannelClick,
+                // Kept through fullscreen and PiP: the layout hides the page there, and keeping the list
+                // means leaving fullscreen or PiP never shows it empty. Dropping it in PiP rebuilt the
+                // whole page (info, comments preview, related cards) just as the window expanded, which
+                // is what made returning from PiP lag. In PiP it is only hidden, never recomposed.
+                LazyColumn(
+                    Modifier.fillMaxSize().graphicsLayer { this.alpha = if (isInPipMode) 0f else 1f },
+                    state = listState,
+                    contentPadding = PaddingValues(bottom = maxOf(ListEndPadding, dockReserve + QueueDockGap)),
+                ) {
+                    item {
+                        VideoInfoContent(
+                            video = video,
+                            uiState = uiState,
+                            viewModel = viewModel,
+                            screenState = screenState,
+                            commentsUiState = commentsUiState,
+                            commentsEnabled = commentsEnabled,
+                            showCommentsPreview = showCommentsPreview,
+                            deArrowEnabled = prefs.deArrowEnabled,
+                            context = context,
+                            scope = scope,
+                            snackbarHostState = snackbarHostState,
+                            onChannelClick = onChannelClick,
+                        )
+                    }
+                    if (showRelatedVideos) {
+                        if (showsRelatedSkeleton) {
+                            relatedVideosSkeleton(video.thumbnailUrl, relatedCardStyle)
+                        } else if (relatedListUsesGrid(isMediumLayout, relatedCardStyle, relatedLayout)) {
+                            relatedVideosGridContent(
+                                relatedVideos = uiState.relatedVideos,
+                                layout = relatedLayout,
+                                onVideoClick = onVideoClick,
+                                cardStyle = relatedCardStyle,
+                                firstCardModifier = firstRelatedCard,
                             )
-                        }
-                        if (showRelatedVideos) {
-                            if (showsRelatedSkeleton) {
-                                relatedVideosSkeleton(video.thumbnailUrl, relatedCardStyle)
-                            } else if (relatedListUsesGrid(isMediumLayout, relatedCardStyle, relatedLayout)) {
-                                relatedVideosGridContent(
-                                    relatedVideos = uiState.relatedVideos,
-                                    layout = relatedLayout,
-                                    onVideoClick = onVideoClick,
-                                    cardStyle = relatedCardStyle,
-                                    firstCardModifier = firstRelatedCard,
-                                )
-                            } else {
-                                relatedVideosContent(
-                                    relatedVideos = uiState.relatedVideos,
-                                    onVideoClick = onVideoClick,
-                                    cardStyle = relatedCardStyle,
-                                    firstCardModifier = firstRelatedCard,
-                                )
-                            }
+                        } else {
+                            relatedVideosContent(
+                                relatedVideos = uiState.relatedVideos,
+                                onVideoClick = onVideoClick,
+                                cardStyle = relatedCardStyle,
+                                firstCardModifier = firstRelatedCard,
+                            )
                         }
                     }
                 }

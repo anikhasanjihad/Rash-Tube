@@ -72,6 +72,8 @@ import javax.inject.Inject
 private data class Wave1FeedResults(
     val discovery: List<Pair<String, List<Video>>>,
     val related: RelatedGraphFetchResult,
+    /** The signed-in account's own YouTube home feed; empty when nobody is signed in. */
+    val account: List<Video> = emptyList(),
 )
 
 /** Cards a load-more attempt found but did not show yet, with why each is there. */
@@ -139,6 +141,7 @@ class HomeViewModel
             // Next pages of earlier searches a short load-more page may fetch.
             private const val DEEPER_SEARCH_PAGES = 2
             private const val SEARCH_TIMEOUT_MS = 6_000L
+            private const val ACCOUNT_FEED_TIMEOUT_MS = 6_000L
         }
 
         private val relatedPickIds = ConcurrentHashMap.newKeySet<String>()
@@ -627,15 +630,25 @@ class HomeViewModel
                                             feedSources.fetchRelatedGraph(seedInputs + longTermInputs, seedIds, ::cacheFilters)
                                         }
 
+                                    // What YouTube itself recommends to the signed-in account; the other lanes
+                                    // only know what was watched in this app.
+                                    val deferredAccount =
+                                        async {
+                                            runCatching {
+                                                withTimeoutOrNull(ACCOUNT_FEED_TIMEOUT_MS) { repository.accountHomeFeed() }
+                                            }.getOrNull().orEmpty()
+                                        }
+
                                     Wave1FeedResults(
                                         discovery = deferredDiscovery.await(),
                                         related = deferredRelated.await(),
+                                        account = deferredAccount.await(),
                                     )
                                 }
                             }
 
                         val discoveryPairs = results.discovery
-                        val rawDiscovery = discoveryPairs.flatMap { it.second }
+                        val rawDiscovery = results.account + discoveryPairs.flatMap { it.second }
                         val relatedFetch = results.related
                         val rawRelated = relatedFetch.candidates
 

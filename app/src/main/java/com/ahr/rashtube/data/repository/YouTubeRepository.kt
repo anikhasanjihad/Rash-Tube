@@ -312,6 +312,30 @@ class YouTubeRepository
                     }
             }
 
+        /**
+         * The signed-in account's own YouTube home feed (two pages at most), as feed candidates.
+         * Empty when nobody is signed in or YouTube refuses the request, so callers need no check.
+         */
+        suspend fun accountHomeFeed(): List<Video> =
+            withContext(Dispatchers.IO) {
+                if (YouTube.cookie.isNullOrBlank()) return@withContext emptyList()
+                val videos = ArrayList<Video>()
+                var token: String? = null
+                for (round in 0 until 2) {
+                    val page =
+                        YouTube
+                            .accountHomeVideos(token)
+                            .onFailure { error ->
+                                Log.w(TAG, "accountHomeFeed failed: ${error::class.simpleName}: ${error.message}")
+                            }.getOrNull() ?: break
+                    videos += page.first
+                    token = page.second ?: break
+                }
+                videos.distinctBy { it.id }.map { withMusicFlag(it) }
+            }
+
+        private fun withMusicFlag(video: Video): Video = video.copy(isMusic = looksLikeMusicVideo(video.title, video.channelName))
+
         suspend fun enrichLikelyCollabAvatarStacks(
             videos: List<Video>,
             limit: Int = 10,

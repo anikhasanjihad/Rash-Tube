@@ -391,6 +391,46 @@ class InnerTube {
     }
 
     /**
+     * A www.youtube.com /browse request made as the signed-in account. The stored cookie and a
+     * SAPISIDHASH for the main-site origin ride along, so the answer is the account's own (its
+     * subscription list, its home feed) and not an anonymous visitor's. Throws when nobody is
+     * signed in, so a caller never mistakes a logged-out page for the account's.
+     */
+    suspend fun accountWebBrowse(
+        client: YouTubeClient,
+        browseId: String? = null,
+        continuation: String? = null,
+    ) = withRetry {
+        val signedInCookie = checkNotNull(cookie?.takeIf { it.isNotBlank() }) { "Not signed in" }
+        val sapisid = checkNotNull(cookieMap["SAPISID"] ?: cookieMap["__Secure-3PAPISID"]) { "Sign-in cookie has no SAPISID" }
+        val now = System.currentTimeMillis() / 1000
+        httpClient.post("https://www.youtube.com/youtubei/v1/browse") {
+            headers {
+                append("X-YouTube-Client-Name", client.clientId)
+                append("X-YouTube-Client-Version", client.clientVersion)
+                append(HttpHeaders.Origin, YouTubeClient.ORIGIN_YOUTUBE)
+                append("X-Origin", YouTubeClient.ORIGIN_YOUTUBE)
+                append("Referer", YouTubeClient.REFERER_YOUTUBE)
+                append("X-Goog-AuthUser", "0")
+                visitorData?.let { append("X-Goog-Visitor-Id", it) }
+                append("cookie", signedInCookie)
+                append("Authorization", "SAPISIDHASH ${now}_${sha1("$now $sapisid ${YouTubeClient.ORIGIN_YOUTUBE}")}")
+            }
+            contentType(ContentType.Application.Json)
+            userAgent(client.userAgent)
+            parameter("prettyPrint", false)
+            setBody(
+                BrowseBody(
+                    context = client.toContext(locale, visitorData, dataSyncId),
+                    browseId = browseId,
+                    params = null,
+                    continuation = continuation,
+                ),
+            )
+        }
+    }
+
+    /**
      * Search for videos within a specific YouTube channel using the /browse endpoint.
      * Uses the channel's Search Tab (params = "EgZzZWFyY2jyBgQKAloA") with the query as a
      * top-level body field.
