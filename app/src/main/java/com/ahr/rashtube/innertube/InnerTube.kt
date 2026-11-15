@@ -898,6 +898,39 @@ class InnerTube {
             setBody(AccountMenuBody(client.toContext(locale, visitorData, dataSyncId)))
         }
 
+    /** A comment-section page read as the signed-in account: only then does it carry the params for posting. */
+    suspend fun nextWatchSignedIn(continuation: String) =
+        httpClient.post("${YouTubeClient.API_URL_YOUTUBE}next") {
+            val client = YouTubeClient.WEB.copy(loginSupported = true)
+            ytClient(client, setLogin = true, apiUrl = YouTubeClient.API_URL_YOUTUBE)
+            setBody(
+                NextBody(
+                    context = client.toContext(locale, visitorData, dataSyncId),
+                    videoId = null,
+                    playlistId = null,
+                    playlistSetVideoId = null,
+                    index = null,
+                    params = null,
+                    continuation = continuation,
+                ),
+            )
+        }
+
+    suspend fun createComment(
+        createCommentParams: String,
+        commentText: String,
+    ) = httpClient.post("${YouTubeClient.API_URL_YOUTUBE}comment/create_comment") {
+        val client = YouTubeClient.WEB.copy(loginSupported = true)
+        ytClient(client, setLogin = true, apiUrl = YouTubeClient.API_URL_YOUTUBE)
+        setBody(
+            CreateCommentBody(
+                context = client.toContext(locale, visitorData, dataSyncId),
+                createCommentParams = createCommentParams,
+                commentText = commentText,
+            ),
+        )
+    }
+
     suspend fun likeVideo(
         client: YouTubeClient,
         videoId: String,

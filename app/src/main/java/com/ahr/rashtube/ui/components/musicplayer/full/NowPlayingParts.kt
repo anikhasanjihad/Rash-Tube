@@ -35,6 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import com.ahr.rashtube.R
 import com.ahr.rashtube.player.RepeatMode
 import com.ahr.rashtube.ui.components.musicplayer.controls.PlayerMainActionButtons
@@ -65,19 +67,36 @@ internal fun PlayerArtworkFrame(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
+    // Apple Music's signature: the cover rests smaller while paused and swells when playback starts.
+    val restScale by androidx.compose.animation.core.animateFloatAsState(
+        targetValue = if (isPlaying || immersive) 1f else 0.86f,
+        animationSpec =
+            androidx.compose.animation.core.spring(
+                dampingRatio = 0.72f,
+                stiffness = androidx.compose.animation.core.Spring.StiffnessLow,
+            ),
+        label = "artworkRestScale",
+    )
+    val corner = RoundedCornerShape(PlayerArtworkCornerRadius)
     Box(
         modifier =
             modifier
+                .graphicsLayer {
+                    scaleX = restScale
+                    scaleY = restScale
+                }
                 .then(
                     if (immersive) {
                         Modifier
                     } else {
                         Modifier.shadow(
-                            elevation = if (isPlaying) 24.dp else 8.dp,
-                            shape = RoundedCornerShape(8.dp),
+                            elevation = if (isPlaying) 40.dp else 10.dp,
+                            shape = corner,
+                            ambientColor = Color.Black.copy(alpha = 0.6f),
+                            spotColor = Color.Black.copy(alpha = 0.6f),
                         )
                     },
-                ).clip(RoundedCornerShape(8.dp)),
+                ).clip(corner),
     ) {
         content()
     }
@@ -111,7 +130,7 @@ internal fun PlayerTrackHeader(
             ) { value ->
                 Text(
                     text = value,
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.headlineSmall,
                     color = colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     maxLines = 1,
@@ -127,9 +146,9 @@ internal fun PlayerTrackHeader(
             ) { value ->
                 Text(
                     text = value,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.Normal,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = colorScheme.primary.copy(alpha = 0.92f),
+                    fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.clickable(onClick = onArtistClick).trackTextMarquee(animateTrackText),

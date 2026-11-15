@@ -99,8 +99,12 @@ fun ProfileTopBarAction(
             }
         }
     }
+    val privatePrefs = remember { com.ahr.rashtube.data.local.PlayerPreferences(context.applicationContext) }
+    val privateMode by privatePrefs.deepFlowActive.collectAsStateWithLifecycle(initialValue = false)
     if (account.signedIn) {
-        val accountName = account.name ?: account.email ?: stringResource(R.string.app_name)
+        // Private mode keeps the account's name and photo off the screen.
+        val accountName =
+            if (privateMode) stringResource(R.string.deep_flow_mode_title) else account.name ?: account.email ?: stringResource(R.string.app_name)
         IconButton(
             onClick = { com.ahr.rashtube.account.YouTubeAccountActivity.launch() },
             modifier = Modifier.semantics { contentDescription = accountName },
@@ -112,7 +116,12 @@ fun ProfileTopBarAction(
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
             ) {
                 androidx.compose.foundation.layout.Box(contentAlignment = androidx.compose.ui.Alignment.Center) {
-                    if (account.avatarUrl != null) {
+                    if (privateMode) {
+                        androidx.compose.material3.Icon(
+                            androidx.compose.material.icons.Icons.Outlined.Person,
+                            contentDescription = null,
+                        )
+                    } else if (account.avatarUrl != null) {
                         coil3.compose.AsyncImage(
                             model = account.avatarUrl,
                             contentDescription = null,

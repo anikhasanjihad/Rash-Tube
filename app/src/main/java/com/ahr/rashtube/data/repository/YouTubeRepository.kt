@@ -696,6 +696,20 @@ class YouTubeRepository
                 )
             }
 
+        /** Posts a top-level comment on [videoId] as the signed-in YouTube account. */
+        suspend fun postVideoComment(
+            videoId: String,
+            text: String,
+        ): Result<Unit> =
+            withContext(Dispatchers.IO) {
+                runCatching {
+                    val token =
+                        (watchNextResponse(videoId)?.let(YouTube::commentsSection) as? VideoCommentsSection.Open)?.token
+                            ?: error("Comments are not available")
+                    YouTube.postComment(token, text).getOrThrow()
+                }
+            }
+
         suspend fun getMoreVideoComments(
             videoId: String,
             continuation: String,

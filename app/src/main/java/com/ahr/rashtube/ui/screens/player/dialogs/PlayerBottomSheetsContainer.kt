@@ -59,6 +59,11 @@ internal fun PlayerBottomSheetsContainer(
     onMediaSheetProgressChange: (Float) -> Unit = {},
 ) {
     val visibleComments = commentsUiState.visibleComments(screenState)
+    val commentContext = androidx.compose.ui.platform.LocalContext.current
+    val commentAccount by com.ahr.rashtube.account.YouTubeAccountStore
+        .getInstance(commentContext)
+        .state
+        .collectAsStateWithLifecycle()
 
     val handleSeek: (Long) -> Unit =
         remember {
@@ -101,6 +106,17 @@ internal fun PlayerBottomSheetsContainer(
             listState = screenState.commentsListState,
             threadState = screenState.commentThreads,
             isDisabled = commentsUiState.isDisabled,
+            onPostComment =
+                if (commentAccount.signedIn) {
+                    { text ->
+                        com.ahr.rashtube.data.repository.YouTubeRepository
+                            .getInstance()
+                            .postVideoComment(video.id, text)
+                            .isSuccess
+                    }
+                } else {
+                    null
+                },
         )
     }
 

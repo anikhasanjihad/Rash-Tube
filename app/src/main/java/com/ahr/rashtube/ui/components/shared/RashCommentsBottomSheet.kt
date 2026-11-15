@@ -28,6 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.foundation.layout.navigationBarsPadding
 import com.ahr.rashtube.R
 import com.ahr.rashtube.data.model.Comment
 import com.ahr.rashtube.ui.components.shared.RashBottomSheet
@@ -61,6 +64,8 @@ fun RashCommentsBottomSheet(
     listState: LazyListState = rememberLazyListState(),
     threadState: CommentThreadState? = null,
     isDisabled: Boolean = false,
+    /** Set when the signed-in account can comment: posts the text and reports whether it worked. */
+    onPostComment: (suspend (String) -> Boolean)? = null,
 ) {
     val sheetState = rememberFlowBottomSheetState()
     val tint = rememberMediaArtworkTint(artworkUrl)
@@ -111,6 +116,54 @@ fun RashCommentsBottomSheet(
                     .fillMaxWidth()
                     .weight(1f),
         )
+        if (onPostComment != null && !isDisabled) CommentComposer(onPostComment)
+    }
+}
+
+@Composable
+private fun CommentComposer(onPost: suspend (String) -> Boolean) {
+    var text by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf("") }
+    var posting by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    var failed by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
+    val scope = androidx.compose.runtime.rememberCoroutineScope()
+    androidx.compose.foundation.layout.Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+    ) {
+        androidx.compose.material3.OutlinedTextField(
+            value = text,
+            onValueChange = {
+                text = it
+                failed = false
+            },
+            modifier = Modifier.weight(1f),
+            placeholder = { androidx.compose.material3.Text(stringResource(R.string.add_comment_placeholder)) },
+            maxLines = 4,
+            shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
+            isError = failed,
+            enabled = !posting,
+            supportingText = if (failed) ({ androidx.compose.material3.Text(stringResource(R.string.comment_post_failed)) }) else null,
+        )
+        androidx.compose.material3.IconButton(
+            enabled = text.isNotBlank() && !posting,
+            onClick = {
+                scope.launch {
+                    posting = true
+                    val ok = onPost(text.trim())
+                    posting = false
+                    if (ok) text = "" else failed = true
+                }
+            },
+        ) {
+            androidx.compose.material3.Icon(
+                androidx.compose.material.icons.Icons.AutoMirrored.Filled.Send,
+                contentDescription = stringResource(R.string.comment_post),
+            )
+        }
     }
 }
 

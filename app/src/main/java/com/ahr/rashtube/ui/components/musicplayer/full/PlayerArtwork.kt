@@ -38,7 +38,7 @@ import com.ahr.rashtube.R
 import com.ahr.rashtube.ui.components.shared.SkipDirection
 import kotlinx.coroutines.launch
 
-internal val PlayerArtworkCornerRadius = 12.dp
+internal val PlayerArtworkCornerRadius = 16.dp
 
 @Composable
 private fun rememberArtworkRequest(thumbnailUrl: String?): ImageRequest {

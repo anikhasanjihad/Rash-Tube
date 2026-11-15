@@ -129,6 +129,7 @@ import com.ahr.rashtube.utils.avatarImageIdentityKey
 import com.ahr.rashtube.utils.relativedate.RelativeUploadDateParser
 import io.ktor.client.call.body
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.isSuccess
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -2485,6 +2486,30 @@ object YouTube {
             Json
                 .parseToJsonElement(innerTube.timedComments(continuation).bodyAsText())
                 .toTimedComments(ownVideoId)
+        }
+
+    /**
+     * Posts a top-level comment as the signed-in account. [sectionToken] is the video's comment-section
+     * continuation; the section is read signed-in to get the params YouTube wants for a new comment.
+     */
+    suspend fun postComment(
+        sectionToken: String,
+        text: String,
+    ): Result<Unit> =
+        runCatching {
+            val section = Json.parseToJsonElement(innerTube.nextWatchSignedIn(sectionToken).bodyAsText())
+            val params = section.findStringByKey("createCommentParams") ?: error("Sign in to comment")
+            val response = innerTube.createComment(params, text)
+            check(response.status.isSuccess()) { "Comment failed (${response.status.value})" }
+        }
+
+    private fun JsonElement.findStringByKey(key: String): String? =
+        when (this) {
+            is JsonObject ->
+                (this[key] as? JsonPrimitive)?.takeIf { it.isString }?.content
+                    ?: values.firstNotNullOfOrNull { it.findStringByKey(key) }
+            is JsonArray -> firstNotNullOfOrNull { it.findStringByKey(key) }
+            else -> null
         }
 
     suspend fun commentReplies(

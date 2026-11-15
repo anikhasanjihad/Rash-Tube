@@ -396,6 +396,8 @@
     <string name="comments_with_count_template">Comments · %1$s</string>
     <string name="no_comments_yet">No comments yet</string>
     <string name="comments_turned_off">Comments are turned off</string>
+    <string name="comment_post">Post comment</string>
+    <string name="comment_post_failed">Couldn\'t post your comment. Try again.</string>
     <string name="add_comment_placeholder">Add a comment...</string>
     <string name="comment_edited">edited</string>
     <string name="comment_time_edited_template">%1$s (%2$s)</string>
@@ -759,27 +761,27 @@
     <string name="settings_reset_everything">Reset Everything</string>
     <string name="settings_analyzing_interactions">Analyzing your interactions...</string>
     <string name="settings_view_analytics">View Analytics</string>
-    <!-- Deep Focus Mode -->
-    <string name="deep_flow_mode_title">Deep Focus Mode</string>
-    <string name="deep_flow_mode_subtitle">Pause learning and search history</string>
-    <string name="deep_flow_learning_paused">LEARNING PAUSED</string>
+    <!-- Private Mode -->
+    <string name="deep_flow_mode_title">Private Mode</string>
+    <string name="deep_flow_mode_subtitle">Hide your account name and photo, and pause history and learning. The app keeps working as usual.</string>
+    <string name="deep_flow_learning_paused">PRIVATE MODE</string>
     <string name="deep_flow_expires_in">Expires in %s</string>
     <string name="deep_flow_expire_duration_title">Auto-disable after</string>
     <string name="deep_flow_expire_duration_subtitle">Learning resumes automatically after %s</string>
     <string name="deep_flow_save_history_title">Save to watch history</string>
     <string name="deep_flow_save_history_subtitle">Keep watch history without teaching recommendations</string>
-    <string name="deep_flow_scrobble_title">Scrobble during Deep Focus</string>
-    <string name="taste_learning_paused">Deep Focus is on, learning is paused</string>
+    <string name="deep_flow_scrobble_title">Scrobble during Private Mode</string>
+    <string name="taste_learning_paused">Private Mode is on, learning is paused</string>
     <string name="deep_flow_scrobble_subtitle">Keep sending listens to Last.fm, Libre.fm and ListenBrainz</string>
     <string name="deep_flow_on_search_title">Show on search</string>
-    <string name="deep_flow_on_search_subtitle">A Deep Focus switch above recent searches</string>
-    <string name="deep_flow_long_press_hint">Long-press the Rash Tube logo or name on Home to switch Deep Focus</string>
+    <string name="deep_flow_on_search_subtitle">A Private Mode switch above recent searches</string>
+    <string name="deep_flow_long_press_hint">Long-press the Rash Tube logo or name on Home to switch Private Mode</string>
     <string name="deep_flow_dialog_title">Pause Duration</string>
     <string name="deep_flow_dialog_body">How long should learning stay paused?</string>
-    <string name="deep_flow_enabled_message">Deep Focus enabled</string>
-    <string name="deep_flow_disabled_message">Deep Focus disabled</string>
-    <string name="deep_flow_expired_message">Deep Focus timer ended</string>
-    <string name="deep_flow_active_until_disabled">Deep Focus stays active until you turn it off</string>
+    <string name="deep_flow_enabled_message">Private Mode enabled</string>
+    <string name="deep_flow_disabled_message">Private Mode disabled</string>
+    <string name="deep_flow_expired_message">Private Mode timer ended</string>
+    <string name="deep_flow_active_until_disabled">Private Mode stays active until you turn it off</string>
     <string name="deep_flow_duration_never">Never</string>
     <string name="deep_flow_duration_1h">1 hour</string>
     <string name="deep_flow_duration_2h">2 hours</string>
@@ -1291,7 +1293,7 @@
     <string name="content_settings_home_subscriptions_subtitle">Mix videos from channels you follow into Home</string>
     <string name="settings_section_watch_history">Watch history</string>
     <string name="pause_watch_history_title">Pause watch history</string>
-    <string name="pause_watch_history_subtitle">Stop saving what you watch. Deep Focus also pauses learning</string>
+    <string name="pause_watch_history_subtitle">Stop saving what you watch. Private Mode also pauses learning</string>
     <string name="content_settings_show_app_logo_title">Show app logo icon</string>
     <string name="content_settings_show_app_logo_subtitle">Show the Rash Tube logo in the Home top bar</string>
     <string name="content_settings_header_shorts">Shorts</string>
