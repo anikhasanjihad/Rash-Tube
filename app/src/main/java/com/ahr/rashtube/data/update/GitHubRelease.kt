@@ -87,6 +87,11 @@ internal fun selectApk(
     if (splits.isNotEmpty()) {
         return supportedAbis.firstNotNullOfOrNull { abi -> splits.firstOrNull { it.name.equals("flow-$abi.apk", ignoreCase = true) } }
     }
+    // Gradle's own names: app-github-<abi>-release.apk per ABI, and app-github-universal-release.apk.
+    supportedAbis
+        .firstNotNullOfOrNull { abi -> github.firstOrNull { it.name.contains("-$abi-", ignoreCase = true) } }
+        ?.let { return it }
+    github.firstOrNull { it.name.contains("-universal-", ignoreCase = true) }?.let { return it }
     val publishesSplits = github.any { it.name.startsWith("flow-", ignoreCase = true) }
     if (publishesSplits && github.none { it.name.equals(UNIVERSAL_APK, ignoreCase = true) }) return null
     return github.firstOrNull { it.name.equals(UNIVERSAL_APK, ignoreCase = true) } ?: github.firstOrNull()

@@ -185,7 +185,7 @@ object DeviceDetails {
         return listOf(
             DeviceFact(
                 context.getString(R.string.device_info_version),
-                "${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
+                BuildConfig.VERSION_NAME,
             ),
             DeviceFact(context.getString(R.string.device_info_build_type), "${BuildConfig.FLAVOR} ${BuildConfig.BUILD_TYPE}"),
             DeviceFact(context.getString(R.string.device_info_installer), installer ?: unknown),

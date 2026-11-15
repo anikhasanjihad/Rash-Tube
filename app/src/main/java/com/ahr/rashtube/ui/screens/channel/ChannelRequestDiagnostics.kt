@@ -15,7 +15,7 @@ internal fun buildChannelRequestErrorLog(
     return buildString {
         appendLine("FLOW CHANNEL REQUEST ERROR")
         appendLine("Operation: $operation")
-        appendLine("App: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
+        appendLine("App: ${BuildConfig.VERSION_NAME}")
         appendLine("Device: ${Build.MANUFACTURER} ${Build.MODEL}")
         appendLine("Android: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})")
         appendLine("WEB client: ${YouTubeClient.WEB.clientVersion}")

@@ -12,7 +12,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
+import android.os.SystemClock
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,22 +36,35 @@ class UpdateLaunchViewModel
         private val updates: UpdateRepository,
         private val prompts: LaunchPrompts,
     ) : ViewModel() {
-        private var checked = false
+        private var lastCheckMs = 0L
+        private var promptsNotified = false
         private val _openUpdate = MutableStateFlow(false)
         val openUpdate: StateFlow<Boolean> = _openUpdate.asStateFlow()
 
+        /** Asks GitHub for a newer release; repeats each time the app comes forward, at most every few minutes. */
         fun check() {
-            if (checked) return
-            checked = true
+            val now = SystemClock.elapsedRealtime()
+            if (_openUpdate.value || (lastCheckMs != 0L && now - lastCheckMs < RECHECK_MS)) return
+            lastCheckMs = now
             if (BuildConfig.DEBUG || !BuildConfig.UPDATER_ENABLED) {
-                prompts.updateCheckFinished(shownUpdate = false)
+                notifyPrompts(shownUpdate = false)
                 return
             }
             viewModelScope.launch {
                 val release = updates.requiredRelease()
-                prompts.updateCheckFinished(shownUpdate = release != null)
+                notifyPrompts(shownUpdate = release != null)
                 if (release != null) _openUpdate.value = true
             }
+        }
+
+        private fun notifyPrompts(shownUpdate: Boolean) {
+            if (promptsNotified) return
+            promptsNotified = true
+            prompts.updateCheckFinished(shownUpdate = shownUpdate)
+        }
+
+        private companion object {
+            const val RECHECK_MS = 5 * 60 * 1000L
         }
     }
 
@@ -63,6 +79,7 @@ fun ForcedUpdateGate(needsOnboarding: Boolean?) {
     val viewModel: UpdateLaunchViewModel = hiltViewModel(activity)
     val updateRequired by viewModel.openUpdate.collectAsStateWithLifecycle()
     LaunchedEffect(needsOnboarding) { if (needsOnboarding == false) viewModel.check() }
+    LifecycleEventEffect(Lifecycle.Event.ON_START) { if (needsOnboarding == false) viewModel.check() }
     if (updateRequired) {
         BackHandler(enabled = true) {}
         Surface(

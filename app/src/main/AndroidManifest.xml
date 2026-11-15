@@ -217,7 +217,7 @@
             </intent-filter>
         </activity>
         
-        <!-- Always-on new-video checks: a quiet foreground service, restarted after boot. -->
+        <!-- Legacy always-on service: no longer runs in the foreground (it only stops itself); checks now run through WorkManager. -->
         <service
             android:name=".notification.AlwaysOnNotificationService"
             android:exported="false"

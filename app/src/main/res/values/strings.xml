@@ -822,7 +822,7 @@
     <string name="notif_master_toggle">Enable notifications</string>
     <string name="notif_master_toggle_subtitle">Let Rash Tube check for new videos in the background</string>
     <string name="notif_always_on_title">Always-on notifications</string>
-    <string name="notif_always_on_subtitle">Checks for new videos every 2 minutes in the background, even when the app is closed, without showing a notification.</string>
+    <string name="notif_always_on_subtitle">Checks for new videos about every 3 minutes in the background, without showing any notification.</string>
     <string name="notif_always_on_channel">Always-on check</string>
     <string name="notif_always_on_text">Checking for new videos</string>
     <string name="notif_background_restricted_title">Background checks are restricted</string>

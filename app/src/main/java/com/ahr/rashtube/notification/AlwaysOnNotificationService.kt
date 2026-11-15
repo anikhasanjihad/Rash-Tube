@@ -1,40 +1,29 @@
 package com.ahr.rashtube.notification
 
-import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ServiceInfo
-import android.os.Build
 import android.os.IBinder
-import androidx.core.app.NotificationCompat
-import androidx.core.app.ServiceCompat
-import androidx.core.content.ContextCompat
-import com.ahr.rashtube.R
+import androidx.work.Constraints
+import androidx.work.CoroutineWorker
+import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.ahr.rashtube.data.local.PlayerPreferences
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.concurrent.TimeUnit
 
 /**
- * Keeps the app process alive with a quiet status notification, and asks for a new-video check every
- * few minutes. Without it Android may hold background checks back for hours on battery-saving ROMs.
+ * Legacy foreground service of earlier versions. A foreground service must show a notification, so it is
+ * gone: the frequent new-video check now runs through WorkManager ([AlwaysOnChainWorker]), which shows
+ * nothing. This class only stops itself if an old install still starts it.
  */
 class AlwaysOnNotificationService : Service() {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-    private var loop: Job? = null
-
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(
@@ -42,86 +31,34 @@ class AlwaysOnNotificationService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
-        createChannel()
-        ServiceCompat.startForeground(
-            this,
-            NOTIFICATION_ID,
-            buildNotification(),
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE else 0,
-        )
-        if (loop?.isActive != true) {
-            loop =
-                scope.launch {
-                    while (isActive) {
-                        runCatching { SubscriptionCheckWorker.runImmediateCheck(applicationContext) }
-                        delay(CHECK_EVERY_MS)
-                    }
-                }
-        }
-        return START_STICKY
-    }
-
-    override fun onDestroy() {
-        scope.cancel()
-        super.onDestroy()
-    }
-
-    private fun createChannel() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
-        val manager = getSystemService(NotificationManager::class.java)
-        // The old channel was only minimised, so its notification still showed in the shade. A channel's
-        // importance cannot be lowered by the app once created, hence a new id that is blocked from the start.
-        manager.deleteNotificationChannel(OLD_CHANNEL_ID)
-        manager.createNotificationChannel(
-            NotificationChannel(CHANNEL_ID, getString(R.string.notif_always_on_channel), NotificationManager.IMPORTANCE_NONE).apply {
-                setShowBadge(false)
-                setSound(null, null)
-                enableVibration(false)
-                enableLights(false)
-            },
-        )
-    }
-
-    private fun buildNotification(): Notification {
-        val open =
-            packageManager.getLaunchIntentForPackage(packageName)?.let {
-                PendingIntent.getActivity(this, 0, it, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-            }
-        return NotificationCompat
-            .Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification_logo)
-            .setColor(ContextCompat.getColor(this, R.color.flow_red))
-            .setContentTitle(getString(R.string.app_name))
-            .setContentText(getString(R.string.notif_always_on_text))
-            .setContentIntent(open)
-            .setOngoing(true)
-            .setSilent(true)
-            .setShowWhen(false)
-            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
-            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
-            .setPriority(NotificationCompat.PRIORITY_MIN)
-            .setCategory(NotificationCompat.CATEGORY_SERVICE)
-            .build()
+        stopSelf()
+        return START_NOT_STICKY
     }
 
     companion object {
         private const val OLD_CHANNEL_ID = "always_on_channel"
-        private const val CHANNEL_ID = "always_on_silent_channel"
-        private const val NOTIFICATION_ID = 7410
-        private const val CHECK_EVERY_MS = 2 * 60 * 1000L
+        private const val OLD_SILENT_CHANNEL_ID = "always_on_silent_channel"
 
-        /** Starts or stops the service. Android may refuse a start from the background; that is not an error. */
+        /** Turns the silent frequent check on or off, and makes sure no leftover service notification stays. */
         fun setRunning(
             context: Context,
             running: Boolean,
         ) {
-            val intent = Intent(context, AlwaysOnNotificationService::class.java)
+            runCatching { context.stopService(Intent(context, AlwaysOnNotificationService::class.java)) }
             runCatching {
-                if (running) ContextCompat.startForegroundService(context, intent) else context.stopService(intent)
+                val manager = context.getSystemService(NotificationManager::class.java)
+                manager.cancel(LEGACY_NOTIFICATION_ID)
+                manager.deleteNotificationChannel(OLD_CHANNEL_ID)
+                manager.deleteNotificationChannel(OLD_SILENT_CHANNEL_ID)
+            }
+            if (running) {
+                AlwaysOnChainWorker.start(context)
+            } else {
+                WorkManager.getInstance(context).cancelUniqueWork(AlwaysOnChainWorker.NAME)
             }
         }
 
-        /** Starts the service when the switches ask for it; used on app open and after boot. */
+        /** Starts the check when the switches ask for it; used on app open and after boot. */
         fun ensureRunning(context: Context) {
             val preferences = PlayerPreferences(context)
             val wanted =
@@ -130,12 +67,55 @@ class AlwaysOnNotificationService : Service() {
                         preferences.notifNewVideosEnabled.first() &&
                         preferences.alwaysOnNotifications.first()
                 }
-            if (wanted) setRunning(context, true)
+            setRunning(context, wanted)
+        }
+
+        private const val LEGACY_NOTIFICATION_ID = 7410
+    }
+}
+
+/**
+ * Asks for a new-video check, then schedules itself again a few minutes later. A chain of delayed
+ * WorkManager jobs, so nothing is shown to the user and no foreground service is needed.
+ */
+class AlwaysOnChainWorker(
+    context: Context,
+    params: WorkerParameters,
+) : CoroutineWorker(context, params) {
+    override suspend fun doWork(): Result {
+        val preferences = PlayerPreferences(applicationContext)
+        val wanted =
+            preferences.notificationsEnabled.first() &&
+                preferences.notifNewVideosEnabled.first() &&
+                preferences.alwaysOnNotifications.first()
+        if (!wanted) return Result.success()
+        runCatching { SubscriptionCheckWorker.runImmediateCheck(applicationContext) }
+        enqueue(applicationContext, ExistingWorkPolicy.APPEND_OR_REPLACE)
+        return Result.success()
+    }
+
+    companion object {
+        const val NAME = "always_on_chain"
+        private const val CHECK_EVERY_MINUTES = 3L
+
+        /** Begins the chain unless one is already waiting. */
+        fun start(context: Context) = enqueue(context, ExistingWorkPolicy.KEEP)
+
+        private fun enqueue(
+            context: Context,
+            policy: ExistingWorkPolicy,
+        ) {
+            val request =
+                OneTimeWorkRequestBuilder<AlwaysOnChainWorker>()
+                    .setInitialDelay(CHECK_EVERY_MINUTES, TimeUnit.MINUTES)
+                    .setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
+                    .build()
+            WorkManager.getInstance(context).enqueueUniqueWork(NAME, policy, request)
         }
     }
 }
 
-/** Restarts the always-on check after the phone boots or the app is updated. */
+/** Restarts the silent check after the phone boots or the app is updated. */
 class AlwaysOnBootReceiver : BroadcastReceiver() {
     override fun onReceive(
         context: Context,
