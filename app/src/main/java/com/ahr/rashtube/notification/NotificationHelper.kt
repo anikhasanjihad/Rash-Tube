@@ -12,7 +12,6 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.toBitmap
 import coil3.SingletonImageLoader
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
@@ -506,17 +505,33 @@ object NotificationHelper {
     )
 
     /**
+     * Builds a new-video notification laid out like YouTube's: the app logo as the small icon (tinted
+     * with the brand colour), the channel name in the header line next to the time, the video title
+     * as the headline, and the thumbnail on the right.
+     */
+    private fun youtubeStyleBuilder(
+        context: Context,
+        channelName: String,
+        videoTitle: String,
+        contentIntent: PendingIntent,
+    ): NotificationCompat.Builder =
+        NotificationCompat
+            .Builder(context, CHANNEL_SUBSCRIPTIONS)
+            .setSmallIcon(R.drawable.ic_notification_logo)
+            .setColor(ContextCompat.getColor(context, R.color.flow_red))
+            .setContentTitle(videoTitle)
+            .setContentIntent(contentIntent)
+            .setAutoCancel(true)
+            .setShowWhen(true)
+            .setWhen(System.currentTimeMillis())
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setCategory(NotificationCompat.CATEGORY_SOCIAL)
+            .setGroup(GROUP_NEW_VIDEOS)
+            .addExtras(android.os.Bundle().apply { putString("android.substName", channelName) })
+
+    /**
      * Dispatcher for subscription update notifications.
      */
-    /** The launcher logo, shown on the left of the notification next to the new video's title. */
-    private fun appLogoBitmap(context: Context): Bitmap? =
-        runCatching {
-            ContextCompat.getDrawable(context, R.mipmap.ic_launcher)?.let { d ->
-                val size = (64 * context.resources.displayMetrics.density).toInt()
-                d.toBitmap(size, size)
-            }
-        }.getOrNull()
-
     suspend fun showSubscriptionUpdates(
         context: Context,
         videos: List<NewVideoEntry>,
@@ -557,24 +572,12 @@ object NotificationHelper {
                     watchIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
                 )
-            val builder =
-                NotificationCompat
-                    .Builder(context, CHANNEL_SUBSCRIPTIONS)
-                    .setSmallIcon(R.drawable.ic_notification_logo)
-                    .setContentTitle(v.channelName)
-                    .setContentText(v.videoTitle)
-                    .setContentIntent(watchPendingIntent)
-                    .setAutoCancel(true)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setCategory(NotificationCompat.CATEGORY_SOCIAL)
-                    .setGroup(GROUP_NEW_VIDEOS)
-            appLogoBitmap(context)?.let { builder.setLargeIcon(it) }
-            v.thumbnailUrl?.let { url ->
-                getBitmapFromUrl(context, url, followThumbnailSetting = true)?.let { bm ->
-                    builder.setStyle(
-                        NotificationCompat.BigPictureStyle().bigPicture(bm).bigLargeIcon(null as Bitmap?),
-                    )
-                }
+            val builder = youtubeStyleBuilder(context, v.channelName, v.videoTitle, watchPendingIntent)
+            val thumbnail = v.thumbnailUrl?.let { getBitmapFromUrl(context, it, followThumbnailSetting = true) }
+            if (thumbnail != null) {
+                // Collapsed: thumbnail on the right. Expanded: big picture, like YouTube.
+                builder.setLargeIcon(thumbnail)
+                builder.setStyle(NotificationCompat.BigPictureStyle().bigPicture(thumbnail).bigLargeIcon(null as Bitmap?))
             }
             manager.notify(notifId, builder.build())
         }
@@ -679,29 +682,13 @@ object NotificationHelper {
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
             )
 
-        val builder =
-            NotificationCompat
-                .Builder(context, CHANNEL_SUBSCRIPTIONS)
-                .setSmallIcon(R.drawable.ic_notification_logo)
-                .setContentTitle(channelName)
-                .setContentText(videoTitle)
-                .setContentIntent(watchPendingIntent)
-                .setAutoCancel(true)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setCategory(NotificationCompat.CATEGORY_SOCIAL)
-                .setGroup("new_videos")
+        val builder = youtubeStyleBuilder(context, channelName, videoTitle, watchPendingIntent)
 
-        // Try to load thumbnail
         thumbnailUrl?.let { url ->
             val bitmap = getBitmapFromUrl(context, url, followThumbnailSetting = true)
             bitmap?.let {
                 builder.setLargeIcon(it)
-                builder.setStyle(
-                    NotificationCompat
-                        .BigPictureStyle()
-                        .bigPicture(it)
-                        .bigLargeIcon(null as Bitmap?),
-                )
+                builder.setStyle(NotificationCompat.BigPictureStyle().bigPicture(it).bigLargeIcon(null as Bitmap?))
             }
         }
 

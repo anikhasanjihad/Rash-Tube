@@ -97,7 +97,7 @@ class AlwaysOnNotificationService : Service() {
     companion object {
         private const val CHANNEL_ID = "always_on_channel"
         private const val NOTIFICATION_ID = 7410
-        private const val CHECK_EVERY_MS = 5 * 60 * 1000L
+        private const val CHECK_EVERY_MS = 2 * 60 * 1000L
 
         /** Starts or stops the service. Android may refuse a start from the background; that is not an error. */
         fun setRunning(
