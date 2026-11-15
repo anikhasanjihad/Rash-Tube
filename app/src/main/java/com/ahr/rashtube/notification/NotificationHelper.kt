@@ -289,6 +289,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_IMPORTS)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_importing, label))
                 .setContentText(contentText)
                 .apply {
@@ -318,6 +319,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_IMPORTS)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_import_complete))
                 .setContentText(message ?: context.getString(R.string.notification_imported, count, label.lowercase()))
                 .setAutoCancel(true)
@@ -371,6 +373,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_DOWNLOADS)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_downloading, videoTitle))
                 .setContentText(contentText)
                 .setProgress(100, progress, false)
@@ -421,6 +424,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_DOWNLOADS)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_download_complete))
                 .setContentText(videoTitle)
                 .setContentIntent(openPendingIntent)
@@ -472,6 +476,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_DOWNLOADS)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_download_failed))
                 .setContentText(videoTitle)
                 .setStyle(
@@ -616,6 +621,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_SUBSCRIPTIONS)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_new_videos))
                 .setContentText(
                     context.resources.getQuantityString(
@@ -709,6 +715,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_SUBSCRIPTIONS)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_new_videos))
                 .setContentText(
                     context.resources.getQuantityString(
@@ -755,6 +762,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, newVersionChannel(context))
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_update_available, release.version))
                 .setContentText(context.getString(R.string.notification_tap_to_update))
                 .setContentIntent(pendingIntent)
@@ -794,6 +802,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_GENERAL)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.linked_join_notification_title))
                 .setContentText(text)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(text))
@@ -834,6 +843,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_GENERAL)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(title)
                 .setContentText(message)
                 .setContentIntent(pendingIntent)
@@ -875,6 +885,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_GENERAL)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_watch_later_reminder))
                 .setContentText(videoTitle)
                 .setContentIntent(watchPendingIntent)
@@ -924,7 +935,8 @@ object NotificationHelper {
         val builder =
             NotificationCompat
                 .Builder(context, CHANNEL_REMINDERS)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -971,6 +983,7 @@ object NotificationHelper {
             NotificationCompat
                 .Builder(context, CHANNEL_REMINDERS)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.notification_video_live))
                 .setContentText(liveText)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(liveText))

@@ -69,9 +69,15 @@ class AlwaysOnNotificationService : Service() {
     private fun createChannel() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val manager = getSystemService(NotificationManager::class.java)
+        // The old channel was only minimised, so its notification still showed in the shade. A channel's
+        // importance cannot be lowered by the app once created, hence a new id that is blocked from the start.
+        manager.deleteNotificationChannel(OLD_CHANNEL_ID)
         manager.createNotificationChannel(
-            NotificationChannel(CHANNEL_ID, getString(R.string.notif_always_on_channel), NotificationManager.IMPORTANCE_MIN).apply {
+            NotificationChannel(CHANNEL_ID, getString(R.string.notif_always_on_channel), NotificationManager.IMPORTANCE_NONE).apply {
                 setShowBadge(false)
+                setSound(null, null)
+                enableVibration(false)
+                enableLights(false)
             },
         )
     }
@@ -84,18 +90,23 @@ class AlwaysOnNotificationService : Service() {
         return NotificationCompat
             .Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification_logo)
+            .setColor(ContextCompat.getColor(this, R.color.flow_red))
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.notif_always_on_text))
             .setContentIntent(open)
             .setOngoing(true)
             .setSilent(true)
+            .setShowWhen(false)
+            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+            .setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
             .setPriority(NotificationCompat.PRIORITY_MIN)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
     }
 
     companion object {
-        private const val CHANNEL_ID = "always_on_channel"
+        private const val OLD_CHANNEL_ID = "always_on_channel"
+        private const val CHANNEL_ID = "always_on_silent_channel"
         private const val NOTIFICATION_ID = 7410
         private const val CHECK_EVERY_MS = 2 * 60 * 1000L
 

@@ -121,6 +121,7 @@ private fun CountdownCard(
     Surface(
         shape = MaterialTheme.shapes.extraLarge,
         color = frostColor(),
+        contentColor = MaterialTheme.colorScheme.onSurface,
         modifier =
             modifier
                 .padding(horizontal = 20.dp)

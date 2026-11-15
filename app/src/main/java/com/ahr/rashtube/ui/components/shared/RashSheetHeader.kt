@@ -113,6 +113,7 @@ fun RashSheetHeader(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = stringResource(R.string.back),
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -149,6 +150,7 @@ fun RashSheetHeader(
                     Icon(
                         imageVector = Icons.Filled.Close,
                         contentDescription = stringResource(R.string.close),
+                        tint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }

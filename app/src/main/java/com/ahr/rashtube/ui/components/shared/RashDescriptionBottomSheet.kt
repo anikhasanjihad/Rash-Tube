@@ -144,7 +144,11 @@ fun RashDescriptionBottomSheet(
                         },
                         modifier = Modifier.size(40.dp),
                     ) {
-                        Icon(Icons.Outlined.ContentCopy, contentDescription = stringResource(R.string.copy_description))
+                        Icon(
+                            Icons.Outlined.ContentCopy,
+                            contentDescription = stringResource(R.string.copy_description),
+                            tint = MaterialTheme.colorScheme.onSurface,
+                        )
                     }
                 },
             )
