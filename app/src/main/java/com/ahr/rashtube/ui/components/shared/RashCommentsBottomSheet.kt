@@ -2,6 +2,7 @@ package com.ahr.rashtube.ui.components.shared
 
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.clip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -68,6 +72,8 @@ fun RashCommentsBottomSheet(
     isDisabled: Boolean = false,
     /** Set when the signed-in account can comment: posts the text and reports whether it worked. */
     onPostComment: (suspend (String) -> Boolean)? = null,
+    /** Shown in place of the box while nobody is signed in: opens the YouTube sign-in. */
+    onSignInClick: (() -> Unit)? = null,
 ) {
     val sheetState = rememberFlowBottomSheetState()
     val tint = rememberMediaArtworkTint(artworkUrl)
@@ -80,7 +86,8 @@ fun RashCommentsBottomSheet(
         collapsedHeight = collapsedHeight,
         dismissOnOutsideTap = dismissOnOutsideTap,
         shape = RectangleShape,
-        containerColor = frostColor(),
+        // Frosted: dense enough that the page moving behind never shows through the list or the box.
+        containerColor = frostColor().copy(alpha = 0.96f),
         onProgressChange = onSheetProgressChange,
         header = { dragModifier ->
             // Not RashSheetHeader: the sort chips sit under the title row, inside the same padding
@@ -118,7 +125,58 @@ fun RashCommentsBottomSheet(
                     .fillMaxWidth()
                     .weight(1f),
         )
-        if (onPostComment != null && !isDisabled) CommentComposer(onPostComment)
+        if (!isDisabled) {
+            if (onPostComment != null) {
+                CommentComposer(onPostComment)
+            } else if (onSignInClick != null) {
+                SignInToComment(onSignInClick)
+            }
+        }
+    }
+}
+
+/** The poster for the signed-in YouTube account, or null while nobody is signed in. [videoId] is read at post time. */
+@Composable
+fun rememberCommentPoster(videoId: () -> String?): (suspend (String) -> Boolean)? {
+    val context = androidx.compose.ui.platform.LocalContext.current
+    val account by com.ahr.rashtube.account.YouTubeAccountStore
+        .getInstance(context)
+        .state
+        .collectAsStateWithLifecycle()
+    val latestId by androidx.compose.runtime.rememberUpdatedState(videoId)
+    val poster =
+        androidx.compose.runtime.remember<suspend (String) -> Boolean> {
+            { text ->
+                val id = latestId()
+                id != null &&
+                    com.ahr.rashtube.data.repository.YouTubeRepository
+                        .getInstance()
+                        .postVideoComment(id, text)
+                        .isSuccess
+            }
+        }
+    return if (account.signedIn) poster else null
+}
+
+@Composable
+private fun SignInToComment(onClick: () -> Unit) {
+    androidx.compose.foundation.layout.Row(
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .navigationBarsPadding()
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .clip(androidx.compose.foundation.shape.RoundedCornerShape(24.dp))
+                .background(MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f))
+                .clickable(onClick = onClick)
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+    ) {
+        Text(
+            text = stringResource(R.string.comment_sign_in),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.72f),
+        )
     }
 }
 
@@ -155,6 +213,13 @@ private fun CommentComposer(onPost: suspend (String) -> Boolean) {
             isError = failed,
             enabled = !posting,
             supportingText = errorText,
+            colors =
+                androidx.compose.material3.OutlinedTextFieldDefaults.colors(
+                    focusedContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.10f),
+                    unfocusedContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
+                    disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.06f),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.16f),
+                ),
         )
         androidx.compose.material3.IconButton(
             enabled = text.isNotBlank() && !posting,

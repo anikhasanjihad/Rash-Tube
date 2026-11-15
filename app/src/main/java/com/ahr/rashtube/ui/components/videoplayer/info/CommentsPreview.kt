@@ -38,7 +38,8 @@ internal fun CommentsPreview(
         onClick = onClick,
         enabled = !isDisabled,
         shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        // The theme's surface colours are glass and see-through; a tint of the text colour gives a frosted card.
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.09f),
         modifier =
             Modifier
                 .fillMaxWidth()

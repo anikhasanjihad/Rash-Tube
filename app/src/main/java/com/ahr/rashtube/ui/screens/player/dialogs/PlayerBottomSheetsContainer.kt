@@ -117,6 +117,7 @@ internal fun PlayerBottomSheetsContainer(
                 } else {
                     null
                 },
+            onSignInClick = { com.ahr.rashtube.account.YouTubeAccountActivity.launch() },
         )
     }
 

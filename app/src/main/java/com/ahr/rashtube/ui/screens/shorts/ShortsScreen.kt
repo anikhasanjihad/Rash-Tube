@@ -41,6 +41,7 @@ import com.ahr.rashtube.player.GlobalPlayerState
 import com.ahr.rashtube.player.shorts.ShortsPlayerPool
 import com.ahr.rashtube.ui.components.shared.CommentSortFilter
 import com.ahr.rashtube.ui.components.shared.RashCommentsBottomSheet
+import com.ahr.rashtube.ui.components.shared.rememberCommentPoster
 import com.ahr.rashtube.ui.components.shared.RashDescriptionBottomSheet
 import com.ahr.rashtube.ui.components.shared.RashErrorState
 import com.ahr.rashtube.ui.components.shared.RashLoadingIndicator
@@ -277,6 +278,8 @@ fun ShortsScreen(
                 dismissOnOutsideTap = true,
                 onDismiss = { showCommentsSheet = false },
                 isDisabled = commentsDisabled,
+                onPostComment = rememberCommentPoster { uiState.shorts.getOrNull(uiState.currentIndex)?.id },
+                onSignInClick = { com.ahr.rashtube.account.YouTubeAccountActivity.launch() },
             )
         }
 
