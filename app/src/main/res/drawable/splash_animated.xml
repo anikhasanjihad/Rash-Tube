@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Played by the system on the render thread (no app code runs), so it cannot stall startup. -->
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/splash_logo_animated_vector">
+    <target
+        android:name="badge"
+        android:animation="@animator/splash_badge_scale_x" />
+    <target
+        android:name="badge"
+        android:animation="@animator/splash_badge_scale_y" />
+    <target
+        android:name="plate"
+        android:animation="@animator/splash_fade_in" />
+    <target
+        android:name="play_group"
+        android:animation="@animator/splash_play_scale_x" />
+    <target
+        android:name="play_group"
+        android:animation="@animator/splash_play_scale_y" />
+    <target
+        android:name="play"
+        android:animation="@animator/splash_play_fade_in" />
+</animated-vector>

@@ -1,6 +1,8 @@
 package com.ahr.rashtube.ui.components.musicplayer.full
 
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.view.WindowManager
 import androidx.compose.foundation.background
@@ -47,6 +49,14 @@ import kotlin.math.abs
 
 private const val SWIPE_SKIP_THRESHOLD_PX = 150f
 
+/** The context may be wrapped (locale, theme), so walk down to the activity that owns the window. */
+private tailrec fun Context.findActivity(): Activity? =
+    when (this) {
+        is Activity -> this
+        is ContextWrapper -> baseContext.findActivity()
+        else -> null
+    }
+
 /**
  * Ambient Mode: the song's cover beside its synced lyrics, full screen and landscape, with the screen
  * kept awake. Double-tap the cover to play or pause; swipe sideways to skip. It is a dialog over the
@@ -67,7 +77,7 @@ internal fun AmbientModeOverlay(
         properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false),
     ) {
         val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
-        val activity = LocalContext.current as? Activity
+        val activity = LocalContext.current.findActivity()
 
         DisposableEffect(activity, dialogWindow) {
             val previousOrientation = activity?.requestedOrientation ?: ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED

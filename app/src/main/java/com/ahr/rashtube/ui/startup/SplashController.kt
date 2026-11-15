@@ -5,7 +5,9 @@ import android.os.Build
 import android.os.SystemClock
 import androidx.core.splashscreen.SplashScreen
 
-private const val MAX_HOLD_MS = 1_000L
+/** The badge animation takes about this long; leaving sooner would cut it off mid-pop. */
+private const val MIN_SHOW_MS = 700L
+private const val MAX_HOLD_MS = 1_500L
 
 /**
  * The platform splash, held until the first real screen can be drawn, so a cold start goes from the
@@ -23,7 +25,10 @@ class SplashController(
     private val startedAt = SystemClock.uptimeMillis()
 
     fun install(splash: SplashScreen) {
-        splash.setKeepOnScreenCondition { !contentReady && SystemClock.uptimeMillis() - startedAt < MAX_HOLD_MS }
+        splash.setKeepOnScreenCondition {
+            val elapsed = SystemClock.uptimeMillis() - startedAt
+            elapsed < MIN_SHOW_MS || (!contentReady && elapsed < MAX_HOLD_MS)
+        }
     }
 
     /** Opens the next launch on [tone] with the art of [iconSuffix]; Android 13 and later only. */
