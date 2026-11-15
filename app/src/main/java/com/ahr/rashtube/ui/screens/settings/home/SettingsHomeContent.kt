@@ -1,5 +1,7 @@
 package com.ahr.rashtube.ui.screens.settings.home
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -144,7 +146,7 @@ internal fun SettingsListScope.homeContent(
     group(key = "home.about", header = R.string.settings_header_about) {
         nav(
             com.ahr.rashtube.ui.screens.settings.index.AboutIndex.developer,
-            icon = androidx.compose.material.icons.Icons.Outlined.Person,
+            icon = Icons.Outlined.Person,
             showChevron = false,
             onClick = { actions.onOpenUrl("https://anikhasanjihad.vercel.app/") },
         )
