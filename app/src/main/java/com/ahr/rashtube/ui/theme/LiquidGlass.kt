@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -69,7 +70,11 @@ internal fun LiquidBackdrop(
     // The drift is slow, so it updates ~10 times a second; redrawing three full-screen gradients on
     // every frame under a scrolling list is what made scrolling heavy.
     var phase by androidx.compose.runtime.remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
-    androidx.compose.runtime.LaunchedEffect(Unit) {
+    val isTelevision =
+        androidx.compose.ui.platform.LocalContext.current.packageManager
+            .hasSystemFeature(android.content.pm.PackageManager.FEATURE_LEANBACK)
+    androidx.compose.runtime.LaunchedEffect(isTelevision) {
+        if (isTelevision) return@LaunchedEffect
         val start = android.os.SystemClock.uptimeMillis()
         while (true) {
             kotlinx.coroutines.delay(100)
@@ -102,24 +107,27 @@ fun Modifier.glassEdge(shape: Shape = RectangleShape): Modifier =
     if (!LIQUID_GLASS_ENABLED) {
         this
     } else {
-        drawWithContent {
-            drawContent()
+        // drawWithCache: the outline and gradients are rebuilt only when the size changes, not on
+        // every frame of every card while a list scrolls.
+        drawWithCache {
             val outline = shape.createOutline(size, layoutDirection, this)
-            val sheenHeight = minOf(size.height, 56.dp.toPx())
-            drawOutline(
-                outline = outline,
-                brush = Brush.verticalGradient(listOf(Color.White.copy(alpha = 0.10f), Color.Transparent), endY = sheenHeight),
-            )
-            drawOutline(
-                outline = outline,
-                brush =
-                    Brush.linearGradient(
-                        listOf(Color.White.copy(alpha = 0.40f), Color.White.copy(alpha = 0.06f), Color.White.copy(alpha = 0.18f)),
-                        start = Offset.Zero,
-                        end = Offset(size.width, size.height),
-                    ),
-                style = Stroke(width = 1.dp.toPx()),
-            )
+            val sheen =
+                Brush.verticalGradient(
+                    listOf(Color.White.copy(alpha = 0.10f), Color.Transparent),
+                    endY = minOf(size.height, 56.dp.toPx()),
+                )
+            val rim =
+                Brush.linearGradient(
+                    listOf(Color.White.copy(alpha = 0.40f), Color.White.copy(alpha = 0.06f), Color.White.copy(alpha = 0.18f)),
+                    start = Offset.Zero,
+                    end = Offset(size.width, size.height),
+                )
+            val stroke = Stroke(width = 1.dp.toPx())
+            onDrawWithContent {
+                drawContent()
+                drawOutline(outline = outline, brush = sheen)
+                drawOutline(outline = outline, brush = rim, style = stroke)
+            }
         }
     }
 

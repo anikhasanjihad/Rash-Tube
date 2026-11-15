@@ -150,6 +150,7 @@ class MainActivity : ComponentActivity() {
         splashController.install(installSplashScreen())
 
         super.onCreate(savedInstanceState)
+        requestHighestRefreshRate()
         DiscordPresenceRuntime.attachActivity(this)
 
         window.setSoftInputMode(android.view.WindowManager.LayoutParams.SOFT_INPUT_ADJUST_NOTHING)
@@ -607,5 +608,21 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         const val EXTRA_BENCHMARK_BYPASS_ONBOARDING = "com.ahr.rashtube.extra.BENCHMARK_BYPASS_ONBOARDING"
+    }
+
+    /** Many phones keep third-party apps at 60 Hz; ask for the panel's top rate at the same resolution. */
+    @Suppress("DEPRECATION")
+    private fun requestHighestRefreshRate() {
+        runCatching {
+            val display = windowManager.defaultDisplay ?: return
+            val current = display.mode
+            val best =
+                display.supportedModes
+                    .filter { it.physicalWidth == current.physicalWidth && it.physicalHeight == current.physicalHeight }
+                    .maxByOrNull { it.refreshRate } ?: return
+            val params = window.attributes
+            params.preferredDisplayModeId = best.modeId
+            window.attributes = params
+        }
     }
 }

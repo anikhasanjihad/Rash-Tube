@@ -1,0 +1,4 @@
+# Hand-written baseline profile: pre-compile the app's own code so first scrolls, screen opens and
+# the player don't run in the interpreter/JIT. Library code ships its own profiles.
+HSPLcom/ahr/rashtube/**->**(**)**
+Lcom/ahr/rashtube/**;
