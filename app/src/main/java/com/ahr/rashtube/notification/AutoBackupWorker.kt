@@ -176,6 +176,7 @@ class AutoBackupWorker(
             NotificationCompat
                 .Builder(context, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(androidx.core.content.ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(titleRes))
                 .setAutoCancel(true)
                 .build()

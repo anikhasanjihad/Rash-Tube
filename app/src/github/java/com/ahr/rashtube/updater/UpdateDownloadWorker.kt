@@ -129,6 +129,7 @@ class UpdateDownloadWorker(
             NotificationCompat
                 .Builder(applicationContext, NotificationHelper.CHANNEL_UPDATES)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(androidx.core.content.ContextCompat.getColor(applicationContext, R.color.flow_red))
                 .setContentTitle(applicationContext.getString(R.string.update_downloading_notification, version))
                 .setProgress(PERCENT, ((progress ?: 0f) * PERCENT).toInt(), progress == null)
                 .setOngoing(true)
@@ -154,6 +155,7 @@ class UpdateDownloadWorker(
             NotificationCompat
                 .Builder(applicationContext, NotificationHelper.CHANNEL_UPDATES)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(androidx.core.content.ContextCompat.getColor(applicationContext, R.color.flow_red))
                 .setContentTitle(applicationContext.getString(R.string.update_ready_notification, version))
                 .setContentText(applicationContext.getString(R.string.update_ready_notification_text))
                 .setContentIntent(

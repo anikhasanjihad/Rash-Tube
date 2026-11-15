@@ -28,6 +28,7 @@ class SyncIndicator
             return NotificationCompat
                 .Builder(context, SyncForegroundService.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification_logo)
+                .setColor(androidx.core.content.ContextCompat.getColor(context, R.color.flow_red))
                 .setContentTitle(context.getString(R.string.linked_syncing_notification))
                 .setOngoing(true)
                 .setSilent(true)
