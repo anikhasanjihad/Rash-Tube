@@ -54,8 +54,8 @@ private enum class AboutDialog { CHANGELOG, DEVICE, NOTICES }
 
 private const val WEBSITE_URL = "https://github.com/anikhasanjihad/Rash-Tube"
 private const val GITHUB_URL = "https://github.com/anikhasanjihad/Rash-Tube"
-private const val SUPPORT_CHANNEL_URL = "https://t.me/ahr2215"
-private const val CREATOR_URL = "https://github.com/anikhasanjihad"
+private const val SUPPORT_CHANNEL_URL = "https://t.me/rnexflix"
+private const val CREATOR_URL = "https://t.me/ahr2215"
 private const val NEWPIPE_URL = "https://github.com/TeamNewPipe/NewPipeExtractor"
 private const val LICENSE_URL = "https://www.gnu.org/licenses/gpl-3.0.html"
 private const val CREATOR_AVATAR_URL = "https://github.com/anikhasanjihad.png?size=144"

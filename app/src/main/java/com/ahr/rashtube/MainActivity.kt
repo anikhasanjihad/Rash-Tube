@@ -3,6 +3,8 @@ package com.ahr.rashtube
 import android.app.PictureInPictureUiState
 import android.content.Context
 import android.content.Intent
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
@@ -14,6 +16,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
@@ -66,6 +70,7 @@ private const val PORTRAIT_REEL_ASPECT_RATIO = 9f / 16f
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val links = IncomingLinks()
+    private val notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
     private val hardwareKeyboard = HardwareKeyboardState()
 
     @Inject
@@ -151,6 +156,12 @@ class MainActivity : ComponentActivity() {
         splashController.install(installSplashScreen())
 
         super.onCreate(savedInstanceState)
+        // Android 13+ shows no notification until this is granted; without it new-video alerts stay silent.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
         requestHighestRefreshRate()
         DiscordPresenceRuntime.attachActivity(this)
 

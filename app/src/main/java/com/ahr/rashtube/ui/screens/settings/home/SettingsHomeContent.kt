@@ -154,7 +154,7 @@ internal fun SettingsListScope.homeContent(
             com.ahr.rashtube.ui.screens.settings.index.AboutIndex.support,
             iconRes = R.drawable.ic_telegram,
             showChevron = false,
-            onClick = { actions.onOpenUrl("https://t.me/ahr2215") },
+            onClick = { actions.onOpenUrl("https://t.me/rnexflix") },
         )
         page(SettingsDestination.DIAGNOSTICS)
         if (BuildConfig.UPDATER_ENABLED) {
