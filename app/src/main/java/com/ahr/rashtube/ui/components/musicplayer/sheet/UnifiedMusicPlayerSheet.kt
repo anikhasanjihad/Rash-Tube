@@ -31,7 +31,14 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawOutline
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.util.VelocityTracker
@@ -68,6 +75,38 @@ import kotlin.math.roundToInt
 
 // The share of its own height the mini bar sinks while fading out when swiped away.
 private const val MINI_BAR_FADE_DISTANCE = 0.6f
+
+/**
+ * The thin bright rim and the soft top sheen that make the collapsed bar read as liquid glass.
+ * [visibility] is read while drawing, so the rim fades out as the sheet opens without recomposing.
+ */
+private fun Modifier.miniGlassEdge(
+    shape: Shape,
+    visibility: () -> Float,
+): Modifier =
+    drawWithCache {
+        val sheen =
+            Brush.verticalGradient(
+                listOf(Color.White.copy(alpha = 0.14f), Color.Transparent),
+                endY = size.height,
+            )
+        val rim =
+            Brush.linearGradient(
+                listOf(Color.White.copy(alpha = 0.42f), Color.White.copy(alpha = 0.06f), Color.White.copy(alpha = 0.20f)),
+                start = Offset.Zero,
+                end = Offset(size.width, size.height),
+            )
+        val stroke = Stroke(width = 1.dp.toPx())
+        onDrawWithContent {
+            drawContent()
+            val seen = visibility()
+            if (seen > 0f) {
+                val outline = shape.createOutline(size, layoutDirection, this)
+                drawOutline(outline = outline, brush = sheen, alpha = seen)
+                drawOutline(outline = outline, brush = rim, alpha = seen, style = stroke)
+            }
+        }
+    }
 
 private val SheetDefaultSpring =
     spring<Float>(
@@ -349,6 +388,7 @@ internal fun UnifiedMusicPlayerSheet(
                             shape = cardShape,
                             clip = false,
                         ).background(cardColor, cardShape)
+                        .miniGlassEdge(cardShape) { (1f - state.expansionFraction.value * 6f).coerceIn(0f, 1f) }
                         .clip(cardShape)
                         .layout { measurable, constraints ->
                             val fullHeightPx = containerHeightPx.roundToInt()

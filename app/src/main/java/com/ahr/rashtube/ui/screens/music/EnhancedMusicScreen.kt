@@ -153,7 +153,7 @@ fun EnhancedMusicScreen(
     Scaffold(
         topBar = {
             RashTopBar(
-                title = stringResource(R.string.screen_title_music),
+                title = stringResource(R.string.music_home_title),
                 actions = {
                     IconButton(onClick = onSearchClick) {
                         Icon(Icons.Outlined.Search, stringResource(R.string.search))

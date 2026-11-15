@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.unit.dp
 import kotlin.math.cos
@@ -70,20 +71,24 @@ internal fun LiquidBackdrop(
     // The drift is slow, so it updates ~10 times a second; redrawing three full-screen gradients on
     // every frame under a scrolling list is what made scrolling heavy.
     var phase by androidx.compose.runtime.remember { androidx.compose.runtime.mutableFloatStateOf(0f) }
+    val context = androidx.compose.ui.platform.LocalContext.current
     val isTelevision =
-        androidx.compose.ui.platform.LocalContext.current.packageManager
-            .hasSystemFeature(android.content.pm.PackageManager.FEATURE_LEANBACK)
+        androidx.compose.runtime.remember(context) {
+            context.packageManager.hasSystemFeature(android.content.pm.PackageManager.FEATURE_LEANBACK)
+        }
     androidx.compose.runtime.LaunchedEffect(isTelevision) {
         if (isTelevision) return@LaunchedEffect
         val start = android.os.SystemClock.uptimeMillis()
         while (true) {
-            kotlinx.coroutines.delay(100)
+            kotlinx.coroutines.delay(150)
             phase = ((android.os.SystemClock.uptimeMillis() - start) % 45_000L) / 45_000f
         }
     }
+    // Its own layer: a phase tick then re-records only this backdrop. Without one the draw
+    // invalidation lands on the parent layer and the whole UI above it is re-recorded each tick.
     Box(
         modifier =
-            modifier.fillMaxSize().drawBehind {
+            modifier.fillMaxSize().graphicsLayer {}.drawBehind {
                 drawRect(base)
                 val t = phase * TwoPi
                 val radius = max(size.width, size.height) * 0.75f

@@ -330,6 +330,7 @@ internal fun FullMusicPlayerContent(
                             onNextClick = { viewModel.skipToNext() },
                             modifier = modifier,
                             onPreviewDirectionChange = { previewDirection = it },
+                            glass = true,
                         )
                     }
                 },

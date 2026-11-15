@@ -43,6 +43,7 @@ import com.ahr.rashtube.player.RepeatMode
 import com.ahr.rashtube.ui.components.musicplayer.controls.PlayerMainActionButtons
 import com.ahr.rashtube.ui.components.musicplayer.controls.PlayerSecondaryActions
 import com.ahr.rashtube.ui.components.shared.LocalMarqueeEnabled
+import com.ahr.rashtube.ui.theme.glassEdge
 
 internal val PlayerHorizontalPadding = 28.dp
 
@@ -97,7 +98,8 @@ internal fun PlayerArtworkFrame(
                             spotColor = Color.Black.copy(alpha = 0.6f),
                         )
                     },
-                ).clip(corner),
+                ).clip(corner)
+                .then(if (immersive) Modifier else Modifier.glassEdge(corner)),
     ) {
         content()
     }

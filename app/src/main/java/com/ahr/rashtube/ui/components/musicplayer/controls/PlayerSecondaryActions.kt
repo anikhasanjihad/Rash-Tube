@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.ahr.rashtube.R
+import com.ahr.rashtube.ui.theme.glassEdge
 import com.ahr.rashtube.player.RepeatMode
 import com.ahr.rashtube.ui.components.musicplayer.common.readableAccentOn
 
@@ -259,6 +260,7 @@ private fun SplitCapsuleButton(
                 .size(width = 50.dp, height = 42.dp)
                 .clip(shape)
                 .background(containerColor)
+                .glassEdge(shape)
                 .combinedClickable(
                     onClick = onClick,
                     onLongClick = onLongClick,
