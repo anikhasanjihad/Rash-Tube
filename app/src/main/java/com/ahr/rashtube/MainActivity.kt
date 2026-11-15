@@ -370,8 +370,23 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onConfigurationChanged(newConfig: android.content.res.Configuration) {
+        super.onConfigurationChanged(newConfig)
+        enforceAmbientOrientation()
+    }
+
+    /** Ambient Mode is landscape; anything that reset the request while it is open is put back. */
+    private fun enforceAmbientOrientation() {
+        if (com.ahr.rashtube.ui.components.musicplayer.full.AmbientModeController.active.value &&
+            requestedOrientation != android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        ) {
+            requestedOrientation = android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        enforceAmbientOrientation()
         RashCrashHandler.recordPhase("activity", "onResume pip=$isInPictureInPictureMode")
         videoLifecycleLog("onResume")
         // GlobalPlayerState outlives this Activity, so an instance destroyed straight out of PiP

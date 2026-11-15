@@ -46,6 +46,8 @@ internal fun FullscreenEffect(
         activity?.let { act ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && act.isInPictureInPictureMode) return@let
             if (suppressFullscreenRequest && isFullscreen) return@let
+            // Ambient Mode owns the orientation while it is open; resetting it here sent it back to portrait.
+            if (!isFullscreen && com.ahr.rashtube.ui.components.musicplayer.full.AmbientModeController.active.value) return@let
             if (isFullscreen) {
                 forcePortraitLock = false
                 wasFullscreen = true
@@ -172,7 +174,9 @@ internal fun OrientationResetEffect(activity: Activity?) {
     DisposableEffect(Unit) {
         onDispose {
             if (activity?.isInPictureInPictureMode == false) {
-                activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                if (!com.ahr.rashtube.ui.components.musicplayer.full.AmbientModeController.active.value) {
+                    activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                }
                 WindowCompat.setDecorFitsSystemWindows(activity.window, false)
                 val insetsController = WindowCompat.getInsetsController(activity.window, activity.window.decorView)
                 insetsController.show(WindowInsetsCompat.Type.systemBars())
