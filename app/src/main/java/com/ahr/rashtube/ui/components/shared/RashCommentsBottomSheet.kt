@@ -1,5 +1,7 @@
 package com.ahr.rashtube.ui.components.shared
 
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
 import com.ahr.rashtube.ui.theme.frostColor
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -126,6 +128,12 @@ private fun CommentComposer(onPost: suspend (String) -> Boolean) {
     var posting by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
     var failed by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
+    val errorText: (@Composable () -> Unit)? =
+        if (failed) {
+            { androidx.compose.material3.Text(stringResource(R.string.comment_post_failed)) }
+        } else {
+            null
+        }
     androidx.compose.foundation.layout.Row(
         modifier =
             Modifier
@@ -146,7 +154,7 @@ private fun CommentComposer(onPost: suspend (String) -> Boolean) {
             shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
             isError = failed,
             enabled = !posting,
-            supportingText = if (failed) ({ androidx.compose.material3.Text(stringResource(R.string.comment_post_failed)) }) else null,
+            supportingText = errorText,
         )
         androidx.compose.material3.IconButton(
             enabled = text.isNotBlank() && !posting,

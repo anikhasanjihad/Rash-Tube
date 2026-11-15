@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.profiles
 
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.expandVertically
@@ -118,7 +119,7 @@ fun ProfileTopBarAction(
                 androidx.compose.foundation.layout.Box(contentAlignment = androidx.compose.ui.Alignment.Center) {
                     if (privateMode) {
                         androidx.compose.material3.Icon(
-                            androidx.compose.material.icons.Icons.Outlined.Person,
+                            Icons.Outlined.Person,
                             contentDescription = null,
                         )
                     } else if (account.avatarUrl != null) {

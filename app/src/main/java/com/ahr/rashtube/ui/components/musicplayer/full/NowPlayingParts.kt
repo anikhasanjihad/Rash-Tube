@@ -1,5 +1,6 @@
 package com.ahr.rashtube.ui.components.musicplayer.full
 
+import androidx.compose.runtime.getValue
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
