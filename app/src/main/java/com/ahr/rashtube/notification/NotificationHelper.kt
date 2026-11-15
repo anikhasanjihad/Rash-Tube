@@ -12,6 +12,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import coil3.SingletonImageLoader
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
@@ -507,6 +508,15 @@ object NotificationHelper {
     /**
      * Dispatcher for subscription update notifications.
      */
+    /** The launcher logo, shown on the left of the notification next to the new video's title. */
+    private fun appLogoBitmap(context: Context): Bitmap? =
+        runCatching {
+            ContextCompat.getDrawable(context, R.mipmap.ic_launcher)?.let { d ->
+                val size = (64 * context.resources.displayMetrics.density).toInt()
+                d.toBitmap(size, size)
+            }
+        }.getOrNull()
+
     suspend fun showSubscriptionUpdates(
         context: Context,
         videos: List<NewVideoEntry>,
@@ -558,9 +568,9 @@ object NotificationHelper {
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setCategory(NotificationCompat.CATEGORY_SOCIAL)
                     .setGroup(GROUP_NEW_VIDEOS)
+            appLogoBitmap(context)?.let { builder.setLargeIcon(it) }
             v.thumbnailUrl?.let { url ->
                 getBitmapFromUrl(context, url, followThumbnailSetting = true)?.let { bm ->
-                    builder.setLargeIcon(bm)
                     builder.setStyle(
                         NotificationCompat.BigPictureStyle().bigPicture(bm).bigLargeIcon(null as Bitmap?),
                     )

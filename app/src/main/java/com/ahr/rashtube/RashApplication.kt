@@ -120,6 +120,9 @@ class RashApplication :
     @Inject
     lateinit var aiList: AiListRepository
 
+    @Inject
+    lateinit var subscriptionRepository: com.ahr.rashtube.data.local.SubscriptionRepository
+
     override fun newImageLoader(context: PlatformContext): ImageLoader = imageLoader
 
     companion object {
@@ -208,6 +211,11 @@ class RashApplication :
             launch { profileWorkReconciler.reconcile() }
             launch { AutoBackupWorker.keepScheduled(this@RashApplication) }
             launch { postSwitchWork.runIfSwitched() }
+            if (!playerPreferences.allBellsOnMigrated.first()) {
+                subscriptionRepository.enableNotificationsForAll()
+                playerPreferences.setAllBellsOnMigrated()
+            }
+            com.ahr.rashtube.notification.SubscriptionCheckWorker.runImmediateCheck(this@RashApplication)
             BackgroundCheckScheduler.follow(this@RashApplication, playerPreferences)
         }
         SleepTimerManager.attachExitCallback { PlaybackShutdown.closeApp(this) }

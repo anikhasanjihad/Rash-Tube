@@ -4,7 +4,7 @@ import java.net.URLEncoder
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-private const val NEW_ISSUE_URL = "https://t.me/rnexflix"
+private const val NEW_ISSUE_URL = "https://t.me/ahr2215"
 private const val APP_PACKAGE = "com.ahr.rashtube"
 private const val MAX_URL_LOG_CHARS = 1_500
 private const val MAX_URL_ACTUAL_CHARS = 300

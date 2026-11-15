@@ -282,6 +282,19 @@ class SubscriptionRepository private constructor(
 
     private fun deserializeChannel(data: String): ChannelSubscription? = SubscriptionRecordCodec.decode(data)
 
+    /** Turns the bell on for every subscription; used once to bring older installs in line with the new default. */
+    suspend fun enableNotificationsForAll() {
+        context.subscriptionsDataStore.edit { preferences ->
+            preferences.asMap().keys.filter { it.name.startsWith("channel_") }.forEach { key ->
+                val raw = preferences[stringPreferencesKey(key.name)] ?: return@forEach
+                val subscription = deserializeChannel(raw) ?: return@forEach
+                if (!subscription.isNotificationEnabled) {
+                    preferences[stringPreferencesKey(key.name)] = serializeChannel(subscription.copy(isNotificationEnabled = true))
+                }
+            }
+        }
+    }
+
     /**
      * Update the notification state for a channel
      */
@@ -366,7 +379,7 @@ data class ChannelSubscription(
     val lastVideoId: String? = null,
     /** When the background new-upload check last saw a *new* video for this channel. */
     val lastCheckTime: Long = 0L,
-    val isNotificationEnabled: Boolean = false,
+    val isNotificationEnabled: Boolean = true,
     val isMusic: Boolean = false,
     /** When the subscription feed last fetched this channel; 0 means never. */
     val lastFeedFetchAt: Long = 0L,

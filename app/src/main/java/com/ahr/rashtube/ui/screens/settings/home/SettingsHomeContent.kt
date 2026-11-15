@@ -148,13 +148,13 @@ internal fun SettingsListScope.homeContent(
             com.ahr.rashtube.ui.screens.settings.index.AboutIndex.developer,
             icon = Icons.Outlined.Person,
             showChevron = false,
-            onClick = { actions.onOpenUrl("https://anikhasanjihad.vercel.app/") },
+            onClick = { actions.onOpenUrl("https://t.me/ahr2215") },
         )
         nav(
             com.ahr.rashtube.ui.screens.settings.index.AboutIndex.support,
             iconRes = R.drawable.ic_telegram,
             showChevron = false,
-            onClick = { actions.onOpenUrl("https://t.me/rnexflix") },
+            onClick = { actions.onOpenUrl("https://t.me/ahr2215") },
         )
         page(SettingsDestination.DIAGNOSTICS)
         if (BuildConfig.UPDATER_ENABLED) {

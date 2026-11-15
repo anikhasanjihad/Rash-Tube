@@ -261,6 +261,7 @@ class PlayerPreferences(
         // Notification preferences
         val NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
         val NOTIF_NEW_VIDEOS_ENABLED = booleanPreferencesKey("notif_new_videos_enabled")
+        val ALL_BELLS_ON_MIGRATED = booleanPreferencesKey("all_bells_on_migrated_v1")
         val NOTIF_SHORTS_ENABLED = booleanPreferencesKey("notif_shorts_enabled")
         val NOTIF_REMINDERS_ENABLED = booleanPreferencesKey("notif_reminders_enabled")
         val NOTIF_GENERAL_ENABLED = booleanPreferencesKey("notif_general_enabled")
@@ -2275,6 +2276,14 @@ class PlayerPreferences(
         }
     }
 
+    val allBellsOnMigrated: Flow<Boolean> =
+        context.playerPreferencesDataStore.data
+            .map { preferences -> preferences[Keys.ALL_BELLS_ON_MIGRATED] ?: false }
+
+    suspend fun setAllBellsOnMigrated() {
+        context.playerPreferencesDataStore.edit { preferences -> preferences[Keys.ALL_BELLS_ON_MIGRATED] = true }
+    }
+
     val notifNewVideosEnabled: Flow<Boolean> =
         context.playerPreferencesDataStore.data
             .map { preferences -> preferences[Keys.NOTIF_NEW_VIDEOS_ENABLED] ?: true }
@@ -2994,11 +3003,11 @@ class PlayerPreferences(
         }
     }
 
-    // Subscription check interval (default: 360 minutes / 6 hours)
+    // Subscription check interval (default: 30 minutes)
     val subscriptionCheckIntervalMinutes: Flow<Int> =
         context.playerPreferencesDataStore.data
             .map { preferences ->
-                preferences[Keys.SUBSCRIPTION_CHECK_INTERVAL_MINUTES] ?: 360
+                preferences[Keys.SUBSCRIPTION_CHECK_INTERVAL_MINUTES] ?: 30
             }
 
     suspend fun setSubscriptionCheckIntervalMinutes(minutes: Int) {

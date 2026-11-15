@@ -57,8 +57,8 @@ android {
         applicationId = "com.ahr.rashtube"
         minSdk = 26
         targetSdk = 36
-        versionCode = 19
-        versionName = "3.0.0"
+        versionCode = 20
+        versionName = "3.1.0"
 
         buildConfigField("int", "NIGHTLY_RUN", "0")
         buildConfigField("String", "APP_LANGUAGE_TAGS", "\"${(listOf("en") + translatedLocaleTags()).joinToString(",")}\"")
@@ -117,20 +117,24 @@ android {
     }
 
     signingConfigs {
+        // Secrets/CI keystore wins; otherwise the key bundled in ci/ is used, so every GitHub build is
+        // signed with the SAME key and an in-app update installs over the previous version.
+        val ciKeystore = rootDir.resolve("release.keystore")
+        val useCiKeystore = ciKeystore.exists() && ciKeystore.length() > 0
         create("release") {
-            storeFile = rootDir.resolve("release.keystore")
+            storeFile = if (useCiKeystore) ciKeystore else rootDir.resolve("ci/rash-release.keystore")
             storePassword = (project.findProperty("storePassword") as? String)
                 ?: localProperties.getProperty("storePassword")
                 ?: System.getenv("STORE_PASSWORD")
-                ?: ""
+                ?: (if (useCiKeystore) "" else "2J1Khw1VtE4F_vJmJVDESZ-u")
             keyAlias = (project.findProperty("keyAlias") as? String)
                 ?: localProperties.getProperty("keyAlias")
                 ?: System.getenv("KEY_ALIAS")
-                ?: ""
+                ?: (if (useCiKeystore) "" else "rashtube")
             keyPassword = (project.findProperty("keyPassword") as? String)
                 ?: localProperties.getProperty("keyPassword")
                 ?: System.getenv("KEY_PASSWORD")
-                ?: ""
+                ?: (if (useCiKeystore) "" else "2J1Khw1VtE4F_vJmJVDESZ-u")
         }
         // One long-lived key for every nightly, so each build installs over the last one.
         create("nightly") {
