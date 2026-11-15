@@ -72,8 +72,7 @@ import com.ahr.rashtube.ui.screens.playon.PlayOnHost
 import com.ahr.rashtube.ui.screens.settings.wellbeing.TIMES_UP_ROUTE
 import com.ahr.rashtube.ui.screens.settings.wellbeing.TimesUpLaunchEffect
 import com.ahr.rashtube.ui.screens.sync.linked.LinkedSyncAlerts
-import com.ahr.rashtube.ui.screens.update.UPDATE_ROUTE
-import com.ahr.rashtube.ui.screens.update.UpdateLaunchEffect
+import com.ahr.rashtube.ui.screens.update.ForcedUpdateGate
 import com.ahr.rashtube.ui.theme.ThemeMode
 import com.ahr.rashtube.ui.theme.ThemeVariant
 import com.ahr.rashtube.ui.utils.LocalWindowSizeClass
@@ -587,7 +586,7 @@ fun RashApp(
                     },
         )
 
-        UpdateLaunchEffect(needsOnboarding = needsOnboarding, onOpenUpdate = { navController.navigate(UPDATE_ROUTE) })
+        ForcedUpdateGate(needsOnboarding = needsOnboarding)
         TimesUpLaunchEffect(enabled = needsOnboarding == false && !isInPipMode) {
             collapseExpandedPlayers()
             navController.navigate(TIMES_UP_ROUTE) { launchSingleTop = true }

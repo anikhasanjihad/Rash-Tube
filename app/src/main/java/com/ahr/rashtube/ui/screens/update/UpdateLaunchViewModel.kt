@@ -1,6 +1,12 @@
 package com.ahr.rashtube.ui.screens.update
 
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -11,7 +17,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.ahr.rashtube.BuildConfig
-import com.ahr.rashtube.data.update.UpdateAnnouncement
 import com.ahr.rashtube.data.update.UpdateRepository
 import com.ahr.rashtube.ui.startup.LaunchPrompts
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,31 +45,31 @@ class UpdateLaunchViewModel
                 return
             }
             viewModelScope.launch {
-                val release = updates.releaseToAnnounce(UpdateAnnouncement.LAUNCH_PAGE)
+                val release = updates.requiredRelease()
                 prompts.updateCheckFinished(shownUpdate = release != null)
                 if (release != null) _openUpdate.value = true
             }
         }
-
-        fun consumeOpenUpdate() {
-            _openUpdate.value = false
-        }
     }
 
-/** Checks for an update once onboarding is done, and opens the update page when there is one to show. */
+/**
+ * Mandatory update gate. Once onboarding is done it asks GitHub for a newer release; when there is one,
+ * a full-screen update page covers the whole app. It has no close button, no skip and swallows Back, so
+ * the app can only be used again after the update is installed (the app restarts on a new version).
+ */
 @Composable
-fun UpdateLaunchEffect(
-    needsOnboarding: Boolean?,
-    onOpenUpdate: () -> Unit,
-) {
+fun ForcedUpdateGate(needsOnboarding: Boolean?) {
     val activity = LocalContext.current as? ComponentActivity ?: return
     val viewModel: UpdateLaunchViewModel = hiltViewModel(activity)
-    val openUpdate by viewModel.openUpdate.collectAsStateWithLifecycle()
+    val updateRequired by viewModel.openUpdate.collectAsStateWithLifecycle()
     LaunchedEffect(needsOnboarding) { if (needsOnboarding == false) viewModel.check() }
-    LaunchedEffect(openUpdate) {
-        if (openUpdate) {
-            viewModel.consumeOpenUpdate()
-            onOpenUpdate()
+    if (updateRequired) {
+        BackHandler(enabled = true) {}
+        Surface(
+            modifier = Modifier.fillMaxSize().pointerInput(Unit) {},
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            UpdateScreen(onClose = {}, forced = true)
         }
     }
 }

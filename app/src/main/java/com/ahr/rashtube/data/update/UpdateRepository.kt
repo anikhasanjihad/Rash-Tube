@@ -91,6 +91,14 @@ class UpdateRepository
                 release
             }
 
+        /**
+         * For the mandatory-update gate: asks GitHub every time, ignoring the cooldown and any skipped
+         * version. Returns a release only when it has an APK this device can install, so the gate can
+         * never lock the app behind an update that cannot be downloaded. A failed check (offline) returns null.
+         */
+        suspend fun requiredRelease(): AppRelease? =
+            mutex.withLock { runCatching { fetchLocked() }.getOrNull()?.takeIf { it.apk != null } }
+
         suspend fun skip(version: String) = dataManager.setSkippedUpdateVersion(version)
 
         private suspend fun fetchLocked(): AppRelease? {

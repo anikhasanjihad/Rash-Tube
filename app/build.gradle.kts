@@ -57,8 +57,8 @@ android {
         applicationId = "com.ahr.rashtube"
         minSdk = 26
         targetSdk = 36
-        versionCode = 23
-        versionName = "3.1.3"
+        versionCode = 24
+        versionName = "3.1.4"
 
         buildConfigField("int", "NIGHTLY_RUN", "0")
         buildConfigField("String", "APP_LANGUAGE_TAGS", "\"${(listOf("en") + translatedLocaleTags()).joinToString(",")}\"")
@@ -98,7 +98,7 @@ android {
         create("github") {
             dimension = "version"
             isDefault = true
-            buildConfigField("Boolean", "UPDATER_ENABLED", "false")
+            buildConfigField("Boolean", "UPDATER_ENABLED", "true")
             buildConfigField("String", "DISCORD_APPLICATION_ID", "\"1526515771021328514\"")
         }
         create("foss") {

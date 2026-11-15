@@ -40,6 +40,7 @@ internal fun UpdateActionBar(
     stage: UpdateStage,
     onPrimary: () -> Unit,
     onSecondary: () -> Unit,
+    showSecondary: Boolean = true,
 ) {
     Box(
         Modifier.fillMaxWidth().padding(bottom = LocalFlowBottomInsets.current.contentBottom),
@@ -50,8 +51,10 @@ internal fun UpdateActionBar(
             horizontalArrangement = Arrangement.spacedBy(BarSpacing, Alignment.End),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            TextButton(onClick = onSecondary, modifier = Modifier.heightIn(min = ButtonDefaults.MediumContainerHeight)) {
-                Text(stringResource(if (stage is UpdateStage.Downloading) R.string.cancel else R.string.update_not_now))
+            if (showSecondary || stage is UpdateStage.Downloading) {
+                TextButton(onClick = onSecondary, modifier = Modifier.heightIn(min = ButtonDefaults.MediumContainerHeight)) {
+                    Text(stringResource(if (stage is UpdateStage.Downloading) R.string.cancel else R.string.update_not_now))
+                }
             }
             val action = stage.action()
             RashActionButton(

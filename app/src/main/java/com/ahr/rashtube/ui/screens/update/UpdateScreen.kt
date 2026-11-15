@@ -81,6 +81,7 @@ private val NoticePadding = 16.dp
 @Composable
 fun UpdateScreen(
     onClose: () -> Unit,
+    forced: Boolean = false,
     viewModel: UpdateViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -95,9 +96,9 @@ fun UpdateScreen(
         topBar = {
             RashTopBar(
                 title = "",
-                onBack = onClose,
+                onBack = if (forced) null else onClose,
                 actions = {
-                    if (release != null) {
+                    if (release != null && !forced) {
                         UpdateMenu(
                             onSkip = {
                                 viewModel.skip()
@@ -113,6 +114,7 @@ fun UpdateScreen(
             if (release != null) {
                 UpdateActionBar(
                     stage = state.stage,
+                    showSecondary = !forced,
                     onPrimary = {
                         if (state.stage == UpdateStage.NeedsPermission) {
                             runCatching { context.startActivity(viewModel.installPermissionIntent()) }
