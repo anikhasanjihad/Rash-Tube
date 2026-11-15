@@ -150,7 +150,7 @@ internal fun PlayerTrackHeader(
                 Text(
                     text = value,
                     style = MaterialTheme.typography.titleMedium,
-                    color = colorScheme.primary.copy(alpha = 0.92f),
+                    color = colorScheme.onSurface.copy(alpha = 0.62f),
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -226,8 +226,8 @@ internal fun PlayerActionRow(
             shape = CircleShape,
             colors =
                 IconButtonDefaults.filledTonalIconButtonColors(
-                    containerColor = colorScheme.secondaryContainer,
-                    contentColor = colorScheme.onSecondaryContainer,
+                    containerColor = colorScheme.onSurface.copy(alpha = 0.16f),
+                    contentColor = colorScheme.onSurface,
                 ),
         ) {
             Icon(

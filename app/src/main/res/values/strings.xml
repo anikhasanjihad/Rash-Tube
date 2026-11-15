@@ -2375,6 +2375,7 @@
     <!-- Enhanced Music Screen -->
     <string name="screen_title_music">MUSIC</string>
     <string name="music_home_title" translatable="false">Rash Music</string>
+    <string name="player_background_style_ambient" translatable="false">Ambient</string>
     <string name="section_listen_again">Listen again</string>
     <string name="section_on_repeat">On Repeat</string>
     <string name="section_daily_mix_title">%1$s Mix</string>

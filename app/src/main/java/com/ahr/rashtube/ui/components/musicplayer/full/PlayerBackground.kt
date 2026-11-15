@@ -1,6 +1,12 @@
 package com.ahr.rashtube.ui.components.musicplayer.full
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -25,6 +31,7 @@ import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
@@ -71,6 +78,25 @@ fun PlayerBackground(
         when (style) {
             MusicPlayerBackgroundStyle.DEFAULT -> {
                 Unit
+            }
+
+            MusicPlayerBackgroundStyle.AMBIENT -> {
+                AmbientArtworkLayer(thumbnailUrl = rememberLoadedCover(thumbnailUrl))
+                Box(
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(
+                                Brush.verticalGradient(
+                                    colorStops =
+                                        arrayOf(
+                                            0.00f to ground.copy(alpha = 0.30f),
+                                            0.55f to ground.copy(alpha = 0.52f),
+                                            1.00f to ground.copy(alpha = 0.90f),
+                                        ),
+                                ),
+                            ),
+                )
             }
 
             MusicPlayerBackgroundStyle.BLUR -> {
@@ -211,6 +237,73 @@ private fun ImmersiveArtworkLayer(
             )
         }
         animatedArtwork?.invoke()
+    }
+}
+
+/** The cover is decoded this small: stretched over the screen it is already a soft field of colour, with no blur pass to run. */
+private const val AMBIENT_ART_PX = 56
+
+/**
+ * Ambient mode: two oversized, slowly turning copies of the cover drift behind the player, so the
+ * colours of the song move softly under the glass controls. The turning is a layer transform read in
+ * the draw phase, and the picture is tiny rather than blurred, so it stays cheap on every frame.
+ */
+@Composable
+private fun AmbientArtworkLayer(thumbnailUrl: String?) {
+    val context = LocalContext.current
+    val drift = rememberInfiniteTransition(label = "ambientDrift")
+    val turn by drift.animateFloat(
+        initialValue = 0f,
+        targetValue = 360f,
+        animationSpec = infiniteRepeatable(tween(70_000, easing = LinearEasing)),
+        label = "ambientTurn",
+    )
+    val sway by drift.animateFloat(
+        initialValue = -1f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(tween(16_000, easing = FastOutSlowInEasing), RepeatMode.Reverse),
+        label = "ambientSway",
+    )
+    AnimatedContent(
+        targetState = thumbnailUrl,
+        transitionSpec = { fadeIn(tween(900)) togetherWith fadeOut(tween(900)) },
+        label = "ambientArt",
+    ) { url ->
+        val request = remember(url) { ImageRequest.Builder(context).data(url).size(AMBIENT_ART_PX, AMBIENT_ART_PX).build() }
+        Box(modifier = Modifier.fillMaxSize()) {
+            AsyncImage(
+                model = request,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                filterQuality = FilterQuality.Medium,
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .graphicsLayer {
+                            scaleX = 2.2f
+                            scaleY = 2.2f
+                            rotationZ = turn
+                            translationX = sway * size.width * 0.12f
+                            alpha = 0.92f
+                        },
+            )
+            AsyncImage(
+                model = request,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                filterQuality = FilterQuality.Medium,
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .graphicsLayer {
+                            scaleX = 2.6f
+                            scaleY = 2.6f
+                            rotationZ = 40f - turn * 0.7f
+                            translationY = -sway * size.height * 0.10f
+                            alpha = 0.55f
+                        },
+            )
+        }
     }
 }
 

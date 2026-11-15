@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -150,10 +151,10 @@ internal fun RowScope.PlayerToggleButton(
                 .fillMaxHeight(),
         colors =
             ToggleButtonDefaults.toggleButtonColors(
-                containerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f),
-                contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                checkedContainerColor = checkedContainerColor,
-                checkedContentColor = checkedContentColor,
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.62f),
+                checkedContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.18f),
+                checkedContentColor = MaterialTheme.colorScheme.onSurface,
             ),
         shapes =
             ToggleButtonShapes(
@@ -233,34 +234,26 @@ private fun SplitCapsuleButton(
     val containerColor by animateColorAsState(
         targetValue =
             if (active) {
-                scheme.primary
+                scheme.onSurface.copy(alpha = 0.92f)
             } else {
-                scheme.onPrimary.copy(alpha = 0.7f)
+                scheme.onSurface.copy(alpha = 0.16f)
             },
         animationSpec = tween(durationMillis = 250),
         label = "capsuleContainer",
     )
     val contentColor by animateColorAsState(
         targetValue =
-            if (active) {
-                scheme.onPrimary
-            } else {
-                // Contrast-check against what the eye sees: the translucent pill over the surface.
-                readableAccentOn(
-                    container = lerp(scheme.surface, scheme.onPrimary, 0.7f),
-                    accent = scheme.primary,
-                )
-            },
+            if (active) scheme.inverseOnSurface else scheme.onSurface,
         animationSpec = tween(durationMillis = 250),
         label = "capsuleContent",
     )
     Box(
         modifier =
             Modifier
-                .size(width = 50.dp, height = 42.dp)
-                .clip(shape)
+                .size(40.dp)
+                .clip(CircleShape)
                 .background(containerColor)
-                .glassEdge(shape)
+                .glassEdge(CircleShape)
                 .combinedClickable(
                     onClick = onClick,
                     onLongClick = onLongClick,

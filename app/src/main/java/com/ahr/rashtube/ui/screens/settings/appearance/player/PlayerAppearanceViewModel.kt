@@ -35,7 +35,7 @@ class PlayerAppearanceViewModel
         val idleProgressBar = preferences.idleProgressBar.asState(overlayDefaults.idleProgressBar)
         val scrubPreview = preferences.scrubPreviewStyle.asState(overlayDefaults.scrubPreviewStyle)
         val frameStepButtons = preferences.frameStepButtonsEnabled.asState(overlayDefaults.frameStepButtonsEnabled)
-        val musicBackground = preferences.musicPlayerBackgroundStyle.asState(MusicPlayerBackgroundStyle.BLUR_GRADIENT)
+        val musicBackground = preferences.musicPlayerBackgroundStyle.asState(MusicPlayerBackgroundStyle.AMBIENT)
         val hideMusicArtwork = preferences.hideMusicPlayerArtwork.asState(false)
         val followLightTheme = preferences.musicPlayerFollowLightTheme.asState(false)
         val artworkControlColors = preferences.musicArtworkControlColors.asState(true)

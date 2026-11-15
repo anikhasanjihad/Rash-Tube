@@ -42,7 +42,7 @@ internal fun ApplyStatusBarStyle(
     val activity = LocalContext.current as? Activity ?: return
     val view = LocalView.current
     val colorScheme = MaterialTheme.colorScheme
-    val musicBackgroundStyle by preferences.musicPlayerBackgroundStyle.collectAsState(initial = MusicPlayerBackgroundStyle.BLUR_GRADIENT)
+    val musicBackgroundStyle by preferences.musicPlayerBackgroundStyle.collectAsState(initial = MusicPlayerBackgroundStyle.AMBIENT)
     val musicFollowLightTheme by preferences.musicPlayerFollowLightTheme.collectAsState(initial = false)
     val isMusicPlayerImmersive = musicPlayer?.isImmersive == true
     // The lyrics page paints its own dark backdrop over the player, whatever the player's style.

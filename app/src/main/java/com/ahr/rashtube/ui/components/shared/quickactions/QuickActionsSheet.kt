@@ -45,6 +45,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.shape.RoundedCornerShape
+import com.ahr.rashtube.ui.theme.frostColor
 import com.ahr.rashtube.ui.components.shared.RashModalSheetDefaults
 import com.ahr.rashtube.ui.components.shared.RashRowGroup
 import com.ahr.rashtube.ui.components.shared.RashSectionHeader
@@ -134,6 +136,9 @@ fun QuickActionsSheet(
         onDismissRequest = dismissRequest,
         sheetState = sheetState,
         properties = properties,
+        // iOS-style sheet: a frosted, translucent panel with generous top corners.
+        containerColor = frostColor(),
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
         modifier = RashModalSheetDefaults.modifier,
         contentWindowInsets = RashModalSheetDefaults.contentWindowInsets,
     ) {

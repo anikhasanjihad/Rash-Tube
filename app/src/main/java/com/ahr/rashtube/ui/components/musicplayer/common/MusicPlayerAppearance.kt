@@ -41,7 +41,7 @@ internal fun rememberMusicPlayerAppearance(
     val context = LocalContext.current
     val playerPreferences = remember { PlayerPreferences(context) }
     val chosenStyle by playerPreferences.musicPlayerBackgroundStyle.collectAsState(
-        initial = MusicPlayerBackgroundStyle.BLUR_GRADIENT,
+        initial = MusicPlayerBackgroundStyle.AMBIENT,
     )
     val backgroundStyle = style ?: chosenStyle
     val hideArtwork by playerPreferences.hideMusicPlayerArtwork.collectAsState(initial = false)

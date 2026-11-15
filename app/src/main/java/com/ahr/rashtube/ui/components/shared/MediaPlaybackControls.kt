@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -60,7 +61,6 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ahr.rashtube.R
-import com.ahr.rashtube.ui.theme.glassEdge
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -181,6 +181,7 @@ fun MediaPlaybackControls(
         modifier =
             modifier
                 .fillMaxWidth()
+                .padding(horizontal = if (glass) 40.dp else 0.dp)
                 .height(68.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -198,10 +199,10 @@ fun MediaPlaybackControls(
                 }
             },
             onPressedChange = { isPreviousPressed = it },
-            containerColor = if (glass) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.14f) else MaterialTheme.colorScheme.secondaryContainer,
+            containerColor = if (glass) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer,
             contentColor = if (glass) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSecondaryContainer,
             glass = glass,
-            iconSize = 30.dp,
+            iconSize = if (glass) 40.dp else 30.dp,
             onLongPressStart = { onPreviewDirectionChange(SkipDirection.PREVIOUS) },
             onLongPressEnd = { onPreviewDirectionChange(null) },
         )
@@ -218,10 +219,10 @@ fun MediaPlaybackControls(
                 onPlayPauseToggle()
             },
             onPressedChange = { isPressed = it },
-            containerColor = if (glass) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.26f) else MaterialTheme.colorScheme.primary,
+            containerColor = if (glass) Color.Transparent else MaterialTheme.colorScheme.primary,
             contentColor = if (glass) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onPrimary,
             glass = glass,
-            iconSize = 36.dp,
+            iconSize = if (glass) 60.dp else 36.dp,
             cornerRadius = playPauseCorner,
             isBuffering = isBuffering,
             modifier = Modifier.focusRequester(playPauseFocus),
@@ -240,10 +241,10 @@ fun MediaPlaybackControls(
                 }
             },
             onPressedChange = { isNextPressed = it },
-            containerColor = if (glass) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.14f) else MaterialTheme.colorScheme.secondaryContainer,
+            containerColor = if (glass) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer,
             contentColor = if (glass) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSecondaryContainer,
             glass = glass,
-            iconSize = 30.dp,
+            iconSize = if (glass) 40.dp else 30.dp,
             onLongPressStart = { onPreviewDirectionChange(SkipDirection.NEXT) },
             onLongPressEnd = { onPreviewDirectionChange(null) },
         )
@@ -282,7 +283,6 @@ private fun RowScope.ElasticControlButton(
                 .fillMaxHeight()
                 .clip(shape)
                 .background(containerColor)
-                .then(if (glass) Modifier.glassEdge(shape) else Modifier)
                 .indication(interactionSource, ripple(focusRingShape = shape, enablePressIndication = false))
                 .semantics {
                     role = Role.Button

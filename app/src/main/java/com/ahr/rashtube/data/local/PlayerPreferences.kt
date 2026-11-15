@@ -1041,9 +1041,9 @@ class PlayerPreferences(
                 runCatching {
                     MusicPlayerBackgroundStyle.valueOf(
                         preferences[Keys.MUSIC_PLAYER_BACKGROUND_STYLE]
-                            ?: MusicPlayerBackgroundStyle.BLUR_GRADIENT.name,
+                            ?: MusicPlayerBackgroundStyle.AMBIENT.name,
                     )
-                }.getOrDefault(MusicPlayerBackgroundStyle.BLUR_GRADIENT)
+                }.getOrDefault(MusicPlayerBackgroundStyle.AMBIENT)
             }
 
     suspend fun setMusicPlayerBackgroundStyle(style: MusicPlayerBackgroundStyle) {
@@ -5017,6 +5017,7 @@ enum class LyricsBackgroundStyle {
 }
 
 enum class MusicPlayerBackgroundStyle {
+    AMBIENT,
     BLUR_GRADIENT,
     BLUR,
     GRADIENT,

@@ -317,6 +317,7 @@ internal fun FullMusicPlayerContent(
                             // they otherwise burn a frame budget for the whole background-listening session.
                             isPlaying = uiState.isPlaying && isPlayerSheetExpanded,
                             modifier = modifier,
+                            ios = true,
                         )
                     }
                 },

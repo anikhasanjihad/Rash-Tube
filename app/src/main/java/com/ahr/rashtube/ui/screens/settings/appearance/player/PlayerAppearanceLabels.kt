@@ -27,6 +27,7 @@ internal fun sliderStyleLabel(style: SliderStyle): Int =
 @StringRes
 internal fun musicBackgroundLabel(style: MusicPlayerBackgroundStyle): Int =
     when (style) {
+        MusicPlayerBackgroundStyle.AMBIENT -> R.string.player_background_style_ambient
         MusicPlayerBackgroundStyle.BLUR_GRADIENT -> R.string.player_background_style_blur_gradient
         MusicPlayerBackgroundStyle.BLUR -> R.string.player_background_style_blur
         MusicPlayerBackgroundStyle.GRADIENT -> R.string.player_background_style_gradient

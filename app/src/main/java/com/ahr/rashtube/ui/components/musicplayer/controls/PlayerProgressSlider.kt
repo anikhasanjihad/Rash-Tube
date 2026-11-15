@@ -36,6 +36,7 @@ fun PlayerProgressSlider(
     onSeekTo: (Long) -> Unit,
     isPlaying: Boolean,
     modifier: Modifier = Modifier,
+    ios: Boolean = false,
 ) {
     val currentPosition = positionProvider()
     val interactionSource = remember { MutableInteractionSource() }
@@ -149,7 +150,15 @@ fun PlayerProgressSlider(
         ) {
             val sliderModifier = if (dpad) Modifier.focusProperties { canFocus = false } else Modifier
 
-            when (sliderStyle) {
+            if (ios) {
+                IosProgressBar(
+                    value = displayedPosition,
+                    valueRange = 0f..sliderEnd,
+                    onValueChange = { handleSeekPreview(it) },
+                    onValueChangeFinished = { commitSeekPreview() },
+                    modifier = sliderModifier,
+                )
+            } else when (sliderStyle) {
                 SliderStyle.SQUIGGLY -> {
                     SquigglySlider(
                         value = displayedPosition,
