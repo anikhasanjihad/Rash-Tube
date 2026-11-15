@@ -8,6 +8,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.drawBehind
@@ -83,7 +85,11 @@ internal fun CollapsingPlayerScrim(
     val scrimVisible by remember(state) { derivedStateOf { state.expandFraction.value < 0.999f } }
     val inlineMode by remember(state) { derivedStateOf { state.miniSizeScale.value > 1.5f } }
     if (!scrimVisible || inlineMode) return
-    val background = com.ahr.rashtube.ui.theme.frostColor()
+    // Opaque on purpose: the glass theme's own page colour is see-through, and a see-through page
+    // behind the player would show the feed moving underneath it (the old fix blurred the whole page,
+    // which cost a full-screen blur pass on every open and on every PiP change).
+    val darkTheme = MaterialTheme.colorScheme.onBackground.luminance() > 0.5f
+    val background = if (darkTheme) Color(0xFF101016) else Color(0xFFF6F6FA)
     val scrim = MaterialTheme.colorScheme.scrim
     Box(
         modifier =

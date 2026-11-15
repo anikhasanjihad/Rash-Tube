@@ -30,6 +30,8 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.graphicsLayer
@@ -81,22 +83,13 @@ fun PlayerBackground(
             }
 
             MusicPlayerBackgroundStyle.AMBIENT -> {
-                AmbientArtworkLayer(thumbnailUrl = rememberLoadedCover(thumbnailUrl))
-                Box(
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .background(
-                                Brush.verticalGradient(
-                                    colorStops =
-                                        arrayOf(
-                                            0.00f to ground.copy(alpha = 0.30f),
-                                            0.55f to ground.copy(alpha = 0.52f),
-                                            1.00f to ground.copy(alpha = 0.90f),
-                                        ),
-                                ),
-                            ),
-                )
+                AmbientArtworkLayer(thumbnailUrl = rememberLoadedCover(thumbnailUrl), mesh = false)
+                AmbientScrim(ground = ground)
+            }
+
+            MusicPlayerBackgroundStyle.LIVE_MESH -> {
+                AmbientArtworkLayer(thumbnailUrl = rememberLoadedCover(thumbnailUrl), mesh = true)
+                AmbientScrim(ground = ground)
             }
 
             MusicPlayerBackgroundStyle.BLUR -> {
@@ -243,14 +236,40 @@ private fun ImmersiveArtworkLayer(
 /** The cover is decoded this small: stretched over the screen it is already a soft field of colour, with no blur pass to run. */
 private const val AMBIENT_ART_PX = 56
 
+/** Keeps the controls readable over the moving colour: a veil that deepens towards the bottom. */
+@Composable
+private fun AmbientScrim(ground: Color) {
+    Box(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colorStops =
+                            arrayOf(
+                                0.00f to ground.copy(alpha = 0.30f),
+                                0.55f to ground.copy(alpha = 0.52f),
+                                1.00f to ground.copy(alpha = 0.90f),
+                            ),
+                    ),
+                ),
+    )
+}
+
 /**
- * Ambient mode: two oversized, slowly turning copies of the cover drift behind the player, so the
- * colours of the song move softly under the glass controls. The turning is a layer transform read in
- * the draw phase, and the picture is tiny rather than blurred, so it stays cheap on every frame.
+ * Ambient and Live mesh: oversized, slowly turning copies of the cover drift behind the player, so
+ * the colours of the song move softly under the glass controls. Live mesh (after Rash Music) adds a
+ * third, faster layer and richer colour. The turning is a layer transform read in the draw phase and
+ * the picture is tiny rather than blurred, so it stays cheap on every frame. Every layer turns a
+ * whole number of times per loop, so the loop never jumps.
  */
 @Composable
-private fun AmbientArtworkLayer(thumbnailUrl: String?) {
+private fun AmbientArtworkLayer(
+    thumbnailUrl: String?,
+    mesh: Boolean,
+) {
     val context = LocalContext.current
+    val vivid = remember(mesh) { ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(if (mesh) 1.8f else 1.4f) }) }
     val drift = rememberInfiniteTransition(label = "ambientDrift")
     val turn by drift.animateFloat(
         initialValue = 0f,
@@ -276,6 +295,7 @@ private fun AmbientArtworkLayer(thumbnailUrl: String?) {
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 filterQuality = FilterQuality.Medium,
+                colorFilter = vivid,
                 modifier =
                     Modifier
                         .fillMaxSize()
@@ -292,17 +312,38 @@ private fun AmbientArtworkLayer(thumbnailUrl: String?) {
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 filterQuality = FilterQuality.Medium,
+                colorFilter = vivid,
                 modifier =
                     Modifier
                         .fillMaxSize()
                         .graphicsLayer {
                             scaleX = 2.6f
                             scaleY = 2.6f
-                            rotationZ = 40f - turn * 0.7f
+                            rotationZ = 40f - turn
                             translationY = -sway * size.height * 0.10f
                             alpha = 0.55f
                         },
             )
+            if (mesh) {
+                AsyncImage(
+                    model = request,
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop,
+                    filterQuality = FilterQuality.Medium,
+                    colorFilter = vivid,
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .graphicsLayer {
+                                scaleX = 1.9f
+                                scaleY = 1.9f
+                                rotationZ = 120f + turn * 2f
+                                translationX = -sway * size.width * 0.18f
+                                translationY = sway * size.height * 0.08f
+                                alpha = 0.5f
+                            },
+                )
+            }
         }
     }
 }

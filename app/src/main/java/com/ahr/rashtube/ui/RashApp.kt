@@ -2,7 +2,6 @@ package com.ahr.rashtube.ui
 
 import android.app.Activity
 import androidx.compose.animation.*
-import androidx.compose.ui.draw.blur
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.WindowInsetsSides
@@ -475,19 +474,11 @@ fun RashApp(
                         } else {
                             paddingValues
                         }
-                    // iOS-style: the page behind the open video player is softly blurred.
-                    val behindPlayerBlur by androidx.compose.animation.core.animateDpAsState(
-                        targetValue =
-                            if (playerVisible && playerSheetState.currentValue == PlayerSheetValue.Expanded) 14.dp else 0.dp,
-                        animationSpec = androidx.compose.animation.core.tween(380),
-                        label = "behindPlayerBlur",
-                    )
                     Box(
                         modifier =
                             Modifier
                                 .padding(if (isInPipMode) PaddingValues(0.dp) else contentPadding)
-                                .nestedScroll(navScrollState.nestedScrollConnection)
-                                .then(if (behindPlayerBlur > 0.dp) Modifier.blur(behindPlayerBlur) else Modifier),
+                                .nestedScroll(navScrollState.nestedScrollConnection),
                     ) {
                         if (needsOnboarding != null) {
                             val homeViewModel: HomeViewModel = hiltViewModel(activity!!)

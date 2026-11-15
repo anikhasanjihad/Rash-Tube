@@ -5018,6 +5018,7 @@ enum class LyricsBackgroundStyle {
 
 enum class MusicPlayerBackgroundStyle {
     AMBIENT,
+    LIVE_MESH,
     BLUR_GRADIENT,
     BLUR,
     GRADIENT,
