@@ -1862,6 +1862,8 @@
     <string name="confirm">Confirm</string>
     <!-- Sleep Timer -->
     <string name="sleep_timer">Sleep Timer</string>
+    <string name="ambient_mode">Ambient Mode</string>
+    <string name="ambient_mode_desc">Full-screen cover and lyrics</string>
     <string name="sleep_timer_duration">Duration</string>
     <plurals name="sleep_timer_minutes">
         <item quantity="one">%1$d min</item>

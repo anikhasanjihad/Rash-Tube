@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import com.ahr.rashtube.R
 import com.ahr.rashtube.data.model.Comment
@@ -186,6 +187,16 @@ private fun CommentComposer(onPost: suspend (String) -> Boolean) {
     var posting by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
     var failed by androidx.compose.runtime.remember { androidx.compose.runtime.mutableStateOf(false) }
     val scope = androidx.compose.runtime.rememberCoroutineScope()
+    val submit: () -> Unit = {
+        if (text.isNotBlank() && !posting) {
+            scope.launch {
+                posting = true
+                val ok = onPost(text.trim())
+                posting = false
+                if (ok) text = "" else failed = true
+            }
+        }
+    }
     val errorText: (@Composable () -> Unit)? =
         if (failed) {
             { androidx.compose.material3.Text(stringResource(R.string.comment_post_failed)) }
@@ -197,8 +208,10 @@ private fun CommentComposer(onPost: suspend (String) -> Boolean) {
             Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
+                // The window does not resize for the keyboard, so the box lifts itself above it.
+                .imePadding()
                 .padding(horizontal = 12.dp, vertical = 8.dp),
-        verticalAlignment = androidx.compose.ui.Alignment.CenterVertically,
+        verticalAlignment = androidx.compose.ui.Alignment.Bottom,
     ) {
         androidx.compose.material3.OutlinedTextField(
             value = text,
@@ -212,6 +225,12 @@ private fun CommentComposer(onPost: suspend (String) -> Boolean) {
             shape = androidx.compose.foundation.shape.RoundedCornerShape(24.dp),
             isError = failed,
             enabled = !posting,
+            keyboardOptions =
+                androidx.compose.foundation.text.KeyboardOptions(
+                    capitalization = androidx.compose.ui.text.input.KeyboardCapitalization.Sentences,
+                    imeAction = androidx.compose.ui.text.input.ImeAction.Send,
+                ),
+            keyboardActions = androidx.compose.foundation.text.KeyboardActions(onSend = { submit() }),
             supportingText = errorText,
             colors =
                 androidx.compose.material3.OutlinedTextFieldDefaults.colors(
@@ -221,16 +240,18 @@ private fun CommentComposer(onPost: suspend (String) -> Boolean) {
                     unfocusedBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.16f),
                 ),
         )
-        androidx.compose.material3.IconButton(
-            enabled = text.isNotBlank() && !posting,
-            onClick = {
-                scope.launch {
-                    posting = true
-                    val ok = onPost(text.trim())
-                    posting = false
-                    if (ok) text = "" else failed = true
-                }
-            },
+        val canSend = text.isNotBlank() && !posting
+        androidx.compose.material3.FilledIconButton(
+            enabled = canSend,
+            onClick = submit,
+            modifier = Modifier.padding(start = 8.dp, bottom = 4.dp).size(48.dp),
+            colors =
+                androidx.compose.material3.IconButtonDefaults.filledIconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledContainerColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.14f),
+                    disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                ),
         ) {
             androidx.compose.material3.Icon(
                 androidx.compose.material.icons.Icons.AutoMirrored.Filled.Send,

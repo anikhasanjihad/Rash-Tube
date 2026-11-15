@@ -226,10 +226,6 @@ class MainActivity : ComponentActivity() {
                         appLock = appLock,
                         onUiRoot = { cachedAppUiRoot = it },
                     )
-                    com.ahr.rashtube.ui.startup.RashTextSplash(
-                        contentReady = { splashController.contentReady },
-                        onShown = { splashController.overlayShown = true },
-                    )
                 }
             }
         }

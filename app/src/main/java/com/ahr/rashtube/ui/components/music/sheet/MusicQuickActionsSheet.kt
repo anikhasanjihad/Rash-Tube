@@ -9,6 +9,7 @@ import androidx.compose.material.icons.outlined.Album
 import androidx.compose.material.icons.outlined.Bedtime
 import androidx.compose.material.icons.outlined.Block
 import androidx.compose.material.icons.outlined.Download
+import androidx.compose.material.icons.outlined.Fullscreen
 import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.JoinInner
@@ -65,7 +66,7 @@ class CrossfadePauseRow(
 )
 
 /**
- * A song's menu. [onAudioEffectsClick], [onSleepTimerClick] and [crossfadePause] are the player's own
+ * A song's menu. [onAudioEffectsClick], [onSleepTimerClick], [onAmbientModeClick] and [crossfadePause] are the player's own
  * settings, so their rows appear only when the player passes them.
  */
 @Composable
@@ -74,6 +75,7 @@ fun MusicQuickActionsSheet(
     onDismiss: () -> Unit,
     onAudioEffectsClick: (() -> Unit)? = null,
     onSleepTimerClick: (() -> Unit)? = null,
+    onAmbientModeClick: (() -> Unit)? = null,
     crossfadePause: CrossfadePauseRow? = null,
     viewModel: MusicPlayerViewModel = sharedMusicPlayerViewModel(),
     quickActions: QuickActionsViewModel = sharedQuickActionsViewModel(),
@@ -131,7 +133,7 @@ fun MusicQuickActionsSheet(
                 }
                 QuickActionsGroup(
                     title = stringResource(R.string.playback_header),
-                    rows = playbackRows(track, viewModel, quickActions, onAudioEffectsClick, onSleepTimerClick, crossfadePause, close),
+                    rows = playbackRows(track, viewModel, quickActions, onAudioEffectsClick, onSleepTimerClick, onAmbientModeClick, crossfadePause, close),
                 )
                 // A file on the device has no artist page, feed or online details to offer.
                 if (isDeviceFile) return@QuickActionsSheet
@@ -219,6 +221,7 @@ private fun playbackRows(
     quickActions: QuickActionsViewModel,
     onAudioEffectsClick: (() -> Unit)?,
     onSleepTimerClick: (() -> Unit)?,
+    onAmbientModeClick: (() -> Unit)?,
     crossfadePause: CrossfadePauseRow?,
     onDismiss: () -> Unit,
 ): List<QuickActionRow> {
@@ -270,6 +273,14 @@ private fun playbackRows(
         onAudioEffectsClick?.let { open ->
             add(
                 actionRow("audio_effects", Icons.Outlined.GraphicEq, stringResource(R.string.audio_effects)) {
+                    open()
+                    onDismiss()
+                },
+            )
+        }
+        onAmbientModeClick?.let { open ->
+            add(
+                actionRow("ambient_mode", Icons.Outlined.Fullscreen, stringResource(R.string.ambient_mode), stringResource(R.string.ambient_mode_desc)) {
                     open()
                     onDismiss()
                 },

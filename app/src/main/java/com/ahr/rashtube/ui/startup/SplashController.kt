@@ -5,7 +5,7 @@ import android.os.Build
 import android.os.SystemClock
 import androidx.core.splashscreen.SplashScreen
 
-private const val MAX_HOLD_MS = 2_500L
+private const val MAX_HOLD_MS = 1_000L
 
 /**
  * The platform splash, held until the first real screen can be drawn, so a cold start goes from the
@@ -20,14 +20,10 @@ class SplashController(
     @Volatile
     var contentReady: Boolean = false
 
-    /** Set once the animated wordmark has drawn, so the platform splash can hand over to it. */
-    @Volatile
-    var overlayShown: Boolean = false
-
     private val startedAt = SystemClock.uptimeMillis()
 
     fun install(splash: SplashScreen) {
-        splash.setKeepOnScreenCondition { !overlayShown && SystemClock.uptimeMillis() - startedAt < MAX_HOLD_MS }
+        splash.setKeepOnScreenCondition { !contentReady && SystemClock.uptimeMillis() - startedAt < MAX_HOLD_MS }
     }
 
     /** Opens the next launch on [tone] with the art of [iconSuffix]; Android 13 and later only. */

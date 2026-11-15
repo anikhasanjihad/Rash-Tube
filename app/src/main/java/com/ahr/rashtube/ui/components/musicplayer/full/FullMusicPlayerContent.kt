@@ -133,6 +133,9 @@ internal fun FullMusicPlayerContent(
     }
 
     FullPlayerSheets(sheets, uiState.currentTrack, isPlayerSheetExpanded)
+    LaunchedEffect(sheets.ambient) {
+        if (sheets.ambient) uiState.currentTrack?.let { viewModel.ensureLyricsLoaded(it) }
+    }
 
     LaunchedEffect(track.videoId) {
         // A song swapped for its video keeps the song's related list rather than fetching another.
@@ -476,6 +479,18 @@ internal fun FullMusicPlayerContent(
                 },
             onDismiss = { showLyricsSheet = false },
         )
+
+        if (sheets.ambient) {
+            AmbientModeOverlay(
+                uiState = uiState,
+                viewModel = viewModel,
+                backdropColor = remember(palette.base) { lyricsBackdrop(palette.base) },
+                accentColor = colorScheme.primary,
+                artworkUrl = thumbnailUrl,
+                positionState = positionState,
+                onDismiss = { sheets.ambient = false },
+            )
+        }
 
         // Hosted here rather than at app level so it picks up the palette-derived scheme.
         if (sheets.sleepTimer) {

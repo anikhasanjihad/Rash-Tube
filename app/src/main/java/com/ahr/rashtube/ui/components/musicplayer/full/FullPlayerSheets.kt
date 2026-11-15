@@ -24,6 +24,7 @@ internal class FullPlayerSheetState {
     var save by mutableStateOf(false)
     var audioSettings by mutableStateOf(false)
     var sleepTimer by mutableStateOf(false)
+    var ambient by mutableStateOf(false)
     var artists by mutableStateOf(emptyList<MusicArtist>())
 }
 
@@ -49,6 +50,7 @@ internal fun FullPlayerSheets(
             onDismiss = { state.moreOptions = false },
             onAudioEffectsClick = { state.audioSettings = true },
             onSleepTimerClick = { state.sleepTimer = true },
+            onAmbientModeClick = { state.ambient = true },
             crossfadePause = if (crossfadeOn) CrossfadePauseRow(crossfadePaused, crossfade::toggle) else null,
         )
     }
