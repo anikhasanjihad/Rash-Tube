@@ -27,6 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.style.TextOverflow
@@ -34,8 +37,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.ahr.rashtube.R
 import com.ahr.rashtube.data.contentfilter.aislist.AiVerdict
+import com.ahr.rashtube.data.localmedia.LocalMediaIds
 import com.ahr.rashtube.data.model.Video
 import com.ahr.rashtube.data.model.VideoCollaborator
+import com.ahr.rashtube.player.preview.FeedPreviewController
 import com.ahr.rashtube.ui.components.layout.navigation.LocalMediaNavigator
 import com.ahr.rashtube.ui.components.shared.LocalDpadNavigation
 import com.ahr.rashtube.ui.components.shared.dpadReturnFocus
@@ -114,9 +119,11 @@ internal fun CardReasonLabel(reason: String) {
 }
 
 /**
- * The whole card opens the video, and a long press opens its quick actions. TalkBack announces the
- * long press by name, since the gesture alone is undiscoverable. On a D-pad the card lifts on focus
- * and the Menu key opens the quick actions too.
+ * The whole card opens the video, and a long press plays a muted preview of it over the thumbnail,
+ * as YouTube's feed does. The ⋮ button opens the quick actions. A live or upcoming video, a local
+ * file and a D-pad have no preview to play, so their long press and the Menu key open the quick
+ * actions. TalkBack announces the long press by name, since the gesture alone is undiscoverable.
+ * On a D-pad the card lifts on focus.
  */
 @Composable
 internal fun Modifier.videoCardClickable(
@@ -124,6 +131,11 @@ internal fun Modifier.videoCardClickable(
     onClick: () -> Unit,
 ): Modifier {
     val interactionSource = remember { MutableInteractionSource() }
+    val context = LocalContext.current
+    val haptics = LocalHapticFeedback.current
+    val dpad = LocalDpadNavigation.current
+    val video = state.video
+    val previewable = !dpad && !video.isLive && !video.isUpcoming && !LocalMediaIds.isLocal(video.id)
     return pressScale(interactionSource)
         .focusLift(interactionSource)
         .onMenuKey { state.sheets.showQuickActions = true }
@@ -132,9 +144,19 @@ internal fun Modifier.videoCardClickable(
             interactionSource = interactionSource,
             indication = ripple(focusRingShape = MaterialTheme.shapes.large),
             onClickLabel = null,
-            onLongClickLabel = stringResource(R.string.more_options),
-            onLongClick = { state.sheets.showQuickActions = true },
-            onClick = onClick,
+            onLongClickLabel = stringResource(if (previewable) R.string.preview_video else R.string.more_options),
+            onLongClick = {
+                if (previewable) {
+                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                    FeedPreviewController.start(context, video.id)
+                } else {
+                    state.sheets.showQuickActions = true
+                }
+            },
+            onClick = {
+                FeedPreviewController.stop()
+                onClick()
+            },
         )
 }
 
