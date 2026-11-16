@@ -85,7 +85,7 @@ internal fun DiagnosticsScreen(
 
     val device = viewModel.device
     val androidValue = stringResource(R.string.settings_diagnostics_android_value, device.androidRelease, device.sdk)
-    val versionValue = device.versionName?.let { "$it (${device.versionCode})" } ?: stringResource(R.string.unknown)
+    val versionValue = device.versionName ?: stringResource(R.string.unknown)
     val copiedMessage = stringResource(R.string.diagnostics_copied)
     val subject = stringResource(R.string.diagnostics_report_subject)
     val shareTitle = stringResource(R.string.diagnostics_share)

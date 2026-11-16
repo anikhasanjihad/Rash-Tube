@@ -30,6 +30,7 @@ import com.ahr.rashtube.data.local.entity.NotificationEntity
 import com.ahr.rashtube.data.profile.ActiveProfile
 import com.ahr.rashtube.data.update.AppRelease
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -87,6 +88,9 @@ object NotificationHelper {
     const val NOTIFICATION_DOWNLOAD_PROGRESS = 1001
     const val NOTIFICATION_DOWNLOAD_COMPLETE = 1002
     const val NOTIFICATION_DOWNLOAD_FAILED = 1003
+    // A burst of new videos is shown like YouTube does: a few at a time, spaced out, the rest in the summary.
+    private const val MAX_INDIVIDUAL_NEW_VIDEOS = 3
+    private const val NEW_VIDEO_STAGGER_MS = 2500L
     const val NOTIFICATION_NEW_VIDEO = 2000 // Base ID, per-video IDs are this + (videoId hash & 0xFFFF)
     const val NOTIFICATION_NEW_VIDEO_SUMMARY = 1999 // Group summary; kept below the per-video range
     private const val GROUP_NEW_VIDEOS = "new_videos"
@@ -561,7 +565,8 @@ object NotificationHelper {
         val manager = NotificationManagerCompat.from(context)
         val multiple = videos.size > 1
 
-        videos.forEach { v ->
+        videos.take(MAX_INDIVIDUAL_NEW_VIDEOS).forEachIndexed { index, v ->
+            if (index > 0) delay(NEW_VIDEO_STAGGER_MS)
             val notifId = NOTIFICATION_NEW_VIDEO + v.videoId.hashCode().and(0xFFFF)
             val watchIntent =
                 profileIntent(context).apply {
@@ -578,6 +583,8 @@ object NotificationHelper {
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
                 )
             val builder = youtubeStyleBuilder(context, v.channelName, v.videoTitle, watchPendingIntent)
+            // Only the first one of a burst makes a sound or pops up.
+            builder.setSilent(index > 0)
             val thumbnail = v.thumbnailUrl?.let { getBitmapFromUrl(context, it, followThumbnailSetting = true) }
             if (thumbnail != null) {
                 // Collapsed: thumbnail on the right. Expanded: big picture, like YouTube.
@@ -632,6 +639,7 @@ object NotificationHelper {
                 ).setContentIntent(summaryPendingIntent)
                 .setAutoCancel(true)
                 .setOnlyAlertOnce(true)
+                .setSilent(true)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setCategory(NotificationCompat.CATEGORY_SOCIAL)
                 .setStyle(inboxStyle)

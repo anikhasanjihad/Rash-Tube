@@ -149,7 +149,7 @@ object RashDiagnostics {
                 appendLine("Model        : ${info.model}")
                 appendLine("Android      : ${info.androidRelease} (SDK ${info.sdk})")
                 appendLine("Brand        : ${info.brand}")
-                appendLine("App version  : ${info.versionName?.let { "$it (${info.versionCode})" } ?: "unknown"}")
+                appendLine("App version  : ${info.versionName ?: "unknown"}")
             }.trimEnd()
         }
 
