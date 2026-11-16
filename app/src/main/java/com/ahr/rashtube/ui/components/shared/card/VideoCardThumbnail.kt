@@ -46,6 +46,7 @@ internal fun VideoCardThumbnail(
         onModelLoaded = state.deArrowFrameUrl?.let { frame -> { loaded -> deArrowFrameShown = loaded == frame } },
         modifier = modifier,
     ) {
+        VideoCardPreview(videoId = video.id)
         val badgeModifier = Modifier.padding(MediaThumbnailDefaults.BadgePadding)
         VideoStatusBadge(
             isLive = video.isLive,
