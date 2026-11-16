@@ -87,7 +87,7 @@ class CategoriesViewModel
             }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(SUBSCRIPTION_GRACE_MS), emptyList())
 
         val trendingRegion: StateFlow<String> =
-            preferences.trendingRegion.stateIn(viewModelScope, SharingStarted.WhileSubscribed(SUBSCRIPTION_GRACE_MS), "US")
+            preferences.trendingRegion.stateIn(viewModelScope, SharingStarted.WhileSubscribed(SUBSCRIPTION_GRACE_MS), "BD")
 
         private data class GridKey(
             val browseId: String,

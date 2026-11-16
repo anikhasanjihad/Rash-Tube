@@ -526,7 +526,7 @@ class LocalDataManager
         // Settings
         val trendingRegion: Flow<String> =
             context.dataStore.data.map { prefs ->
-                prefs[TRENDING_REGION] ?: "US"
+                prefs[TRENDING_REGION] ?: "BD"
             }
 
         suspend fun setTrendingRegion(region: String) {

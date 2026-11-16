@@ -57,8 +57,8 @@ android {
         applicationId = "com.ahr.rashtube"
         minSdk = 26
         targetSdk = 36
-        versionCode = 26
-        versionName = "1.0.0"
+        versionCode = 27
+        versionName = "1.0.1"
 
         buildConfigField("int", "NIGHTLY_RUN", "0")
         buildConfigField("String", "APP_LANGUAGE_TAGS", "\"${(listOf("en") + translatedLocaleTags()).joinToString(",")}\"")

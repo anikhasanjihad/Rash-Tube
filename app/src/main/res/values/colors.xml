@@ -23,10 +23,10 @@
     <color name="icon_bg_expressive_cookie">#000000</color>
     <color name="icon_bg_expressive_oval">#EB0000</color>
     <color name="icon_bg_expressive_pill">#FFF8F6</color>
-    <color name="splash_background">#0B0B10</color>
-    <color name="splash_background_light">#0B0B10</color>
-    <color name="splash_background_dark">#0B0B10</color>
-    <color name="splash_background_black">#0B0B10</color>
+    <color name="splash_background">#000000</color>
+    <color name="splash_background_light">#000000</color>
+    <color name="splash_background_dark">#000000</color>
+    <color name="splash_background_black">#000000</color>
     <color name="rash_icon_red">#E50914</color>
 </resources>
 

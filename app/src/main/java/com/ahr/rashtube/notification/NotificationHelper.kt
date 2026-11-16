@@ -511,6 +511,7 @@ object NotificationHelper {
         val videoTitle: String,
         val videoId: String,
         val thumbnailUrl: String?,
+        val channelId: String? = null,
     )
 
     /**
@@ -518,6 +519,76 @@ object NotificationHelper {
      * with the brand colour), the channel name in the header line next to the time, the video title
      * as the headline, and the thumbnail on the right.
      */
+    /**
+     * Bangla (and other complex-script) titles wrap cleanly when the text is in one composed form with no
+     * invisible break characters. Joiners (ZWJ/ZWNJ) are kept: they make conjuncts such as র‍্যাব render right.
+     */
+    private fun String.forNotification(): String =
+        java.text.Normalizer
+            .normalize(this, java.text.Normalizer.Form.NFC)
+            .replace(Regex("[\\u200B\\u2060\\uFEFF]"), "")
+            .replace(Regex("\\s+"), " ")
+            .trim()
+
+    private fun videoActionIntent(
+        context: Context,
+        notifId: Int,
+        action: String,
+        v: NewVideoEntry,
+        slot: Int,
+    ): PendingIntent =
+        PendingIntent.getBroadcast(
+            context,
+            (notifId shl 2) + slot,
+            Intent(context, NotificationActionReceiver::class.java)
+                .setAction(action)
+                .putExtra(NotificationActionReceiver.EXTRA_VIDEO_ID, v.videoId)
+                .putExtra(NotificationActionReceiver.EXTRA_VIDEO_TITLE, v.videoTitle)
+                .putExtra(NotificationActionReceiver.EXTRA_CHANNEL_NAME, v.channelName)
+                .putExtra(NotificationActionReceiver.EXTRA_CHANNEL_ID, v.channelId)
+                .putExtra(NotificationActionReceiver.EXTRA_THUMBNAIL_URL, v.thumbnailUrl)
+                .putExtra(NotificationActionReceiver.EXTRA_NOTIFICATION_ID, notifId),
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
+
+    /** Watch later, Mark as watched and Open channel, right on the notification like YouTube's. */
+    private fun addVideoActions(
+        context: Context,
+        builder: NotificationCompat.Builder,
+        notifId: Int,
+        v: NewVideoEntry,
+    ) {
+        builder.addAction(
+            0,
+            context.getString(R.string.watch_later),
+            videoActionIntent(context, notifId, NotificationActionReceiver.ACTION_WATCH_LATER, v, slot = 1),
+        )
+        builder.addAction(
+            0,
+            context.getString(R.string.mark_as_watched),
+            videoActionIntent(context, notifId, NotificationActionReceiver.ACTION_MARK_WATCHED, v, slot = 2),
+        )
+        val channelId = v.channelId
+        if (!channelId.isNullOrBlank()) {
+            val channelIntent =
+                profileIntent(context).apply {
+                    action = Intent.ACTION_VIEW
+                    data = android.net.Uri.parse("https://www.youtube.com/channel/$channelId")
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
+                }
+            builder.addAction(
+                0,
+                context.getString(R.string.subscriptions_open_channel),
+                PendingIntent.getActivity(
+                    context,
+                    (notifId shl 2) + 3,
+                    channelIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                ),
+            )
+        }
+    }
+
     private fun youtubeStyleBuilder(
         context: Context,
         channelName: String,
@@ -528,7 +599,7 @@ object NotificationHelper {
             .Builder(context, CHANNEL_SUBSCRIPTIONS)
             .setSmallIcon(R.drawable.ic_notification_logo)
             .setColor(ContextCompat.getColor(context, R.color.flow_red))
-            .setContentTitle(videoTitle)
+            .setContentTitle(videoTitle.forNotification())
             .setContentIntent(contentIntent)
             .setAutoCancel(true)
             .setShowWhen(true)
@@ -585,13 +656,16 @@ object NotificationHelper {
             val builder = youtubeStyleBuilder(context, v.channelName, v.videoTitle, watchPendingIntent)
             // Only the first one of a burst makes a sound or pops up.
             builder.setSilent(index > 0)
+            addVideoActions(context, builder, notifId, v)
             val thumbnail = v.thumbnailUrl?.let { getBitmapFromUrl(context, it, followThumbnailSetting = true) }
             if (thumbnail != null) {
                 // Collapsed: thumbnail on the right. Expanded: big picture, like YouTube.
                 builder.setLargeIcon(thumbnail)
                 builder.setStyle(NotificationCompat.BigPictureStyle().bigPicture(thumbnail).bigLargeIcon(null as Bitmap?))
+            } else {
+                builder.setStyle(NotificationCompat.BigTextStyle().bigText(v.videoTitle.forNotification()))
             }
-            manager.notify(notifId, builder.build())
+            runCatching { manager.notify(notifId, builder.build()) }
         }
 
         if (!multiple) return

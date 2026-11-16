@@ -58,6 +58,7 @@ internal fun SettingsListScope.playbackSections(
                 )
             }
         }
+        switch(PlaybackIndex.dataSaver, viewModel.dataSaver, viewModel::setDataSaver)
         switch(PlaybackIndex.startPaused, viewModel.startPaused, viewModel::setStartPaused)
         switch(PlaybackIndex.openFullscreen, viewModel.openFullscreen, viewModel::setOpenFullscreen)
         switch(PlaybackIndex.tiltFullscreen, viewModel.tiltFullscreen, viewModel::setTiltFullscreen)

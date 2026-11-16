@@ -99,6 +99,22 @@ class UpdateRepository
         suspend fun requiredRelease(): AppRelease? =
             mutex.withLock { runCatching { fetchLocked() }.getOrNull()?.takeIf { it.apk != null } }
 
+        /** The release notes GitHub holds for the tag of [version]; null when there are none or the lookup fails. */
+        suspend fun notesFor(version: String): String? =
+            withContext(Dispatchers.IO) {
+                runCatching {
+                    val request =
+                        Request
+                            .Builder()
+                            .url("https://api.github.com/repos/anikhasanjihad/Rash-Tube/releases/tags/v${AppVersions.normalize(version)}")
+                            .header("Accept", GITHUB_JSON)
+                            .build()
+                    client.newCall(request).execute().use { response ->
+                        if (!response.isSuccessful) null else parseGitHubRelease(response.body.string()).body?.trim()?.takeIf { it.isNotEmpty() }
+                    }
+                }.getOrNull()
+            }
+
         suspend fun skip(version: String) = dataManager.setSkippedUpdateVersion(version)
 
         private suspend fun fetchLocked(): AppRelease? {

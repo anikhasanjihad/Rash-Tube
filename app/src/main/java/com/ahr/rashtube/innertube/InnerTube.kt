@@ -356,7 +356,8 @@ class InnerTube {
             httpClient.get("https://suggestqueries-clients6.youtube.com/complete/search") {
                 parameter("client", "youtube")
                 parameter("ds", "yt")
-                parameter("hl", locale.hl)
+                // Typing in Bangla script gets Bangla suggestions whatever language the app is shown in.
+                parameter("hl", if (query.any { it in '\u0980'..'\u09FF' }) "bn" else locale.hl)
                 parameter("gl", locale.gl)
                 parameter("q", query)
                 userAgent(YouTubeClient.WEB.userAgent)

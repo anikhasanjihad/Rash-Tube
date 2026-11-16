@@ -297,6 +297,8 @@
                 <action android:name="com.ahr.rashtube.action.PAUSE_DOWNLOAD" />
                 <action android:name="com.ahr.rashtube.action.RESUME_DOWNLOAD" />
                 <action android:name="com.ahr.rashtube.action.DISMISS_NOTIFICATION" />
+                <action android:name="com.ahr.rashtube.action.WATCH_LATER" />
+                <action android:name="com.ahr.rashtube.action.MARK_WATCHED" />
             </intent-filter>
         </receiver>
 

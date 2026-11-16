@@ -73,6 +73,7 @@ import com.ahr.rashtube.ui.screens.settings.wellbeing.TIMES_UP_ROUTE
 import com.ahr.rashtube.ui.screens.settings.wellbeing.TimesUpLaunchEffect
 import com.ahr.rashtube.ui.screens.sync.linked.LinkedSyncAlerts
 import com.ahr.rashtube.ui.screens.update.ForcedUpdateGate
+import com.ahr.rashtube.ui.screens.update.WhatsNewGate
 import com.ahr.rashtube.ui.theme.ThemeMode
 import com.ahr.rashtube.ui.theme.ThemeVariant
 import com.ahr.rashtube.ui.utils.LocalWindowSizeClass
@@ -587,6 +588,7 @@ fun RashApp(
         )
 
         ForcedUpdateGate(needsOnboarding = needsOnboarding)
+        WhatsNewGate(needsOnboarding = needsOnboarding)
         TimesUpLaunchEffect(enabled = needsOnboarding == false && !isInPipMode) {
             collapseExpandedPlayers()
             navController.navigate(TIMES_UP_ROUTE) { launchSingleTop = true }

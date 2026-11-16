@@ -62,6 +62,6 @@ class LanguageRegionViewModel
         fun setOriginalTitles(enabled: Boolean) = write { preferences.setOriginalTitles(enabled) }
 
         private companion object {
-            const val DEFAULT_COUNTRY = "US"
+            const val DEFAULT_COUNTRY = "BD"
         }
     }

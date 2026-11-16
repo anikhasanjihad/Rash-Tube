@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Played by the system on the render thread (no app code runs), so it cannot stall startup. -->
-<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/splash_logo_animated_vector">
-    <target
-        android:name="badge"
-        android:animation="@animator/splash_badge_scale_x" />
-    <target
-        android:name="badge"
-        android:animation="@animator/splash_badge_scale_y" />
-    <target
-        android:name="plate"
-        android:animation="@animator/splash_fade_in" />
-    <target
-        android:name="play_group"
-        android:animation="@animator/splash_play_scale_x" />
-    <target
-        android:name="play_group"
-        android:animation="@animator/splash_play_scale_y" />
-    <target
-        android:name="play"
-        android:animation="@animator/splash_play_fade_in" />
-</animated-vector>
+<!-- Static Rash Tube splash mark: a red badge with the white R whose counter is a play triangle.
+     Nothing animates, so the system draws it instantly and startup never stutters. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="288"
+    android:viewportHeight="288">
+    <path
+        android:fillColor="#E60000"
+        android:pathData="M98,100H190A26,26 0 0 1 216,126V162A26,26 0 0 1 190,188H98A26,26 0 0 1 72,162V126A26,26 0 0 1 98,100Z" />
+    <group
+        android:scaleX="3.73"
+        android:scaleY="3.73"
+        android:translateX="97.2"
+        android:translateY="99.2">
+        <path
+            android:fillColor="#FFFFFFFF"
+            android:fillType="evenOdd"
+            android:pathData="M6.2,4.5H12.6C16.2,4.5 18.4,6.5 18.4,9.6C18.4,11.8 17.3,13.3 15.5,14.1L18.9,19.5H15.5L12.5,14.6H9.4V19.5H6.2Z M9.4,7.2V11.9L13.9,9.55Z" />
+    </group>
+</vector>

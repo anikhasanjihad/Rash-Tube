@@ -288,6 +288,7 @@ class SubscriptionCheckWorker(
                     videoTitle = video.title,
                     videoId = video.videoId,
                     thumbnailUrl = video.thumbnailUrl,
+                    channelId = subscription.channelId,
                 )
             }
     }

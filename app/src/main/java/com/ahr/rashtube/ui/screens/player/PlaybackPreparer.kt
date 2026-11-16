@@ -60,7 +60,7 @@ internal class PlaybackPreparer(
         videos: List<Video>,
     ): Boolean =
         withContext(Dispatchers.Main) {
-            val autoplay = playerPreferences.autoplayEnabled.first()
+            val autoplay = playerPreferences.effectiveAutoplayEnabled.first()
             playerManager.setAutoplayCandidates(sourceVideoId = videoId, videos = videos, enabled = autoplay)
             autoplay
         }

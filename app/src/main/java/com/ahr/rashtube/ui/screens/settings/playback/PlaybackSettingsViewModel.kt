@@ -42,6 +42,7 @@ class PlaybackSettingsViewModel
         val keepPlayingAfterSwipe = preferences.keepPlayingAfterSwipe.asState(DEFAULT_KEEP_PLAYING_AFTER_SWIPE)
         val autoplay = preferences.autoplayEnabled.asState(true)
         val startPaused = preferences.startVideosPaused.asState(false)
+        val dataSaver = preferences.dataSaverEnabled.asState(false)
         val openFullscreen = preferences.openVideosFullscreen.asState(false)
         val tiltFullscreen = preferences.tiltFullscreenRotationLocked.asState(false)
         val queueAutoplay = preferences.queueAutoplayEnabled.asState(true)
@@ -159,6 +160,8 @@ class PlaybackSettingsViewModel
             if (!value) HeadphoneResume.set(context, allowed = false)
             write { preferences.setResumeFromHeadphones(value) }
         }
+
+        fun setDataSaver(value: Boolean) = write { preferences.setDataSaverEnabled(value) }
 
         fun setStartPaused(value: Boolean) = write { preferences.setStartVideosPaused(value) }
 

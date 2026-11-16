@@ -51,6 +51,7 @@ const val DEEP_FLOW_NEVER_EXPIRES_HOURS = 0
 private const val PLAYLIST_SORT_SEPARATOR = "|"
 private const val CHANNEL_SPEED_SEPARATOR = "|"
 const val CONTENT_LANGUAGE_FOLLOW_APP = "app"
+private const val DATA_SAVER_MAX_HEIGHT = 360
 const val DEFAULT_PORTRAIT_SEEKBAR_PADDING_DP = 16
 const val MAX_PORTRAIT_SEEKBAR_PADDING_DP = 64
 const val DEFAULT_FULLSCREEN_SEEKBAR_PADDING_DP = 48
@@ -422,6 +423,7 @@ class PlayerPreferences(
 
         val DEFAULT_QUALITY_WIFI = device(stringPreferencesKey("default_quality_wifi"))
         val DEFAULT_QUALITY_CELLULAR = device(stringPreferencesKey("default_quality_cellular"))
+        val DATA_SAVER_ENABLED = device(booleanPreferencesKey("data_saver_enabled"))
         val DEFAULT_VIDEO_CODEC = device(stringPreferencesKey("default_video_codec"))
         val FALLBACK_VIDEO_CODEC = device(stringPreferencesKey("fallback_video_codec"))
         val TILT_FULLSCREEN_ROTATION_LOCKED = device(booleanPreferencesKey("tilt_fullscreen_rotation_locked"))
@@ -1703,7 +1705,7 @@ class PlayerPreferences(
     val trendingRegion: Flow<String> =
         context.devicePreferencesDataStore.data
             .map { preferences ->
-                preferences[DeviceKeys.TRENDING_REGION] ?: "US"
+                preferences[DeviceKeys.TRENDING_REGION] ?: "BD"
             }
 
     suspend fun setTrendingRegion(region: String) {
@@ -1779,10 +1781,27 @@ class PlayerPreferences(
                 VideoQuality.fromString(preferences[DeviceKeys.DEFAULT_QUALITY_WIFI] ?: "Auto")
             }
 
+    /**
+     * Data saver: on mobile data it holds video quality at 360p, fetches no thumbnails and does not autoplay
+     * the next video. Wi-Fi is untouched.
+     */
+    val dataSaverEnabled: Flow<Boolean> =
+        context.devicePreferencesDataStore.data
+            .map { preferences -> preferences[DeviceKeys.DATA_SAVER_ENABLED] ?: false }
+
+    suspend fun setDataSaverEnabled(enabled: Boolean) {
+        context.devicePreferencesDataStore.edit { preferences ->
+            preferences[DeviceKeys.DATA_SAVER_ENABLED] = enabled
+        }
+    }
+
+    private fun VideoQuality.cappedForDataSaver(): VideoQuality = if (this == VideoQuality.AUTO || height > DATA_SAVER_MAX_HEIGHT) VideoQuality.Q_360P else this
+
     val defaultQualityCellular: Flow<VideoQuality> =
         context.devicePreferencesDataStore.data
             .map { preferences ->
-                VideoQuality.fromString(preferences[DeviceKeys.DEFAULT_QUALITY_CELLULAR] ?: "Auto")
+                val quality = VideoQuality.fromString(preferences[DeviceKeys.DEFAULT_QUALITY_CELLULAR] ?: "Auto")
+                if (preferences[DeviceKeys.DATA_SAVER_ENABLED] == true) quality.cappedForDataSaver() else quality
             }
 
     suspend fun setDefaultQualityWifi(quality: VideoQuality) {
@@ -1850,7 +1869,8 @@ class PlayerPreferences(
     val shortsQualityCellular: Flow<VideoQuality> =
         context.devicePreferencesDataStore.data
             .map { preferences ->
-                VideoQuality.fromString(preferences[DeviceKeys.SHORTS_QUALITY_CELLULAR] ?: "480p")
+                val quality = VideoQuality.fromString(preferences[DeviceKeys.SHORTS_QUALITY_CELLULAR] ?: "480p")
+                if (preferences[DeviceKeys.DATA_SAVER_ENABLED] == true) quality.cappedForDataSaver() else quality
             }
 
     suspend fun setShortsQualityWifi(quality: VideoQuality) {
@@ -1871,7 +1891,13 @@ class PlayerPreferences(
 
     val thumbnailQualityCellular: Flow<ThumbnailQuality> =
         context.devicePreferencesDataStore.data
-            .map { preferences -> ThumbnailQuality.fromName(preferences[DeviceKeys.THUMBNAIL_QUALITY_CELLULAR]) }
+            .map { preferences ->
+                if (preferences[DeviceKeys.DATA_SAVER_ENABLED] == true) {
+                    ThumbnailQuality.OFF
+                } else {
+                    ThumbnailQuality.fromName(preferences[DeviceKeys.THUMBNAIL_QUALITY_CELLULAR])
+                }
+            }
 
     suspend fun setThumbnailQualityWifi(quality: ThumbnailQuality) {
         context.devicePreferencesDataStore.edit { preferences ->
@@ -1933,6 +1959,12 @@ class PlayerPreferences(
             .map { preferences ->
                 preferences[Keys.AUTOPLAY_ENABLED] ?: true
             }
+
+    /** Autoplay as the player applies it: Data saver holds it back while the phone is on mobile data. */
+    val effectiveAutoplayEnabled: Flow<Boolean> =
+        combine(autoplayEnabled, dataSaverEnabled) { autoplay, saver ->
+            autoplay && !(saver && !NetworkState.isOnWifi(context))
+        }
 
     suspend fun setAutoplayEnabled(enabled: Boolean) {
         context.playerPreferencesDataStore.edit { preferences ->

@@ -96,7 +96,7 @@ class PlaybackLoadResolver
                         request.resumePositionOverrideMs?.takeIf { it > 0L }
                             ?: viewHistory.getPlaybackPosition(videoId).first()
                     }
-                val autoplayDeferred = scope.async(ioDispatcher) { playerPreferences.autoplayEnabled.first() }
+                val autoplayDeferred = scope.async(ioDispatcher) { playerPreferences.effectiveAutoplayEnabled.first() }
                 val preferences = withContext(ioDispatcher) { readStreamPreferences(request.isWifi) }
 
                 val playbackLoadTimeoutMs = if (request.escalateToSabr) SABR_LOAD_TIMEOUT_MS else LOAD_TIMEOUT_MS

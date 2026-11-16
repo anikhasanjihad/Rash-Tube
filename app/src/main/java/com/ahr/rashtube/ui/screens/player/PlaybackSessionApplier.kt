@@ -526,7 +526,7 @@ internal class PlaybackSessionApplier(
 
         scope.launch {
             if (!isLoadCurrent(loadToken)) return@launch
-            val autoplay = playerPreferences.autoplayEnabled.first()
+            val autoplay = playerPreferences.effectiveAutoplayEnabled.first()
             if (!isLoadCurrent(loadToken)) return@launch
             playerManager.setAutoplayCandidates(
                 sourceVideoId = videoId,

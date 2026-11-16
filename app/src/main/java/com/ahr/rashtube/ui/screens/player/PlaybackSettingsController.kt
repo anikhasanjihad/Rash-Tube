@@ -30,7 +30,7 @@ internal class PlaybackSettingsController(
     private val scope: CoroutineScope,
 ) {
     fun collectAutoplayPreference() {
-        playerPreferences.autoplayEnabled
+        playerPreferences.effectiveAutoplayEnabled
             .distinctUntilChanged()
             .onEach(::applyAutoplayPreference)
             .launchIn(scope)
