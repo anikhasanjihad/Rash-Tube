@@ -1,12 +1,6 @@
 package com.ahr.rashtube.ui.screens.update
 
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,8 +64,8 @@ class UpdateLaunchViewModel
 
 /**
  * Mandatory update gate. Once onboarding is done it asks GitHub for a newer release; when there is one,
- * a full-screen update page covers the whole app. It has no close button, no skip and swallows Back, so
- * the app can only be used again after the update is installed (the app restarts on a new version).
+ * a blurred, non-dismissable update dialog sits over the app until the update is installed (the app
+ * restarts on the new version).
  */
 @Composable
 fun ForcedUpdateGate(needsOnboarding: Boolean?) {
@@ -80,13 +74,5 @@ fun ForcedUpdateGate(needsOnboarding: Boolean?) {
     val updateRequired by viewModel.openUpdate.collectAsStateWithLifecycle()
     LaunchedEffect(needsOnboarding) { if (needsOnboarding == false) viewModel.check() }
     LifecycleEventEffect(Lifecycle.Event.ON_START) { if (needsOnboarding == false) viewModel.check() }
-    if (updateRequired) {
-        BackHandler(enabled = true) {}
-        Surface(
-            modifier = Modifier.fillMaxSize().pointerInput(Unit) {},
-            color = MaterialTheme.colorScheme.background,
-        ) {
-            UpdateScreen(onClose = {}, forced = true)
-        }
-    }
+    if (updateRequired) ForcedUpdateDialog()
 }

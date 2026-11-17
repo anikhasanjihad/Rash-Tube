@@ -58,7 +58,7 @@ internal fun HomeFeedGrid(
     footerMinVideos: Int = FEED_FOOTER_MIN_VIDEOS,
     showShorts: Boolean = true,
 ) {
-    val videos = remember(uiState.videos) { uiState.videos.distinctBy { it.id } }
+    val videos = uiState.videos
     val channelMemoryReason = stringResource(R.string.home_reason_channel_memory)
     val rows =
         remember(videos, feedLayout.columns, uiState.continueWatchingVideos.isNotEmpty(), showShorts && uiState.shorts.isNotEmpty()) {

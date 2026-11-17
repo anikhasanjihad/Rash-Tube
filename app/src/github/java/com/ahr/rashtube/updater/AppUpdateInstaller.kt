@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.pm.PackageInstaller
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import androidx.work.BackoffPolicy
 import androidx.work.Constraints
@@ -26,6 +28,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.getAndUpdate
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
@@ -34,6 +37,7 @@ import javax.inject.Singleton
 
 private const val WORK_NAME = "app_update_download"
 private const val INSTALL_REQUEST = 7301
+private const val CONFIRMATION_FALLBACK_MS = 1_500L
 
 /**
  * Downloads a release in the background and installs it through a platform installer session.
@@ -50,7 +54,25 @@ class AppUpdateInstaller
         /** True once the installer reported a failure, until the next install attempt. */
         val installFailed: StateFlow<Boolean> = _installFailed.asStateFlow()
 
+        private val _pendingConfirmation = MutableStateFlow<Intent?>(null)
+
+        /** The system's "install this update?" screen, waiting for the update page to open it. */
+        val pendingConfirmation: StateFlow<Intent?> = _pendingConfirmation.asStateFlow()
+
         val isAvailable: Boolean = true
+
+        fun consumeConfirmation(): Intent? = _pendingConfirmation.getAndUpdate { null }
+
+        /**
+         * The update page opens the confirmation itself, because an app in front may always start an
+         * activity. If the page is not there to do it, it is started from here after a moment.
+         */
+        internal fun offerConfirmation(confirmation: Intent) {
+            _pendingConfirmation.value = confirmation
+            Handler(Looper.getMainLooper()).postDelayed({
+                consumeConfirmation()?.let { runCatching { context.startActivity(it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)) } }
+            }, CONFIRMATION_FALLBACK_MS)
+        }
 
         fun download(release: AppRelease) {
             val apk = release.apk ?: return
@@ -115,6 +137,8 @@ class AppUpdateInstaller
                 if (!apk.exists()) return@withContext false
                 _installFailed.value = false
                 val installer = context.packageManager.packageInstaller
+                // A failed or abandoned earlier try leaves its session open and would block this one.
+                installer.mySessions.forEach { runCatching { installer.abandonSession(it.sessionId) } }
                 val params =
                     PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL).apply {
                         setAppPackageName(context.packageName)

@@ -40,7 +40,6 @@ internal fun UpdateActionBar(
     stage: UpdateStage,
     onPrimary: () -> Unit,
     onSecondary: () -> Unit,
-    showSecondary: Boolean = true,
 ) {
     Box(
         Modifier.fillMaxWidth().padding(bottom = LocalFlowBottomInsets.current.contentBottom),
@@ -51,10 +50,8 @@ internal fun UpdateActionBar(
             horizontalArrangement = Arrangement.spacedBy(BarSpacing, Alignment.End),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (showSecondary || stage is UpdateStage.Downloading) {
-                TextButton(onClick = onSecondary, modifier = Modifier.heightIn(min = ButtonDefaults.MediumContainerHeight)) {
-                    Text(stringResource(if (stage is UpdateStage.Downloading) R.string.cancel else R.string.update_not_now))
-                }
+            TextButton(onClick = onSecondary, modifier = Modifier.heightIn(min = ButtonDefaults.MediumContainerHeight)) {
+                Text(stringResource(if (stage is UpdateStage.Downloading) R.string.cancel else R.string.update_not_now))
             }
             val action = stage.action()
             RashActionButton(
@@ -69,7 +66,7 @@ internal fun UpdateActionBar(
     }
 }
 
-private class StageAction(
+internal class StageAction(
     val labelRes: Int,
     val icon: ImageVector?,
     val enabled: Boolean = true,
@@ -79,7 +76,7 @@ private class StageAction(
     fun label(): String = if (percent != null) stringResource(labelRes, percent) else stringResource(labelRes)
 }
 
-private fun UpdateStage.action(): StageAction =
+internal fun UpdateStage.action(): StageAction =
     when (this) {
         UpdateStage.Available -> {
             StageAction(R.string.update_action_download, Icons.Outlined.Download)

@@ -81,13 +81,13 @@ private val NoticePadding = 16.dp
 @Composable
 fun UpdateScreen(
     onClose: () -> Unit,
-    forced: Boolean = false,
     viewModel: UpdateViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { viewModel.onResume() }
+    ConfirmationLauncher(viewModel)
     val release = state.release
 
     Scaffold(
@@ -96,9 +96,9 @@ fun UpdateScreen(
         topBar = {
             RashTopBar(
                 title = "",
-                onBack = if (forced) null else onClose,
+                onBack = onClose,
                 actions = {
-                    if (release != null && !forced) {
+                    if (release != null) {
                         UpdateMenu(
                             onSkip = {
                                 viewModel.skip()
@@ -114,14 +114,7 @@ fun UpdateScreen(
             if (release != null) {
                 UpdateActionBar(
                     stage = state.stage,
-                    showSecondary = !forced,
-                    onPrimary = {
-                        if (state.stage == UpdateStage.NeedsPermission) {
-                            runCatching { context.startActivity(viewModel.installPermissionIntent()) }
-                        } else {
-                            viewModel.primaryAction()
-                        }
-                    },
+                    onPrimary = { viewModel.onPrimary { runCatching { context.startActivity(it) } } },
                     onSecondary = { if (state.stage is UpdateStage.Downloading) viewModel.cancelDownload() else onClose() },
                 )
             }
@@ -213,7 +206,7 @@ private fun StageNotice(stage: UpdateStage) {
     }
 }
 
-private fun UpdateFailure.messageRes(): Int =
+internal fun UpdateFailure.messageRes(): Int =
     when (this) {
         UpdateFailure.NETWORK -> R.string.update_failed_network
         UpdateFailure.STORAGE -> R.string.update_failed_storage

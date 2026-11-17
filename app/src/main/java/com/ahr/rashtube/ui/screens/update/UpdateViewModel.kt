@@ -74,8 +74,8 @@ class UpdateViewModel
             }
         }
 
-        /** Runs the action the current stage offers; the permission stage is handled by the screen. */
-        fun primaryAction() {
+        /** Runs the action the current stage offers. */
+        private fun primaryAction() {
             val current = state.value
             val release = current.release ?: return
             when (val stage = current.stage) {
@@ -86,9 +86,16 @@ class UpdateViewModel
             }
         }
 
-        fun cancelDownload() = installer.cancel()
+        val confirmation: StateFlow<Intent?> = installer.pendingConfirmation
 
-        fun installPermissionIntent(): Intent = installer.installPermissionIntent()
+        fun consumeConfirmation(): Intent? = installer.consumeConfirmation()
+
+        /** The one button of the update screens: the install-permission page when needed, else the stage's action. */
+        fun onPrimary(openPermissionSettings: (Intent) -> Unit) {
+            if (state.value.stage == UpdateStage.NeedsPermission) openPermissionSettings(installer.installPermissionIntent()) else primaryAction()
+        }
+
+        fun cancelDownload() = installer.cancel()
 
         fun skip() {
             val release = state.value.release ?: return

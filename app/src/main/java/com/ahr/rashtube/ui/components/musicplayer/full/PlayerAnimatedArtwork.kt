@@ -46,6 +46,8 @@ import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import com.ahr.rashtube.R
 import com.ahr.rashtube.data.music.model.MusicTrack
+import com.ahr.rashtube.ui.components.shared.MutedPlayerView
+import com.ahr.rashtube.ui.components.shared.rememberMutedLoopPlayer
 import com.ahr.rashtube.ui.screens.music.AnimatedArtworkViewModel
 import kotlinx.coroutines.delay
 
@@ -124,23 +126,7 @@ internal fun PlayerAnimatedArtwork(
     val context = LocalContext.current
     val reportFailure by rememberUpdatedState(onFailed)
     var hasFrame by remember(url) { mutableStateOf(false) }
-    val player =
-        remember(dataSourceFactory) {
-            ExoPlayer
-                .Builder(context)
-                .setMediaSourceFactory(DefaultMediaSourceFactory(dataSourceFactory))
-                .build()
-                .apply {
-                    repeatMode = Player.REPEAT_MODE_ONE
-                    volume = 0f
-                    trackSelectionParameters =
-                        trackSelectionParameters
-                            .buildUpon()
-                            .setTrackTypeDisabled(C.TRACK_TYPE_AUDIO, true)
-                            .build()
-                }
-        }
-    DisposableEffect(player) { onDispose { player.release() } }
+    val player = rememberMutedLoopPlayer(dataSourceFactory)
 
     DisposableEffect(player, url) {
         val listener =
@@ -188,26 +174,6 @@ internal fun PlayerAnimatedArtwork(
                     .setViewportSize(widthPx, heightPx, false)
                     .build()
         }
-        AndroidView(
-            factory = { viewContext ->
-                // A TextureView, unlike a SurfaceView, fades and clips with the artwork around it.
-                (LayoutInflater.from(viewContext).inflate(R.layout.video_player_view, null) as PlayerView).apply {
-                    layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                    resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-                    setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
-                    setKeepContentOnPlayerReset(true)
-                    artworkDisplayMode = PlayerView.ARTWORK_DISPLAY_MODE_OFF
-                    setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
-                    setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                    subtitleView?.visibility = View.GONE
-                    this.player = player
-                }
-            },
-            onRelease = { it.player = null },
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .graphicsLayer { this.alpha = alpha },
-        )
+        MutedPlayerView(player = player, alpha = alpha)
     }
 }

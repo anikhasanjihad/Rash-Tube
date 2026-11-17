@@ -5,7 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInstaller
 import android.util.Log
+import android.widget.Toast
 import androidx.core.content.IntentCompat
+import com.ahr.rashtube.R
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -21,17 +23,18 @@ class UpdateInstallReceiver : BroadcastReceiver() {
     ) {
         when (val status = intent.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)) {
             PackageInstaller.STATUS_PENDING_USER_ACTION -> {
-                IntentCompat.getParcelableExtra(intent, Intent.EXTRA_INTENT, Intent::class.java)?.let { confirm ->
-                    context.startActivity(confirm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-                }
+                IntentCompat.getParcelableExtra(intent, Intent.EXTRA_INTENT, Intent::class.java)?.let(installer::offerConfirmation)
             }
 
-            PackageInstaller.STATUS_SUCCESS -> {
+            // Dismissing the system's prompt is a choice, not a failure: the page just offers Install again.
+            PackageInstaller.STATUS_SUCCESS, PackageInstaller.STATUS_FAILURE_ABORTED -> {
                 Unit
             }
 
             else -> {
-                Log.w(TAG, "Update install failed ($status): ${intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)}")
+                val message = intent.getStringExtra(PackageInstaller.EXTRA_STATUS_MESSAGE)
+                Log.w(TAG, "Update install failed ($status): $message")
+                Toast.makeText(context, message ?: context.getString(R.string.update_failed_install), Toast.LENGTH_LONG).show()
                 installer.reportInstallFailure()
             }
         }

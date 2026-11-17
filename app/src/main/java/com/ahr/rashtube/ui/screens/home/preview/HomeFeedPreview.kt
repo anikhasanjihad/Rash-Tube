@@ -1,16 +1,11 @@
 package com.ahr.rashtube.ui.screens.home.preview
 
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.OptIn
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -24,33 +19,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerEventTimeoutCancellationException
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.currentStateAsState
 import androidx.lifecycle.viewModelScope
-import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
-import androidx.media3.ui.AspectRatioFrameLayout
-import androidx.media3.ui.PlayerView
-import com.ahr.rashtube.R
 import com.ahr.rashtube.data.local.PlayerPreferences
 import com.ahr.rashtube.data.shorts.ShortsStreamResolver
 import com.ahr.rashtube.network.ProxyAwareClient
+import com.ahr.rashtube.ui.components.shared.MutedPlayerView
+import com.ahr.rashtube.ui.components.shared.rememberMutedLoopPlayer
 import com.ahr.rashtube.ui.screens.home.HomeFeedRow
 import com.ahr.rashtube.utils.NetworkState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -198,26 +186,9 @@ private fun PreviewPlayer(
     dataSourceFactory: DataSource.Factory,
     onFailed: () -> Unit,
 ) {
-    val context = LocalContext.current
     val reportFailure by rememberUpdatedState(onFailed)
     var hasFrame by remember(url) { mutableStateOf(false) }
-    val player =
-        remember(dataSourceFactory) {
-            ExoPlayer
-                .Builder(context)
-                .setMediaSourceFactory(DefaultMediaSourceFactory(dataSourceFactory))
-                .build()
-                .apply {
-                    repeatMode = Player.REPEAT_MODE_ONE
-                    volume = 0f
-                    trackSelectionParameters =
-                        trackSelectionParameters
-                            .buildUpon()
-                            .setTrackTypeDisabled(C.TRACK_TYPE_AUDIO, true)
-                            .build()
-                }
-        }
-    DisposableEffect(player) { onDispose { player.release() } }
+    val player = rememberMutedLoopPlayer(dataSourceFactory)
     DisposableEffect(player, url) {
         val listener =
             object : Player.Listener {
@@ -234,23 +205,5 @@ private fun PreviewPlayer(
         onDispose { player.removeListener(listener) }
     }
     val alpha by animateFloatAsState(targetValue = if (hasFrame) 1f else 0f, label = "homeFeedPreviewAlpha")
-    AndroidView(
-        factory = { viewContext ->
-            (LayoutInflater.from(viewContext).inflate(R.layout.video_player_view, null) as PlayerView).apply {
-                layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-                resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-                setShowBuffering(PlayerView.SHOW_BUFFERING_NEVER)
-                useController = false
-                setShutterBackgroundColor(android.graphics.Color.TRANSPARENT)
-                setBackgroundColor(android.graphics.Color.TRANSPARENT)
-                subtitleView?.visibility = View.GONE
-                this.player = player
-            }
-        },
-        onRelease = { it.player = null },
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .graphicsLayer { this.alpha = alpha },
-    )
+    MutedPlayerView(player = player, alpha = alpha)
 }
