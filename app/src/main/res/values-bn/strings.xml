@@ -168,4 +168,6 @@
     <string name="update_whats_new_dismiss">বুঝেছি</string>
     <string name="data_saver_title">ডেটা সেভার</string>
     <string name="data_saver_subtitle">মোবাইল ডেটায়: কম ভিডিও কোয়ালিটি, থাম্বনেইল নেই, অটোপ্লে নেই</string>
+    <string name="content_settings_video_card_auto_preview_title">অটো-প্লে প্রিভিউ</string>
+    <string name="content_settings_video_card_auto_preview_subtitle">ফিডে ভিডিও কিছুক্ষণ স্ক্রিনে থাকলে নিজে থেকে মিউট প্রিভিউ চলবে। বেশি ডেটা ও ব্যাটারি খরচ হয়; ডেটা সেভার চালু থাকলে বন্ধ থাকে</string>
 </resources>

@@ -98,6 +98,14 @@ object FeedPreviewController {
             }
     }
 
+    /** Starts a preview only if none is running, so cards resting in view do not take turns. Main thread. */
+    fun startIfIdle(
+        context: Context,
+        videoId: String,
+    ) {
+        if (_activeVideoId.value == null) start(context, videoId)
+    }
+
     /** Stops the preview. With [videoId], only if that video's preview is the one running. */
     fun stop(videoId: String? = null) {
         if (videoId != null && _activeVideoId.value != videoId) return

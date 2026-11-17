@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.ahr.rashtube.R
+import com.ahr.rashtube.data.localmedia.LocalMediaIds
+import com.ahr.rashtube.ui.components.shared.LocalDpadNavigation
 import com.ahr.rashtube.ui.components.shared.MediaIconBadge
 import com.ahr.rashtube.ui.components.shared.MediaThumbnail
 import com.ahr.rashtube.ui.components.shared.MediaThumbnailDefaults
@@ -46,7 +48,15 @@ internal fun VideoCardThumbnail(
         onModelLoaded = state.deArrowFrameUrl?.let { frame -> { loaded -> deArrowFrameShown = loaded == frame } },
         modifier = modifier,
     ) {
-        VideoCardPreview(videoId = video.id)
+        VideoCardPreview(
+            videoId = video.id,
+            autoPlay =
+                LocalVideoCardPreferences.current.autoPreviewEnabled &&
+                    !LocalDpadNavigation.current &&
+                    !video.isLive &&
+                    !video.isUpcoming &&
+                    !LocalMediaIds.isLocal(video.id),
+        )
         val badgeModifier = Modifier.padding(MediaThumbnailDefaults.BadgePadding)
         VideoStatusBadge(
             isLive = video.isLive,

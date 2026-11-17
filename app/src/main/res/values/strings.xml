@@ -1296,6 +1296,8 @@
     <string name="content_settings_video_card_mark_watched_subtitle">An eye button on cards to mark videos as watched</string>
     <string name="content_settings_video_card_progress_title">Show watch progress</string>
     <string name="content_settings_video_card_progress_subtitle">A bar on thumbnails showing how much you watched</string>
+    <string name="content_settings_video_card_auto_preview_title">Auto-play previews</string>
+    <string name="content_settings_video_card_auto_preview_subtitle">Silently play a video in the feed once it rests in view. Uses more data and battery; off with Data saver</string>
     <string name="content_settings_home_subscriptions_title">Subscriptions on Home</string>
     <string name="content_settings_home_subscriptions_subtitle">Mix videos from channels you follow into Home</string>
     <string name="settings_section_watch_history">Watch history</string>

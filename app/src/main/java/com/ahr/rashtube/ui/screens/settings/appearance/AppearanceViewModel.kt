@@ -56,6 +56,7 @@ class AppearanceViewModel
         val cardLikeButtons = preferences.videoCardActionsEnabled.asState(false)
         val cardMarkWatched = preferences.videoCardMarkWatchedEnabled.asState(false)
         val cardWatchProgress = preferences.showWatchProgress.asState(true)
+        val cardAutoPreview = preferences.feedAutoPreview.asState(false)
 
         val shortsContent = preferences.shortsContentEnabled.asState(true)
         val navigationVisibility: StateFlow<NavigationVisibility> =
@@ -131,6 +132,8 @@ class AppearanceViewModel
         fun setCardMarkWatched(enabled: Boolean) = write { preferences.setVideoCardMarkWatchedEnabled(enabled) }
 
         fun setCardWatchProgress(enabled: Boolean) = write { preferences.setShowWatchProgress(enabled) }
+
+        fun setCardAutoPreview(enabled: Boolean) = write { preferences.setFeedAutoPreview(enabled) }
 
         fun setHomeTab(enabled: Boolean) = write { preferences.setHomeNavigationEnabled(enabled) }
 

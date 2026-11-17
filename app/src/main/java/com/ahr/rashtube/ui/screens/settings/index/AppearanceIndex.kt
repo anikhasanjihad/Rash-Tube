@@ -98,6 +98,14 @@ internal object AppearanceIndex {
             section = R.string.settings_section_video_cards,
             destination = page,
         )
+    val cardAutoPreview =
+        SettingEntry(
+            key = "appearance.card_auto_preview",
+            title = R.string.content_settings_video_card_auto_preview_title,
+            summary = R.string.content_settings_video_card_auto_preview_subtitle,
+            section = R.string.settings_section_video_cards,
+            destination = page,
+        )
     val cardMarkWatched =
         SettingEntry(
             key = "appearance.card_mark_watched",
@@ -189,6 +197,7 @@ internal object AppearanceIndex {
             groupBadges,
             cardLikeButtons,
             cardWatchProgress,
+            cardAutoPreview,
             cardMarkWatched,
         )
 }

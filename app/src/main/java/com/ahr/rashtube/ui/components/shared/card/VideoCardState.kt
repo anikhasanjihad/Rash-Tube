@@ -54,6 +54,7 @@ data class VideoCardPreferences(
     val showWatchProgress: Boolean = true,
     val originalTitlesEnabled: Boolean = false,
     val deArrowRandomFrame: Boolean = true,
+    val autoPreviewEnabled: Boolean = false,
 )
 
 /**
@@ -160,6 +161,13 @@ fun ProvideVideoCardState(
                 cardPreferences.copy(originalTitlesEnabled = originalTitles)
             }.combine(playerPreferences.deArrowRandomFrame) { cardPreferences, randomFrame ->
                 cardPreferences.copy(deArrowRandomFrame = randomFrame)
+            }.combine(
+                playerPreferences.feedAutoPreview.combine(playerPreferences.dataSaverEnabled) { auto, dataSaver ->
+                    // Data saver wins: an automatic preview is the one playback the user never asked for.
+                    auto && !dataSaver
+                },
+            ) { cardPreferences, autoPreview ->
+                cardPreferences.copy(autoPreviewEnabled = autoPreview)
             }.distinctUntilChanged()
         }
     val preferences by preferencesFlow.collectAsStateWithLifecycle(VideoCardPreferences())

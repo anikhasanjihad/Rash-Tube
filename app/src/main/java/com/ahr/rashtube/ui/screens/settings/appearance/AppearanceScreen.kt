@@ -74,6 +74,7 @@ internal fun AppearanceScreen(
     val groupBadges by viewModel.groupBadges.collectAsStateWithLifecycle()
     val cardLikeButtons by viewModel.cardLikeButtons.collectAsStateWithLifecycle()
     val cardMarkWatched by viewModel.cardMarkWatched.collectAsStateWithLifecycle()
+    val cardAutoPreview by viewModel.cardAutoPreview.collectAsStateWithLifecycle()
 
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -204,6 +205,7 @@ internal fun AppearanceScreen(
         group(key = "appearance.cards", header = R.string.settings_section_video_cards) {
             switch(AppearanceIndex.cardLikeButtons, cardLikeButtons, viewModel::setCardLikeButtons)
             switch(AppearanceIndex.cardWatchProgress, viewModel.cardWatchProgress, viewModel::setCardWatchProgress)
+            switch(AppearanceIndex.cardAutoPreview, cardAutoPreview, viewModel::setCardAutoPreview)
             switch(AppearanceIndex.cardMarkWatched, cardMarkWatched, viewModel::setCardMarkWatched)
         }
         group(key = "appearance.more", header = R.string.settings_section_more) {

@@ -168,6 +168,7 @@ class PlayerPreferences(
         val SUBSCRIPTION_COLLABORATIONS_ENABLED = booleanPreferencesKey("subscription_collaborations_enabled")
         val NOTES_SORT = stringPreferencesKey("notes_sort")
         val SHOW_WATCH_PROGRESS = booleanPreferencesKey("show_watch_progress")
+        val FEED_AUTO_PREVIEW = booleanPreferencesKey("feed_auto_preview")
         val WATCH_HISTORY_PAUSED = booleanPreferencesKey("watch_history_paused")
         val HOME_NAVIGATION_ENABLED = booleanPreferencesKey("home_navigation_enabled")
         val SHORTS_NAVIGATION_ENABLED = booleanPreferencesKey("shorts_navigation_enabled")
@@ -1423,6 +1424,17 @@ class PlayerPreferences(
     suspend fun setShowWatchProgress(enabled: Boolean) {
         context.playerPreferencesDataStore.edit { preferences ->
             preferences[Keys.SHOW_WATCH_PROGRESS] = enabled
+        }
+    }
+
+    /** Whether a feed card plays a muted preview by itself once it rests in view. Off by default: it costs data and battery. */
+    val feedAutoPreview: Flow<Boolean> =
+        context.playerPreferencesDataStore.data
+            .map { preferences -> preferences[Keys.FEED_AUTO_PREVIEW] ?: false }
+
+    suspend fun setFeedAutoPreview(enabled: Boolean) {
+        context.playerPreferencesDataStore.edit { preferences ->
+            preferences[Keys.FEED_AUTO_PREVIEW] = enabled
         }
     }
 
