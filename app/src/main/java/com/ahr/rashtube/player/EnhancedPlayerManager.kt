@@ -123,6 +123,8 @@ import org.schabi.newpipe.extractor.stream.VideoStream
 @UnstableApi
 class EnhancedPlayerManager private constructor() {
     companion object {
+        private const val AUTOPLAY_HISTORY_SIZE = 40
+        private const val AUTOPLAY_FALLBACK_SIZE = 10
         private const val TAG = PlayerConfig.TAG
         private const val LIVE_EDGE_THRESHOLD_MS = 700L
         private const val SABR_QUALITY_KEY_PREFIX = "sabr:"
@@ -871,7 +873,7 @@ class EnhancedPlayerManager private constructor() {
         }
 
         built.launch {
-            prefs.autoplayEnabled.collect { isEnabled ->
+            prefs.effectiveAutoplayEnabled.collect { isEnabled ->
                 autoplayEnabled = isEnabled
             }
         }
@@ -1877,12 +1879,30 @@ class EnhancedPlayerManager private constructor() {
             )
         relatedCandidatesSnapshot = RelatedCandidatesSnapshot(sourceVideoId, relatedCandidates)
         autoplayCandidates = relatedCandidates.filter { !it.isLive && !it.isUpcoming }
+        rememberAutoplayed(sourceVideoId)
+        // YouTube sometimes returns no related videos; the next video must still come, as it does on YouTube.
+        if (autoplayCandidates.isEmpty()) autoplayCandidates = homeFeedFallback(sourceVideoId)
         Log.d(TAG, "Autoplay candidates for $sourceVideoId: ${autoplayCandidates.size}, enabled=$enabled")
         autoNextLog("setAutoplayCandidates source=$sourceVideoId input=${videos.size} filtered=${autoplayCandidates.size} enabled=$enabled")
         if (sourceVideoId == currentVideoId) {
             preload.request("autoplay-candidates")
         }
     }
+
+    private val autoplayHistory = java.util.ArrayDeque<String>()
+
+    private fun rememberAutoplayed(videoId: String) {
+        autoplayHistory.remove(videoId)
+        autoplayHistory.addLast(videoId)
+        while (autoplayHistory.size > AUTOPLAY_HISTORY_SIZE) autoplayHistory.removeFirst()
+    }
+
+    /** The Home feed's videos, without the current one, anything played recently and live or upcoming ones. */
+    private fun homeFeedFallback(sourceVideoId: String): List<Video> =
+        com.ahr.rashtube.ui.screens.home.HomeFeedCache.videos
+            .filter { it.id != sourceVideoId && it.id !in autoplayHistory && !it.isLive && !it.isUpcoming }
+            .distinctBy { it.id }
+            .take(AUTOPLAY_FALLBACK_SIZE)
 
     private fun hasNextForSession(): Boolean = hasNext() || (autoplayEnabled && autoplayCandidates.isNotEmpty())
 
@@ -1922,6 +1942,7 @@ class EnhancedPlayerManager private constructor() {
             }
 
         autoNextLog("playNextAutoplayCandidate starting ${nextVideo.id}")
+        rememberAutoplayed(nextVideo.id)
         autoplayCandidates = autoplayCandidates.drop(1)
         playVideoFromServiceLayer(nextVideo, reason = "related-autoplay")
         return true

@@ -2,6 +2,8 @@ package com.ahr.rashtube.ui.components.shared.card
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import com.ahr.rashtube.ui.screens.home.preview.LocalHomeFeedPreview
+import com.ahr.rashtube.ui.screens.home.preview.homeFeedHoldPreview
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -124,16 +126,21 @@ internal fun Modifier.videoCardClickable(
     onClick: () -> Unit,
 ): Modifier {
     val interactionSource = remember { MutableInteractionSource() }
+    val feedPreview = LocalHomeFeedPreview.current
     return pressScale(interactionSource)
         .focusLift(interactionSource)
         .onMenuKey { state.sheets.showQuickActions = true }
         .dpadReturnFocus(state.video.id)
+        .homeFeedHoldPreview(state.video.id)
         .combinedClickable(
             interactionSource = interactionSource,
             indication = ripple(focusRingShape = MaterialTheme.shapes.large),
             onClickLabel = null,
             onLongClickLabel = stringResource(R.string.more_options),
-            onLongClick = { state.sheets.showQuickActions = true },
+            onLongClick = {
+                // A card held for its preview does not also open the menu.
+                if (feedPreview?.holdId != state.video.id) state.sheets.showQuickActions = true
+            },
             onClick = onClick,
         )
 }

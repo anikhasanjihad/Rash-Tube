@@ -19,6 +19,7 @@ import com.ahr.rashtube.ui.components.shared.MediaIconBadge
 import com.ahr.rashtube.ui.components.shared.MediaThumbnail
 import com.ahr.rashtube.ui.components.shared.MediaThumbnailDefaults
 import com.ahr.rashtube.ui.components.shared.VideoStatusBadge
+import com.ahr.rashtube.ui.screens.home.preview.HomeFeedPreviewOverlay
 
 /**
  * A card's thumbnail: the shared [MediaThumbnail] with the status, reminder and DeArrow badges on it.
@@ -46,6 +47,7 @@ internal fun VideoCardThumbnail(
         onModelLoaded = state.deArrowFrameUrl?.let { frame -> { loaded -> deArrowFrameShown = loaded == frame } },
         modifier = modifier,
     ) {
+        HomeFeedPreviewOverlay(video.id)
         val badgeModifier = Modifier.padding(MediaThumbnailDefaults.BadgePadding)
         VideoStatusBadge(
             isLive = video.isLive,

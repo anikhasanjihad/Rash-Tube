@@ -43,6 +43,7 @@ class PlaybackSettingsViewModel
         val autoplay = preferences.autoplayEnabled.asState(true)
         val startPaused = preferences.startVideosPaused.asState(false)
         val dataSaver = preferences.dataSaverEnabled.asState(false)
+        val homeFeedPreview = preferences.homeFeedPreviewEnabled.asState(true)
         val openFullscreen = preferences.openVideosFullscreen.asState(false)
         val tiltFullscreen = preferences.tiltFullscreenRotationLocked.asState(false)
         val queueAutoplay = preferences.queueAutoplayEnabled.asState(true)
@@ -160,6 +161,8 @@ class PlaybackSettingsViewModel
             if (!value) HeadphoneResume.set(context, allowed = false)
             write { preferences.setResumeFromHeadphones(value) }
         }
+
+        fun setHomeFeedPreview(value: Boolean) = write { preferences.setHomeFeedPreviewEnabled(value) }
 
         fun setDataSaver(value: Boolean) = write { preferences.setDataSaverEnabled(value) }
 

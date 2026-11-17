@@ -24,6 +24,15 @@ internal object PlaybackIndex {
             section = R.string.playback_header,
             destination = page,
         )
+    val homeFeedPreview =
+        SettingEntry(
+            key = "playback.home_feed_preview",
+            title = R.string.home_feed_preview_title,
+            summary = R.string.home_feed_preview_subtitle,
+            keywords = R.string.settings_keywords_autoplay,
+            section = R.string.playback_header,
+            destination = page,
+        )
     val dataSaver =
         SettingEntry(
             key = "playback.data_saver",
@@ -446,6 +455,7 @@ internal object PlaybackIndex {
         listOf(
             backgroundPlay,
             keepPlayingAfterSwipe,
+            homeFeedPreview,
             dataSaver,
             startPaused,
             openFullscreen,

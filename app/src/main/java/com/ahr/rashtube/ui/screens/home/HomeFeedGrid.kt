@@ -7,6 +7,13 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ahr.rashtube.ui.screens.home.preview.HomeFeedPreviewViewModel
+import com.ahr.rashtube.ui.screens.home.preview.LocalHomeFeedPreview
+import com.ahr.rashtube.ui.screens.home.preview.rememberHomeFeedPreviewState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -51,7 +58,7 @@ internal fun HomeFeedGrid(
     footerMinVideos: Int = FEED_FOOTER_MIN_VIDEOS,
     showShorts: Boolean = true,
 ) {
-    val videos = uiState.videos
+    val videos = remember(uiState.videos) { uiState.videos.distinctBy { it.id } }
     val channelMemoryReason = stringResource(R.string.home_reason_channel_memory)
     val rows =
         remember(videos, feedLayout.columns, uiState.continueWatchingVideos.isNotEmpty(), showShorts && uiState.shorts.isNotEmpty()) {
@@ -73,7 +80,11 @@ internal fun HomeFeedGrid(
             compactRowSpacing = if (isListView) 0.dp else feedLayout.cardSpacing,
         )
     val stripCardWidth = feedStripCardWidth(feedLayout.rowWidth, ContinueWatchingShelfDefaults.CardWidth)
+    val previewViewModel: HomeFeedPreviewViewModel = hiltViewModel()
+    val previewEnabled by previewViewModel.enabled.collectAsStateWithLifecycle()
+    val previewState = rememberHomeFeedPreviewState(gridState, rows, previewEnabled)
 
+    CompositionLocalProvider(LocalHomeFeedPreview provides previewState.takeIf { previewEnabled }) {
     LazyVerticalGrid(
         columns = plan.cells,
         modifier =
@@ -165,5 +176,6 @@ internal fun HomeFeedGrid(
                 )
             }
         }
+    }
     }
 }

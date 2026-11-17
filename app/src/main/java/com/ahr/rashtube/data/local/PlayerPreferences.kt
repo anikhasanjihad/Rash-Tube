@@ -424,6 +424,7 @@ class PlayerPreferences(
         val DEFAULT_QUALITY_WIFI = device(stringPreferencesKey("default_quality_wifi"))
         val DEFAULT_QUALITY_CELLULAR = device(stringPreferencesKey("default_quality_cellular"))
         val DATA_SAVER_ENABLED = device(booleanPreferencesKey("data_saver_enabled"))
+        val HOME_FEED_PREVIEW = device(booleanPreferencesKey("home_feed_preview"))
         val DEFAULT_VIDEO_CODEC = device(stringPreferencesKey("default_video_codec"))
         val FALLBACK_VIDEO_CODEC = device(stringPreferencesKey("fallback_video_codec"))
         val TILT_FULLSCREEN_ROTATION_LOCKED = device(booleanPreferencesKey("tilt_fullscreen_rotation_locked"))
@@ -1792,6 +1793,17 @@ class PlayerPreferences(
     suspend fun setDataSaverEnabled(enabled: Boolean) {
         context.devicePreferencesDataStore.edit { preferences ->
             preferences[DeviceKeys.DATA_SAVER_ENABLED] = enabled
+        }
+    }
+
+    /** Muted previews on the Home feed: the video in view plays, and a held card plays too. */
+    val homeFeedPreviewEnabled: Flow<Boolean> =
+        context.devicePreferencesDataStore.data
+            .map { preferences -> preferences[DeviceKeys.HOME_FEED_PREVIEW] ?: true }
+
+    suspend fun setHomeFeedPreviewEnabled(enabled: Boolean) {
+        context.devicePreferencesDataStore.edit { preferences ->
+            preferences[DeviceKeys.HOME_FEED_PREVIEW] = enabled
         }
     }
 
